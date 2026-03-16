@@ -1,6 +1,14 @@
+import { guestTracker } from "../data/guest-tracker";
+
 import { getObjective } from "../utils/get-objective";
-import { updateObjectiveValues } from "./update-objective-values";
 import { getObjectiveWidgets } from "./get-objective-widgets";
+import { updateObjectiveValues } from "./update-objective-values";
+
+import { getRidesWidgets } from "./get-rides-widgets";
+import { updateParkValue } from "./update-park-value";
+
+import { getGuestsWidgets } from "./get-guests-widgets";
+
 import {
   TITLE,
   WINDOW_WIDTH,
@@ -15,14 +23,40 @@ import {
   ICON_CROWD,
   ICON_RIDES,
 } from "../constants";
+import { updateGuestsValues } from "./update-guests-values";
 
 export const openWindow = () => {
+  // Only allow one window to be open at a time
   for (let i = 0; i < ui.windows; i++) {
     if (ui.getWindow(i).title === TITLE) return;
   }
 
+  // Initialise guest tracker
+  const tracker = guestTracker();
+  context.subscribe("interval.day", function () {
+    tracker.updateGuestCount();
+  });
+
+  // We need to maintain a closure of the ride ID's to make the list clickable
+  let clickRideIDs: number[] = [];
+  const openRide = (row: number) => {
+    // BUG: The API can't open the ride window. Best we can do is move the viewport to it.
+    const ride = map.getRide(clickRideIDs[row]);
+    if (ride && ride.stations.length > 0) {
+      const tile = ride.stations[0].start;
+      ui.mainViewport.scrollTo(tile);
+    }
+  };
+
+  // Get the objective widgets
   const objective = getObjective(UI_LINE_LENGTH);
   const objectiveWidgets = getObjectiveWidgets(objective);
+
+  // Get the rides widgets
+  const ridesWidgets = getRidesWidgets(openRide);
+
+  // Get the guests widgets
+  const guestsWidgets = getGuestsWidgets(openRide);
 
   let window: Window;
   window = ui.openWindow({
@@ -40,15 +74,15 @@ export const openWindow = () => {
         widgets: [...objectiveWidgets.widgets],
       },
       {
+        image: ICON_CROWD,
+        widgets: [...guestsWidgets.widgets],
+      },
+      {
         image: ICON_CHART,
-        widgets: [],
+        widgets: [...ridesWidgets.widgets],
       },
       {
         image: ICON_COASTERS,
-        widgets: [],
-      },
-      {
-        image: ICON_CROWD,
         widgets: [],
       },
       {
@@ -58,6 +92,10 @@ export const openWindow = () => {
     ],
     onUpdate: () => {
       if (window.tabIndex === 0) updateObjectiveValues(window, objective);
+      if (window.tabIndex === 1)
+        clickRideIDs = updateGuestsValues(window, objective, tracker);
+      if (window.tabIndex === 2)
+        clickRideIDs = updateParkValue(window, objective, tracker);
     },
   });
 };
@@ -95,8 +133,4 @@ export const openWindow = () => {
 29: Dark pink
 30: Bright pink
 31: Light pink
-
-
-
-
 */

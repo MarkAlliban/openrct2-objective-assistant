@@ -1,20 +1,24 @@
 import { convertTicksToDays } from "../utils/convert-ticks-to-days";
 import { TObjectiveTarget } from "../utils/get-objective";
-import { TICKS_PER_MONTH, TICKS_PER_YEAR } from "../constants";
+import { formatCurrency } from "../utils/format-currency";
+import { SUCCESS_COLOUR, TICKS_PER_MONTH, TICKS_PER_YEAR } from "../constants";
 import { ERROR_COLOUR, WARNING_COLOUR, WARNING_DAYS } from "../constants";
 
-export const updateObjectiveValues = (window: Window, objective: TObjectiveTarget) => {
+export const updateObjectiveValues = (
+  window: Window,
+  objective: TObjectiveTarget,
+) => {
   if (objective.guests) {
     const box: TextBoxWidget = window.findWidget("valueGuests");
-    box.text = `${park.guests} / ${objective.guests}`;
+    box.text = `${park.guests >= objective.guests ? `{${SUCCESS_COLOUR}}` : ""}${park.guests} / ${objective.guests}`;
   }
   if (objective.parkValue) {
     const box: TextBoxWidget = window.findWidget("valueParkValue");
-    box.text = context.formatString("{CURRENCY2DP}", park.value).split(".")[0];
+    box.text = `${park.value >= objective.parkValue ? `{${SUCCESS_COLOUR}}` : ""}${formatCurrency(park.value)}`;
   }
   if (objective.rating) {
     const box: TextBoxWidget = window.findWidget("valueRating");
-    box.text = `${park.rating} / ${objective.rating}`;
+    box.text = `${park.rating >= objective.rating ? `{${SUCCESS_COLOUR}}` : ""}${park.rating} / ${objective.rating}`;
   }
   if (objective.year) {
     const ticksElapsed =
@@ -24,7 +28,7 @@ export const updateObjectiveValues = (window: Window, objective: TObjectiveTarge
     const box: TextBoxWidget = window.findWidget("valueYear");
     box.text =
       daysRemaining <= 0
-        ? `{${ERROR_COLOUR}}${-daysRemaining} days ago`
+        ? `{${ERROR_COLOUR}}${-daysRemaining} day${daysRemaining === -1 ? "" : "s"} ago`
         : `${daysRemaining < WARNING_DAYS ? `{${WARNING_COLOUR}}` : ""}${daysRemaining} day${daysRemaining === 1 ? "" : "s"}`;
   }
   if (objective.rollercoasters) {
@@ -42,15 +46,14 @@ export const updateObjectiveValues = (window: Window, objective: TObjectiveTarge
 
   if (objective.rideIncome) {
     const box: TextBoxWidget = window.findWidget("valueRideIncome");
-    box.text = context.formatString("{CURRENCY2DP}", objective.rideIncome).split(".")[0];
+    box.text = formatCurrency(objective.rideIncome);
   }
   if (objective.stallsIncome) {
     const box: TextBoxWidget = window.findWidget("valueStallsIncome");
-    box.text = context.formatString("{CURRENCY2DP}", objective.stallsIncome).split(".")[0];
+    box.text = formatCurrency(objective.stallsIncome);
   }
   if (objective.loan) {
     const box: TextBoxWidget = window.findWidget("valueLoan");
-    box.text = context.formatString("{CURRENCY2DP}", park.bankLoan).split(".")[0];
+    box.text = formatCurrency(park.bankLoan);
   }
-
 };

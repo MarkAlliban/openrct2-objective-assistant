@@ -1,4 +1,5 @@
 import { getLengthRequirement } from "./get-length-requirement";
+import { formatCurrency } from "./format-currency";
 
 export type TObjectiveTarget = {
   description: string[];
@@ -49,7 +50,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
     case "parkValueBy":
       return {
         description: wrapWords(
-          `To achieve a park value of at least ${context.formatString("{CURRENCY2DP}", scenario.objective.parkValue).split(".")[0]} at the end of October, Year ${scenario.objective.year}`,
+          `To achieve a park value of at least ${formatCurrency(scenario.objective.parkValue)} at the end of October, Year ${scenario.objective.year}`,
           lineLength,
         ),
         parkValue: scenario.objective.parkValue,
@@ -58,7 +59,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
     case "repayLoanAndParkValue":
       return {
         description: wrapWords(
-          `To repay your loan and achieve a park value of at least ${context.formatString("{CURRENCY2DP}", scenario.objective.parkValue).split(".")[0]}`,
+          `To repay your loan and achieve a park value of at least ${formatCurrency(scenario.objective.parkValue)}`,
           lineLength,
         ),
         parkValue: scenario.objective.parkValue,
@@ -95,7 +96,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
     case "monthlyRideIncome":
       return {
         description: wrapWords(
-          `To achieve a monthly income from ride tickets of at least ${context.formatString("{CURRENCY2DP}", scenario.objective.monthlyIncome).split(".")[0]}`,
+          `To achieve a monthly income from ride tickets of at least ${formatCurrency(scenario.objective.monthlyIncome)}`,
           lineLength,
         ),
         rideIncome: scenario.objective.monthlyIncome,
@@ -103,7 +104,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
     case "monthlyFoodIncome":
       return {
         description: wrapWords(
-          `To achieve a monthly profit from food, drink and merchanidise sales of at least ${context.formatString("{CURRENCY2DP}", scenario.objective.monthlyIncome).split(".")[0]}`,
+          `To achieve a monthly profit from food, drink and merchanidise sales of at least ${formatCurrency(scenario.objective.monthlyIncome)}`,
           lineLength,
         ),
         stallsIncome: scenario.objective.monthlyIncome,

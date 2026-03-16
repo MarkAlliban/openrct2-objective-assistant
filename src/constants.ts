@@ -1,10 +1,11 @@
 export const TITLE = "Objective Progress";
 export const WINDOW_WIDTH = 410;
 export const WINDOW_HEIGHT = 200;
-export const WINDOW_HEIGHT_MIN = 110;
+export const WINDOW_HEIGHT_MIN = 150;
 export const BACKGROUND_COLOR = 3;
 export const FOREGROUND_COLOR = 4;
 
+export const SUCCESS_COLOUR = 'GREEN';
 export const ERROR_COLOUR = 'RED';
 export const WARNING_COLOUR = 'YELLOW';
 export const UI_VALUE_WIDTH = 100;
@@ -33,8 +34,8 @@ export const ICON_COASTERS: ImageAnimation = {
   frameDuration: 4,
 };
 export const ICON_CHART: ImageAnimation = {
-  frameBase: 5237,
-  frameCount: 8,
+  frameBase: 5375,
+  frameCount: 16,
   frameDuration: 4,
 };
 export const ICON_RIDES: ImageAnimation = {

@@ -1,4 +1,5 @@
 import { TObjectiveTarget } from "../utils/get-objective";
+import { formatCurrency } from "../utils/format-currency";
 import { UI_VALUE_HEIGHT, UI_VALUE_WIDTH, WINDOW_WIDTH } from "../constants";
 
 const addRequirementLabel = (
@@ -15,13 +16,18 @@ const addRequirementLabel = (
   height: UI_VALUE_HEIGHT,
   text,
 });
-const addRequirementValue = (name: string, y: number): LabelDesc => ({
+const addRequirementValue = (
+  name: string,
+  y: number,
+  text?: string,
+): LabelDesc => ({
   name,
   type: "label",
   x: WINDOW_WIDTH - 5 - UI_VALUE_WIDTH,
   y,
   width: UI_VALUE_WIDTH,
   height: UI_VALUE_HEIGHT,
+  text,
 });
 
 export const getObjectiveWidgets = (objective: TObjectiveTarget) => {
@@ -36,6 +42,15 @@ export const getObjectiveWidgets = (objective: TObjectiveTarget) => {
   if (objective.parkValue) {
     widgets.push(addRequirementLabel("labelParkValue", 60, "Park value:", y));
     widgets.push(addRequirementValue("valueParkValue", y));
+    y += UI_VALUE_HEIGHT;
+    widgets.push(addRequirementLabel("labelParkValueTarget", 39, "Target:", y));
+    widgets.push(
+      addRequirementValue(
+        "valueParkValueTarget",
+        y,
+        formatCurrency(objective.parkValue),
+      ),
+    );
     y += UI_VALUE_HEIGHT;
   }
   if (objective.rating) {
@@ -107,5 +122,5 @@ export const getObjectiveWidgets = (objective: TObjectiveTarget) => {
     },
   );
 
-  return {widgets, height: y};
+  return { widgets, height: y };
 };
