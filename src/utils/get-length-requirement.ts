@@ -1,5 +1,6 @@
 export const getLengthRequirement = (objective: ScenarioObjective): number | null => {
-  if (objective.length) return objective.length || 0;
+  if (objective.length) return objective.length;
+
   // BUG: objective.length is declared, but not provided at time of coding.
   // If it's fixed in a future release of OpenRCT2 then we will pick it up here.
   // Until then, there are only 4 official scenarios that use this objective:
@@ -7,5 +8,8 @@ export const getLengthRequirement = (objective: ScenarioObjective): number | nul
   if (scenario.name === "Nevermore Park") return 1400;
   if (scenario.name === "Ghost Town") return 1200;
   if (scenario.name === "Rollercoaster Heaven") return 1000;
+
+  // TODO: If it's not an official scenario, maybe we can scrape the length requirement
+  // from the scenario description?
   return null;
 };
