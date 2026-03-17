@@ -1,6 +1,4 @@
 import { TRideInfo } from "../ui/update-rides-data";
 
 export const getRideValue = (ride: TRideInfo) =>
-  ride.count === null
-    ? null
-    : (ride.value || 0) * ((ride.count || 0) + (ride.bonusValue || 0) * 4);
+  (ride.value || 0) * ((ride.count || 0) + (ride.bonusValue || 0) * 4);
