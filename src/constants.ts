@@ -14,7 +14,7 @@ export const UI_LINE_LENGTH = 40;
 
 export const WARNING_DAYS = 31;
 export const TICKS_PER_MONTH = 65536;
-export const TICKS_PER_YEAR = 65536 * 8;
+export const TICKS_PER_YEAR = TICKS_PER_MONTH * 8;
 export const MONTH_DAYS = [31, 30, 31, 30, 31, 31, 30, 31];
 export const DAYS_PER_YEAR = MONTH_DAYS.reduce((a, m) => a + m, 0);
 
