@@ -5,6 +5,11 @@ export const WINDOW_HEIGHT_MIN = 150;
 export const BACKGROUND_COLOR = 3;
 export const FOREGROUND_COLOR = 4;
 
+/*
+Allowed colours - need to be tested!
+BLACK, GREY, WHITE, RED, GREEN, YELLOW, TOPAZ, CELADON, BABYBLUE, PALELAVENDER, PALEGOLD, LIGHTPINK, PEARLAQUA, PALESILVER
+*/
+
 export const SUCCESS_COLOUR = 'GREEN';
 export const ERROR_COLOUR = 'RED';
 export const WARNING_COLOUR = 'YELLOW';
