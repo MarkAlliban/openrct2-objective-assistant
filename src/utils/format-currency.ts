@@ -1,2 +1,5 @@
 export const formatCurrency = (x: number) =>
-  context.formatString("{CURRENCY2DP}", x).split(".")[0];
+  context.formatString("{CURRENCY}", x);
+
+export const formatCurrency2dp = (x: number) =>
+  context.formatString("{CURRENCY2DP}", x);
