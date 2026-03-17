@@ -3,8 +3,11 @@
 A multi-tab plugin that helps montiro your objective progress and various other park statistics that aren't normally visible in-game.
 
 **Tab 1: Objective progress**
+
 **Tab 2: Guests** Soft guest cap, how much each ride / stall / facility contributes.
+
 **Tab 3: Park value** How much each ride and current park guests contribute.
+
 **Tab 4: Coasters** How many qualifying coasters are completed, which types have been built, any duplicate types, etc.
 
 
