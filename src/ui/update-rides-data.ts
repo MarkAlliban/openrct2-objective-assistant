@@ -8,12 +8,13 @@ export type TRideInfo = {
   id: number;
   classification?: string;
   type: number;
-  rideLength?: number;
-  excitement?: number;
   status: string;
   breakdown: string;
-
-	value?: number;
+  rideLength?: number;
+  excitement?: number;
+  value?: number;
+  category?: string;
+  ratingsMultipliers?: [number, number, number];
   typeName?: string;
   bonusValue?: number;
   valueCalculated?: number | null;
@@ -33,8 +34,10 @@ const rideAddMoreInfo = (
 ) => {
   // Add ride type info
   const rideInfo = getRideInfo(ride.type);
-  if (rideInfo.typeName) ride.typeName = rideInfo.typeName;
-  if (rideInfo.bonusValue) ride.bonusValue = rideInfo.bonusValue;
+  ride.typeName = rideInfo.typeName;
+  ride.bonusValue = rideInfo.bonusValue;
+  ride.category = rideInfo.category;
+  ride.ratingsMultipliers = rideInfo.ratingsMultipliers;
 
   // Add guest tracker numbers
   const trackerInfo = tracker.getGuestCount(ride.id);
@@ -44,8 +47,8 @@ const rideAddMoreInfo = (
   // Calculate ride value
   ride.valueCalculated = getRideValue(ride);
 
-  // For non-rides, we're finished here
-  if (ride.classification !== "ride") return ride;
+  // For non-coasters, we're finished here
+  if (ride.category !== "rollercoaster") return ride;
   // If the objective isn't building 10 coasters, we're finished here
   if (!objective.excitementTarget && !objective.lengthTarget) return ride;
 
@@ -73,6 +76,13 @@ export const updateRidesData = (
   const rides: TRideInfo[] = map.rides
     .filter((ride) => types.indexOf(ride.classification) !== -1)
     .map((ride) => rideAddMoreInfo(objective, tracker, ride));
+
+  map.rides.forEach((ride) => {
+    // const r = context.getRide(ride.id);
+    console.log(ride.object);
+    // const obj = context.getObject("ride", ride.object.name);
+    // console.log(ride.id, obj);
+  });
 
   // Combine the stalls
   const stalls: TRideInfo = {
@@ -138,7 +148,7 @@ export const updateRidesData = (
     });
   }
 
-	// Return the filtered ride list
+  // Return the filtered ride list
   return rides.filter((ride) => {
     if (combineFacilities && ride.classification === "facility") return false;
     if (combineStalls && ride.classification === "stall") return false;

@@ -29,7 +29,7 @@ export const openWindow = () => {
   // Only allow one window to be open at a time
   for (let i = 0; i < ui.windows; i++) {
     if (ui.getWindow(i).title === TITLE) {
-      ui.geWindow(i).bringToFront();
+      ui.getWindow(i).bringToFront();
       return;
     }
   }
