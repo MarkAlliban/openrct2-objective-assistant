@@ -1,29 +1,35 @@
 import { guestTracker } from "../data/guest-tracker";
-
 import { getObjective } from "../utils/get-objective";
 import { getObjectiveWidgets } from "./get-objective-widgets";
 import { updateObjectiveValues } from "./update-objective-values";
-
-import { getRidesWidgets } from "./get-rides-widgets";
+import { getParkValueWidgets } from "./get-park-value-widgets";
 import { updateParkValue } from "./update-park-value";
-
 import { getGuestsWidgets } from "./get-guests-widgets";
-
 import {
   TITLE,
   WINDOW_WIDTH,
   WINDOW_HEIGHT,
   WINDOW_HEIGHT_MIN,
   UI_LINE_LENGTH,
-  BACKGROUND_COLOR,
-  FOREGROUND_COLOR,
+  BACKGROUND_COLOUR,
+  FOREGROUND_COLOUR,
   ICON_OBJECTIVE,
   ICON_CHART,
   ICON_COASTERS,
   ICON_CROWD,
-  ICON_RIDES,
+  ICON_MONEY,
+  ICON_BURGER,
 } from "../constants";
 import { updateGuestsValues } from "./update-guests-values";
+import { TRidePrices, TSortTable } from "../types";
+import { getCoastersWidgets } from "./get-coasters-widgets";
+import { updateCoastersValues } from "./update-coasters-values";
+import { getRidePricesWidgets } from "./get-ride-prices-widgets";
+import { updateRidesPrices } from "./update-rides-prices";
+import { openRideWindow } from "../actions/open-ride-window";
+import { handleRidePrice, handleSetAllRides, handleSetAllShops, handleShopPrice } from "../actions/click-handlers";
+import { getShopPricesWidgets } from "./get-shop-prices-widgets";
+import { updateShopsPrices } from "./update-shops-prices";
 
 export const openWindow = () => {
   // Only allow one window to be open at a time
@@ -33,33 +39,35 @@ export const openWindow = () => {
       return;
     }
   }
-
   // Initialise guest tracker
   const tracker = guestTracker();
   context.subscribe("interval.day", function () {
     tracker.updateGuestCount();
   });
-
-  // We need to maintain a closure of the ride ID's to make the list clickable
-  let clickRideIDs: number[] = [];
-  const openRide = (row: number) => {
-    // BUG: The API can't open the ride window. Best we can do is move the viewport to it.
-    const ride = map.getRide(clickRideIDs[row]);
-    if (ride && ride.stations.length > 0) {
-      const tile = ride.stations[0].start;
-      ui.mainViewport.scrollTo(tile);
-    }
+  //Initialise the sorting mechanic
+  const sortBy: TSortTable = {
+    key: "Ride",
+    direction: 1,
+    set: (key: string, direction: number) => {
+      sortBy.key = key;
+      sortBy.direction = direction;
+    },
   };
 
-  // Get the objective widgets
+  // Closure of the ride ID's to make the ride lists clickable
+  let dataRideIDs: number[] = [];
+	const clickRideList = (row: number) => openRideWindow(dataRideIDs[row]);
+  // Closure of the ride ID's and prices to make the price list clickable
+  let dataRidePrices: TRidePrices[] = [];
+	const clickRidePrice = (row: number, col: number) => handleRidePrice(window, dataRidePrices, row, col);
+	const setAllRides = () => handleSetAllRides(window, dataRidePrices);
+  // Closure of the shop ID's and prices to make the price list clickable
+  let dataShopPrices: {id: number, price: number, basePrice:number}[] = [];
+	const clickShopPrice = (row: number, col: number) => handleShopPrice(window, dataShopPrices, row, col);
+	const setAllShops = () => handleSetAllShops(window, dataShopPrices);
+
+  // Get and parse the objective
   const objective = getObjective(UI_LINE_LENGTH);
-  const objectiveWidgets = getObjectiveWidgets(objective);
-
-  // Get the rides widgets
-  const ridesWidgets = getRidesWidgets(openRide);
-
-  // Get the guests widgets
-  const guestsWidgets = getGuestsWidgets(openRide);
 
   let window: Window;
   window = ui.openWindow({
@@ -70,70 +78,46 @@ export const openWindow = () => {
     maxWidth: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
     minHeight: WINDOW_HEIGHT_MIN,
-    colours: [BACKGROUND_COLOR, FOREGROUND_COLOR],
+    colours: [BACKGROUND_COLOUR, FOREGROUND_COLOUR],
     tabs: [
       {
         image: ICON_OBJECTIVE,
-        widgets: [...objectiveWidgets.widgets],
+        widgets: getObjectiveWidgets(objective),
       },
       {
         image: ICON_CROWD,
-        widgets: [...guestsWidgets.widgets],
+        widgets: getGuestsWidgets(clickRideList, sortBy),
       },
       {
         image: ICON_CHART,
-        widgets: [...ridesWidgets.widgets],
+        widgets: getParkValueWidgets(clickRideList, sortBy, objective),
       },
       {
         image: ICON_COASTERS,
-        widgets: [],
+        widgets: getCoastersWidgets(clickRideList, sortBy, objective),
       },
       {
-        image: ICON_RIDES,
-        widgets: [],
+        image: ICON_MONEY,
+        widgets: getRidePricesWidgets(clickRidePrice, sortBy, setAllRides),
+      },
+      {
+        image: ICON_BURGER,
+        widgets: getShopPricesWidgets(clickShopPrice, sortBy, setAllShops),
       },
     ],
     onUpdate: () => {
-      if (window.tabIndex === 0) updateObjectiveValues(window, objective);
+      if (window.tabIndex === 0)
+        updateObjectiveValues(window, objective, tracker);
       if (window.tabIndex === 1)
-        clickRideIDs = updateGuestsValues(window, objective, tracker);
+        dataRideIDs = updateGuestsValues(window, objective, tracker, sortBy);
       if (window.tabIndex === 2)
-        clickRideIDs = updateParkValue(window, objective, tracker);
+        dataRideIDs = updateParkValue(window, objective, tracker, sortBy);
+      if (window.tabIndex === 3)
+        dataRideIDs = updateCoastersValues(window, objective, tracker, sortBy);
+      if (window.tabIndex === 4)
+        dataRidePrices = updateRidesPrices(window, objective, tracker, sortBy);
+      if (window.tabIndex === 5)
+        dataShopPrices = updateShopsPrices(window, objective, tracker, sortBy);
     },
   });
 };
-
-/*
-0: Black
-1: Gray
-2: White
-3: Dark purple
-4: Light purple
-5: Bright purple
-6: Dark blue
-7: Light blue
-8: Icy blue
-9: Dark water
-10: Light water
-11: Saturated green
-12: Dark green
-13: Moss green
-14: Bright green
-15: Olive green
-16: Dark olive green
-17: Bright yellow
-18: Yellow
-19: Dark yellow
-20: Light orange
-21: Dark orange
-22: Light brown
-23: Saturated brown
-24: Dark brown
-25: Salmon pink
-26: Bordeaux red
-27: Saturated red
-28: Bright red
-29: Dark pink
-30: Bright pink
-31: Light pink
-*/

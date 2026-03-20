@@ -1,4 +1,4 @@
-import { TObjectiveTarget } from "../utils/get-objective";
+import { TObjectiveTarget } from "../types";
 import { formatCurrency } from "../utils/format-currency";
 import { UI_VALUE_HEIGHT, UI_VALUE_WIDTH, WINDOW_WIDTH } from "../constants";
 
@@ -33,6 +33,10 @@ const addRequirementValue = (
 export const getObjectiveWidgets = (objective: TObjectiveTarget) => {
   const widgets: WidgetDesc[] = [];
   let y: number = 65;
+
+  widgets.push(addRequirementLabel("labelScenarioStatus", 50, "Status:", y));
+  widgets.push(addRequirementValue("valueScenarioStatus", y));
+  y += UI_VALUE_HEIGHT;
 
   if (objective.guests) {
     widgets.push(addRequirementLabel("labelGuests", 42, "Guests:", y));
@@ -92,7 +96,7 @@ export const getObjectiveWidgets = (objective: TObjectiveTarget) => {
     widgets.push(addRequirementValue("valueStallsIncome", y));
     y += UI_VALUE_HEIGHT;
   }
-  if (objective.loan) {
+  if (objective.loan !== undefined) {
     widgets.push(addRequirementLabel("labelLoan", 30, "Loan:", y));
     widgets.push(addRequirementValue("valueLoan", y));
     y += UI_VALUE_HEIGHT;
@@ -122,5 +126,5 @@ export const getObjectiveWidgets = (objective: TObjectiveTarget) => {
     },
   );
 
-  return { widgets, height: y };
+  return widgets;
 };

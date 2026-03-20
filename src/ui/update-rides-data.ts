@@ -1,69 +1,84 @@
 import { TGuestTracker } from "../data/guest-tracker";
 import { getRideInfo } from "../data/ride-info";
-import { TObjectiveTarget } from "../utils/get-objective";
+import { TObjectiveTarget, TRideInfo } from "../types";
 import { getRideValue } from "../utils/get-ride-value";
-
-export type TRideInfo = {
-  name: string;
-  id: number;
-  classification?: string;
-  type: number;
-  status: string;
-  breakdown: string;
-  rideLength?: number;
-  excitement?: number;
-  value?: number;
-  category?: string;
-  ratingsMultipliers?: [number, number, number];
-  typeName?: string;
-  bonusValue?: number;
-  valueCalculated?: number | null;
-  duplicateType?: boolean;
-  meetsExcitementRequirement?: boolean;
-  meetsLengthRequirement?: boolean;
-  meetsRequirements?: boolean;
-  error?: number;
-  count?: number;
-  incomplete?: boolean;
-};
 
 const rideAddMoreInfo = (
   objective: TObjectiveTarget,
   tracker: TGuestTracker,
-  ride: TRideInfo,
+  ride: Ride,
 ) => {
   // Add ride type info
   const rideInfo = getRideInfo(ride.type);
-  ride.typeName = rideInfo.typeName;
-  ride.bonusValue = rideInfo.bonusValue;
-  ride.category = rideInfo.category;
-  ride.ratingsMultipliers = rideInfo.ratingsMultipliers;
+  const rideUpdated: TRideInfo = {
+    id: ride.id,
+    name: ride.name,
+    type: ride.type,
+    classification: ride.classification,
+    status: ride.status,
+    breakdown: ride.breakdown,
+    age: ride.age,
+    price: ride.price,
+    rideLength: ride.rideLength,
+    excitement: ride.excitement,
+    intensity: ride.intensity,
+    nausea: ride.nausea,
+    value: ride.value,
+    ...rideInfo,
+  };
+
+  rideUpdated.typeName = rideInfo.typeName;
+  rideUpdated.category = rideInfo.category;
+  rideUpdated.bonusValue = rideInfo.bonusValue;
+  if (rideInfo.sameTypeAs) rideUpdated.sameTypeAs = rideInfo.sameTypeAs;
+  rideUpdated.ratingsMultipliers = rideInfo.ratingsMultipliers;
 
   // Add guest tracker numbers
-  const trackerInfo = tracker.getGuestCount(ride.id);
-  ride.count = trackerInfo.count;
-  ride.error = trackerInfo.error;
+  const trackerInfo = tracker.getGuestCount(rideUpdated.id);
+  rideUpdated.count = trackerInfo.count;
+  rideUpdated.error = trackerInfo.error;
 
-  // Calculate ride value
-  ride.valueCalculated = getRideValue(ride);
+  // Calculate ride value (park value contribution)
+  rideUpdated.valueCalculated = getRideValue(rideUpdated);
+
+  // For shops, parse the items and prices
+  if (
+    rideUpdated.classification === "stall" ||
+    rideUpdated.classification === "facility"
+  ) {
+    const shopItems = [];
+    if (ride.object.shopItem < 255)
+      shopItems.push({ id: ride.object.shopItem, price: ride.price[0] });
+    if (ride.object.shopItemSecondary < 255)
+      shopItems.push({
+        id: ride.object.shopItemSecondary,
+        price: ride.price[1],
+      });
+    rideUpdated.shopItems = shopItems;
+  }
 
   // For non-coasters, we're finished here
-  if (ride.category !== "rollercoaster") return ride;
-  // If the objective isn't building 10 coasters, we're finished here
-  if (!objective.excitementTarget && !objective.lengthTarget) return ride;
+  if (rideUpdated.category !== "rollercoaster") return rideUpdated;
+  // If the objective isn't building coasters, we're finished here
+  if (
+    !objective.rollercoasters &&
+    !objective.excitementTarget &&
+    !objective.lengthTarget
+  )
+    return rideUpdated;
 
   // Check if the coaster matches the requirements
   if (objective.lengthTarget)
-    ride.meetsLengthRequirement =
-      (ride.rideLength || 0) >= objective.lengthTarget;
+    rideUpdated.meetsLengthRequirement =
+      (rideUpdated.rideLength || 0) >= objective.lengthTarget;
   if (objective.excitementTarget)
-    ride.meetsExcitementRequirement =
-      (ride.excitement || 0) >= objective.excitementTarget;
-  ride.meetsRequirements =
-    (!objective.lengthTarget || ride.meetsLengthRequirement) &&
-    (!objective.excitementTarget || ride.meetsExcitementRequirement);
+    rideUpdated.meetsExcitementRequirement =
+      (rideUpdated.excitement || 0) >= objective.excitementTarget;
+  rideUpdated.meetsRequirements =
+    (!objective.lengthTarget || rideUpdated.meetsLengthRequirement) &&
+    (!objective.excitementTarget || rideUpdated.meetsExcitementRequirement);
 
-  return ride;
+  return rideUpdated;
 };
 
 export const updateRidesData = (
@@ -73,15 +88,20 @@ export const updateRidesData = (
   combineStalls = false,
   combineFacilities = false,
 ) => {
+  // Filter and get more info on each of the rides
   const rides: TRideInfo[] = map.rides
     .filter((ride) => types.indexOf(ride.classification) !== -1)
     .map((ride) => rideAddMoreInfo(objective, tracker, ride));
 
-  map.rides.forEach((ride) => {
-    // const r = context.getRide(ride.id);
-    console.log(ride.object);
-    // const obj = context.getObject("ride", ride.object.name);
-    // console.log(ride.id, obj);
+  // Check for duplicate qualifying rides
+  rides.forEach((ride) => {
+    if (!ride.meetsRequirements) return;
+    const sameTypes = rides.filter(
+      (r) =>
+        (r.sameTypeAs || r.typeName) === (ride.sameTypeAs || ride.typeName) &&
+        r.meetsRequirements,
+    ).length;
+    if (sameTypes > 1) ride.duplicateType = true;
   });
 
   // Combine the stalls
@@ -154,4 +174,54 @@ export const updateRidesData = (
     if (combineStalls && ride.classification === "stall") return false;
     return true;
   });
+};
+
+export const updateRidePricesMultiple = (
+  ride: TRideInfo,
+  rides: TRideInfo[],
+): TRideInfo => {
+  // Calculate the value (for ticket price)
+  const getAgeFactors = (value: number): number[] => [
+    Math.floor(value + 30),
+    Math.floor(value + 10),
+    Math.floor(value),
+    Math.floor(value * 0.75),
+    Math.floor(value * 0.56),
+    Math.floor(value * 0.42),
+    Math.floor(value * 0.32),
+    Math.floor(value * 0.16),
+    Math.floor(value * 0.08),
+    Math.floor(value * 0.56),
+  ];
+
+  // Initial value of excitement, intensity and nausea values
+  let value =
+    Math.floor(
+      ((ride.excitement || 0) * (ride.ratingsMultipliers?.[0] || 0)) / 1024,
+    ) +
+    Math.floor(
+      ((ride.intensity || 0) * (ride.ratingsMultipliers?.[1] || 0)) / 1024,
+    ) +
+    Math.floor(
+      ((ride.nausea || 0) * (ride.ratingsMultipliers?.[2] || 0)) / 1024,
+    );
+
+  // Adjust for age, and reduce by 25% if there are multiple rides of the same type
+  const numOfType = rides.filter(
+    (r) => (r.sameTypeAs || r.typeName) === (ride.sameTypeAs || ride.typeName),
+  ).length;
+  let agedValues = getAgeFactors(value).map(
+    (value) => value - Math.floor(value * (numOfType === 1 ? 0 : 0.25)),
+  );
+	// Reduce by 75% if there is an entrance fee
+	// (Actually this applies per guest but if some have and some haven't, it's difficult to know whether to apply it or not. We use the current park status for simplicity)
+  if (park.entranceFee) {
+    agedValues.forEach((value, index) => {
+      agedValues[index] = value - Math.floor(value * 0.75);
+    });
+  }
+
+  // Calculate the max prices from the value
+  ride.maxPrices = agedValues.map((value) => value * 2);
+  return ride;
 };

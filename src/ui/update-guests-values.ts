@@ -1,20 +1,37 @@
 import { TGuestTracker } from "../data/guest-tracker";
-import { TObjectiveTarget } from "../utils/get-objective";
+import { TObjectiveTarget } from "../types";
 import { renderRideTableRow } from "./render-ride-table-row";
 import { updateRidesData } from "./update-rides-data";
 import { fitListToWindow } from "./fit-list-to-window";
 import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
+import { updateTimeData } from "./update-time-data";
 
 export const updateGuestsValues = (
   window: Window,
   objective: TObjectiveTarget,
   tracker: TGuestTracker,
+  sortBy: any,
 ) => {
-  const rides = updateRidesData(objective, tracker, [
-    "ride",
-    "stall",
-    "facility",
-  ], true, true).sort((a, b) => (a.name > b.name ? 1 : -1));
+  // Get ride info and sort
+  const rides = updateRidesData(
+    objective,
+    tracker,
+    ["ride", "stall", "facility"],
+    true,
+    true,
+  ).sort((a, b) => {
+    if (sortBy.key === "Ride")
+      return a.name > b.name ? sortBy.direction : -sortBy.direction;
+    if (sortBy.key === "Type" && a.typeName !== b.typeName)
+      return (a.typeName || "") > (b.typeName || "")
+        ? sortBy.direction
+        : -sortBy.direction;
+    if (sortBy.key === "Bonus" && a.bonusValue !== b.bonusValue)
+      return (a.bonusValue || 0) > (b.bonusValue || 0)
+        ? -sortBy.direction
+        : sortBy.direction;
+    return a.id > b.id ? 1 : -1;
+  });
 
   // Calculate soft guest cap
   const softGuestCapPotential = rides.reduce(
@@ -42,6 +59,9 @@ export const updateGuestsValues = (
   const textSoftGuestCapPotential: TextBoxWidget =
     window.findWidget("textSoftGuestCap");
   textSoftGuestCapPotential.text = `${park.suggestedGuestMaximum} / ${softGuestCapPotential}${softGuestCapRealtime === park.suggestedGuestMaximum ? "" : ` {${WARNING_COLOUR}}(${softGuestCapRealtime})`}`;
+
+	// Update time limit indicator
+	updateTimeData(window, objective, !!objective.guests);
 
   // Update ride list widget
   const listview: ListViewWidget = window.findWidget("listRides");

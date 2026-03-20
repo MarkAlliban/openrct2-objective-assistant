@@ -1,19 +1,6 @@
 import { getLengthRequirement } from "./get-length-requirement";
 import { formatCurrency } from "./format-currency";
-
-export type TObjectiveTarget = {
-  description: string[];
-  guests?: number;
-  parkValue?: number;
-  rating?: number;
-  year?: number;
-  rollercoasters?: number;
-  excitementTarget?: number;
-  lengthTarget?: number | null;
-  rideIncome?: number;
-  stallsIncome?: number;
-  loan?: number;
-};
+import { TObjectiveTarget } from "../types";
 
 const wrapWords = (text: string, lineLength: number): string[] => {
   const words: string[] = text.split(" ");
@@ -91,6 +78,14 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
           lineLength,
         ),
         rollercoasters: 5,
+        rollercoastersToComplete: map.rides
+          .filter(
+            (ride) =>
+              ride.classification === "ride" &&
+              ride.object.carsPerFlatRide === 255,
+          )
+          .slice(0, 5)
+          .map((ride) => ride.id),
         excitementTarget: scenario.objective.excitement,
       };
     case "monthlyRideIncome":

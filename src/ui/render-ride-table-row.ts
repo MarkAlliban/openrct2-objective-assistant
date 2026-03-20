@@ -1,6 +1,11 @@
-import {formatCurrency} from '../utils/format-currency';
+import { formatCurrency, formatCurrency2dp } from "../utils/format-currency";
 import { SUCCESS_COLOUR, ERROR_COLOUR, WARNING_COLOUR } from "../constants";
-import { TRideInfo } from "./update-rides-data";
+import { TItemData, TRideInfo, TShopItem } from "../types";
+import {
+  getAgeCategory,
+  getBestPrice,
+  getLongTermPrice,
+} from "../utils/ride-pricing";
 
 const getRideName = (ride: TRideInfo) => {
   if (ride.breakdown !== "none") return `{${ERROR_COLOUR}}${ride.name}`;
@@ -22,9 +27,14 @@ const getTypeName = (ride: TRideInfo) => {
   return `${getColour(ride)}${ride.typeName}`;
 };
 
+const getAgeName = (ride: TRideInfo) => {
+  return `${ride.age}`;
+};
+
 const getExcitementString = (ride: TRideInfo) => {
   if (ride.classification !== "ride") return "-";
-  if (ride.excitement === -1 || ride.excitement === undefined) return `{${ERROR_COLOUR}}???`;
+  if (ride.excitement === -1 || ride.excitement === undefined)
+    return `{${ERROR_COLOUR}}???`;
   return `${getColour(ride)}${(ride.excitement / 100).toFixed(2)}`;
 };
 
@@ -37,7 +47,7 @@ const getLengthString = (ride: TRideInfo) => {
 
 const getRidersString = (ride: TRideInfo) => {
   if (ride.error && ride.error > 0)
-    return `{${ERROR_COLOUR}}In ${(ride.error / 40).toFixed(0)}`;
+    return `{${WARNING_COLOUR}}In ${(ride.error / 40).toFixed(0)}`;
   return `${ride.count?.toFixed(0) || 0}`;
 };
 
@@ -47,14 +57,59 @@ const getValueString = (ride: TRideInfo) => {
   return `${ride.incomplete ? `{${ERROR_COLOUR}}` : ""}${formatCurrency(ride.valueCalculated * 10)}`;
 };
 
+const getActualPriceString = (ride: TRideInfo) => {
+  if (ride.price?.[0] === undefined) return `{${ERROR_COLOUR}}???`;
+  if (ride.price[0] === 0) return `Free`;
+  const currentPrice = ride.price?.[0];
+  const bestPrice = getBestPrice(ride.age || 0, ride.maxPrices || []);
+  if (currentPrice * 10 > bestPrice)
+    return `{${ERROR_COLOUR}}${formatCurrency2dp(currentPrice)}`;
+  if (currentPrice * 10 === bestPrice)
+    return `{${SUCCESS_COLOUR}}${formatCurrency2dp(currentPrice)}`;
+  const longTermPrice = getLongTermPrice(ride.age || 0, ride.maxPrices || []);
+  if (currentPrice * 10 >= longTermPrice)
+    return `${formatCurrency2dp(currentPrice)}`;
+  return `{${WARNING_COLOUR}}${formatCurrency2dp(ride.price?.[0])}`;
+};
+
+const getMaxPriceString = (ride: TRideInfo) => {
+  if (ride.maxPrices) {
+    return ride.maxPrices.map((price, index) => {
+      return `${getAgeCategory(ride.age || 0) === index ? `{${WARNING_COLOUR}}` : ""}${formatCurrency2dp(price)}`;
+    });
+  }
+  return [""];
+};
+
 export const renderRideTableRow = (ride: TRideInfo, columns: string[]) => {
   const cols: string[] = [];
   if (columns.indexOf("name") !== -1) cols.push(getRideName(ride));
   if (columns.indexOf("type") !== -1) cols.push(getTypeName(ride));
-  if (columns.indexOf("excitement") !== -1) cols.push(getExcitementString(ride));
+  if (columns.indexOf("age") !== -1) cols.push(getAgeName(ride));
+  if (columns.indexOf("excitement") !== -1)
+    cols.push(getExcitementString(ride));
   if (columns.indexOf("length") !== -1) cols.push(getLengthString(ride));
   if (columns.indexOf("riders") !== -1) cols.push(getRidersString(ride));
   if (columns.indexOf("bonus") !== -1) cols.push(`${ride.bonusValue}`);
   if (columns.indexOf("value") !== -1) cols.push(getValueString(ride));
+  if (columns.indexOf("prices") !== -1)
+    cols.push(getActualPriceString(ride), ...getMaxPriceString(ride));
   return cols;
 };
+
+const getItemName = (data: TShopItem) => {
+  return `${data.oneOff ? `{${WARNING_COLOUR}}` : ""}${data.name}`;
+};
+const getCurrentPrice = (item: TItemData) => {
+  if (item.minPrice === item.maxPrice && item.minPrice === 0) return "Free";
+	if(item.minPrice !== item.maxPrice) return `{${WARNING_COLOUR}}${formatCurrency2dp(item.maxPrice || 0)}`;
+
+	return `${Math.round(item.minPrice) === Math.round((item.data.recommendedPrice || 0) * 10) ? `{${SUCCESS_COLOUR}}` : ""}${formatCurrency2dp(item.maxPrice || 0)}`;
+};
+
+export const renderItemTableRow = (item: TItemData) => [
+  getItemName(item.data),
+  getCurrentPrice(item),
+  formatCurrency2dp((item.data.basePrice || 0) * 10),
+  formatCurrency2dp((item.data.recommendedPrice || 0) * 10),
+];

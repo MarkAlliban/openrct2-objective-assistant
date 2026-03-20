@@ -1,18 +1,4 @@
-type TRideTypeInfo = {
-  typeId: number;
-  typeName: string;
-  identifier: string;
-  bonusValue: number;
-  category:
-    | "rollercoaster"
-    | "gentle"
-    | "water"
-    | "thrill"
-    | "transport"
-    | "shop"
-    | "none";
-  ratingsMultipliers: [number, number, number];
-};
+import { TRideTypeInfo } from "../types";
 
 const rideDataTable: TRideTypeInfo[] = [
   {
@@ -558,6 +544,7 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 80,
     identifier: "compact_inverted_rc",
+		sameTypeAs: "Inverted Roller Coaster",
   },
   {
     typeId: 74,
