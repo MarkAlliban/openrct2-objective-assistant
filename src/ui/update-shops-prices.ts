@@ -4,12 +4,7 @@ import { TItemData, TObjectiveTarget, TSortTable } from "../types";
 import { getRecommendedPrice } from "../utils/price-adjustment";
 import { renderItemTableRow } from "./render-ride-table-row";
 import { updateRidesData } from "./update-rides-data";
-import { updateWidgetList } from "./update-widget-list";
-
-const getWidgetDropdownValue = (window: Window, name: string): number => {
-  const box: DropdownWidget = window.findWidget(name);
-  return box ? box.selectedIndex : 0;
-};
+import { updateWidgetList, getWidgetDropdownValue } from "./update-widget";
 
 export const updateShopsPrices = (
   window: Window,

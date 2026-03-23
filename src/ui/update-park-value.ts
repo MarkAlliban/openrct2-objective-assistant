@@ -5,8 +5,7 @@ import { updateRidesData } from "./update-rides-data";
 import { renderRideTableRow } from "./render-ride-table-row";
 import { updateTimeData } from "./update-time-data";
 import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
-import { updateWidget } from "./update-widget";
-import { updateWidgetList } from "./update-widget-list";
+import { updateWidget, updateWidgetList } from "./update-widget";
 
 export const updateParkValue = (
   window: Window,

@@ -4,8 +4,7 @@ import { renderRideTableRow } from "./render-ride-table-row";
 import { updateRidesData } from "./update-rides-data";
 import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
 import { updateTimeData } from "./update-time-data";
-import { updateWidget } from "./update-widget";
-import { updateWidgetList } from "./update-widget-list";
+import { updateWidget, updateWidgetList } from "./update-widget";
 
 export const updateGuestsValues = (
   window: Window,

@@ -2,7 +2,7 @@ import { TGuestTracker } from "../data/guest-tracker";
 import { TObjectiveTarget, TRideInfo, TRidePrices, TSortTable } from "../types";
 import { renderRideTableRow } from "./render-ride-table-row";
 import { updateRidePricesMultiple, updateRidesData } from "./update-rides-data";
-import { updateWidgetList } from "./update-widget-list";
+import { updateWidgetList } from "./update-widget";
 
 export const updateRidesPrices = (
   window: Window,
