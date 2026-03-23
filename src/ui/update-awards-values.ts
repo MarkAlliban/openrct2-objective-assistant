@@ -56,6 +56,17 @@ const countThoughts = (
   return { passed: true, required: 0 };
 };
 
+const getExclusions = (award: string) => {
+  const awardInfo = awardsInfo.filter((a) => a.name === award);
+  const awardsCurrent = park.awards.map((a) => a.type);
+  if (!awardInfo.length) return [];
+  const exclusions = awardInfo[0].exclusion.map((exclusion) => {
+    return { name: exclusion, has: awardsCurrent.indexOf(exclusion) !== -1 };
+  });
+  console.log(exclusions);
+  return exclusions;
+};
+
 export const updateAwardsValues = (
   window: Window,
   objective: TObjectiveTarget,
@@ -105,6 +116,7 @@ export const updateAwardsValues = (
     null,
     6,
   );
+  const tidyExclusions = getExclusions("mostTidy");
   const mostTidy: TAwardQualification = {
     eligible: tidyThoughts.passed && untidyThoughts.passed,
     requirements: [
@@ -330,7 +342,6 @@ export const updateAwardsValues = (
     bestCustomDesignedRides,
     mostDazzlingRideColours,
     bestGentleRides,
-		
   };
   awardsInfo.forEach((award) => {
     if (!awards[award.name]) return;
