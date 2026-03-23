@@ -98,7 +98,7 @@ export const updateAwardsValues = (
     (ride) =>
       ride.category === "rollercoaster" &&
       ride.status === "open" &&
-      !((ride.lifecycleFlags || 0) & RIDE_LIFECYCLE_CRASHED),
+      !((ride.flags || 0) & RIDE_LIFECYCLE_CRASHED),
   ).length;
   const bestRollerCoasters: TAwardQualification = {
     eligible: coasters >= 6,
@@ -161,7 +161,7 @@ export const updateAwardsValues = (
   const recentCrashes = allRides.filter(
     (ride) =>
       ride.classification === "ride" &&
-      (ride.lifecycleFlags || 0) & RIDE_LIFECYCLE_CRASHED,
+      (ride.flags || 0) & RIDE_LIFECYCLE_CRASHED,
   ).length;
   const safest: TAwardQualification = {
     eligible: vandalismThoughts.passed && recentCrashes === 0,
@@ -250,7 +250,7 @@ export const updateAwardsValues = (
     (ride) =>
       ride.category === "water" &&
       ride.status === "open" &&
-      !((ride.lifecycleFlags || 0) & RIDE_LIFECYCLE_CRASHED),
+      !((ride.flags || 0) & RIDE_LIFECYCLE_CRASHED),
   ).length;
   const bestWaterRides: TAwardQualification = {
     eligible: waterRides >= 6,
@@ -264,9 +264,9 @@ export const updateAwardsValues = (
   const customRides = allRides.filter(
     (ride) =>
       (ride.excitement || 0) >= 5.5 &&
-      !((ride.lifecycleFlags || 0) & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
+      !((ride.flags || 0) & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
       ride.status === "open" &&
-      !((ride.lifecycleFlags || 0) & RIDE_LIFECYCLE_CRASHED),
+      !((ride.flags || 0) & RIDE_LIFECYCLE_CRASHED),
   ).length;
   const bestCustomDesignedRides: TAwardQualification = {
     eligible: customRides >= 6,

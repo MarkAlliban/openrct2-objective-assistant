@@ -24,7 +24,7 @@ const rideAddMoreInfo = (
     intensity: ride.intensity,
     nausea: ride.nausea,
     value: ride.value,
-		lifecycleFlags: ride.flags,
+		flags: ride.flags,
     ...rideInfo,
   };
 

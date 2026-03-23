@@ -50,7 +50,7 @@ export type TRideInfo = {
   intensity?: number;
   nausea?: number;
   value?: number;
-	lifecycleFlags?: number;
+	flags?: number;
 
   typeName?: string;
   category?: string;
