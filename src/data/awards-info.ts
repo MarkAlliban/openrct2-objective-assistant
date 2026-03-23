@@ -128,7 +128,7 @@ export const awardsInfo: TAward[] = [
     name: "mostDazzlingRideColours",
 		text: "Most dazzling colours",
     positive: true,
-		requirements: ["At least 5 tracked rides", "More than half of them are bright purple, bright green, light orange or bright pink"],
+		requirements: ["At least 5 tracked rides", "More than half of them are bright purple, bright green, light orange or bright pink", "colours"],
     exclusion: ["mostDisappointing"],
   },
   {
