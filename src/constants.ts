@@ -46,8 +46,11 @@ export const INFO_COLOUR = "PALEGOLD";
 export const UI_VALUE_WIDTH = 100;
 export const UI_VALUE_HEIGHT = 12;
 export const UI_LINE_LENGTH = 40;
-
 export const WARNING_DAYS = 31;
+
+export const RIDE_LIFECYCLE_CRASHED = 1 << 10;
+export const RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN = 1 << 18;
+export const DAZZLING_COLOURS = [5, 14, 20, 30];
 
 export const ICON_OBJECTIVE: ImageAnimation = {
   frameBase: 5511,
@@ -78,4 +81,15 @@ export const ICON_BURGER: ImageAnimation = {
   frameBase: 5351,
   frameCount: 16,
   frameDuration: 2,
+};
+
+export const ICONS = {
+  info: 5129,
+  certificate: 5115,
+  rosetteRed: 5470,
+  rosetteGreen: 5472,
+  thumbsDown: 5480,
+  rosetteBlue: 5481,
+  arrowGreenUp: 5130,
+  arrowRedDownimage: 5131,
 };

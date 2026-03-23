@@ -27,9 +27,16 @@ import { updateCoastersValues } from "./update-coasters-values";
 import { getRidePricesWidgets } from "./get-ride-prices-widgets";
 import { updateRidesPrices } from "./update-rides-prices";
 import { openRideWindow } from "../actions/open-ride-window";
-import { handleRidePrice, handleSetAllRides, handleSetAllShops, handleShopPrice } from "../actions/click-handlers";
+import {
+  handleRidePrice,
+  handleSetAllRides,
+  handleSetAllShops,
+  handleShopPrice,
+} from "../actions/click-handlers";
 import { getShopPricesWidgets } from "./get-shop-prices-widgets";
 import { updateShopsPrices } from "./update-shops-prices";
+import { getAwardsWidgets } from "./get-awards-widgets";
+import { updateAwardsValues } from "./update-awards-values";
 
 export const openWindow = () => {
   // Only allow one window to be open at a time
@@ -56,15 +63,17 @@ export const openWindow = () => {
 
   // Closure of the ride ID's to make the ride lists clickable
   let dataRideIDs: number[] = [];
-	const clickRideList = (row: number) => openRideWindow(dataRideIDs[row]);
+  const clickRideList = (row: number) => openRideWindow(dataRideIDs[row]);
   // Closure of the ride ID's and prices to make the price list clickable
   let dataRidePrices: TRidePrices[] = [];
-	const clickRidePrice = (row: number, col: number) => handleRidePrice(window, dataRidePrices, row, col);
-	const setAllRides = () => handleSetAllRides(window, dataRidePrices);
+  const clickRidePrice = (row: number, col: number) =>
+    handleRidePrice(window, dataRidePrices, row, col);
+  const setAllRides = () => handleSetAllRides(window, dataRidePrices);
   // Closure of the shop ID's and prices to make the price list clickable
-  let dataShopPrices: {id: number, price: number, basePrice:number}[] = [];
-	const clickShopPrice = (row: number, col: number) => handleShopPrice(window, dataShopPrices, row, col);
-	const setAllShops = () => handleSetAllShops(window, dataShopPrices);
+  let dataShopPrices: { id: number; price: number; basePrice: number }[] = [];
+  const clickShopPrice = (row: number, col: number) =>
+    handleShopPrice(window, dataShopPrices, row, col);
+  const setAllShops = () => handleSetAllShops(window, dataShopPrices);
 
   // Get and parse the objective
   const objective = getObjective(UI_LINE_LENGTH);
@@ -104,6 +113,10 @@ export const openWindow = () => {
         image: ICON_BURGER,
         widgets: getShopPricesWidgets(clickShopPrice, sortBy, setAllShops),
       },
+      {
+        image: "awards",
+        widgets: getAwardsWidgets(),
+      },
     ],
     onUpdate: () => {
       if (window.tabIndex === 0)
@@ -118,6 +131,8 @@ export const openWindow = () => {
         dataRidePrices = updateRidesPrices(window, objective, tracker, sortBy);
       if (window.tabIndex === 5)
         dataShopPrices = updateShopsPrices(window, objective, tracker, sortBy);
+      if (window.tabIndex === 6)
+        updateAwardsValues(window, objective, tracker);
     },
   });
 };

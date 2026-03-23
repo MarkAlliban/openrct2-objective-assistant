@@ -50,6 +50,7 @@ export type TRideInfo = {
   intensity?: number;
   nausea?: number;
   value?: number;
+	lifecycleFlags?: number;
 
   typeName?: string;
   category?: string;
@@ -93,4 +94,12 @@ export type TShopItem = {
   recommendedPrice?: number;
   name: string;
   oneOff?: boolean;
+};
+
+export type TAward = {
+  name: AwardType;
+	text: string;
+  positive: boolean;
+	requirements: string[];
+  exclusion: AwardType[];
 };
