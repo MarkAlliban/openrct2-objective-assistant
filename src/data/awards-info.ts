@@ -1,4 +1,5 @@
 import { TAward } from "../types";
+import { arrayToObject } from "../utils/array-to-object";
 
 /*
 AWARDS:
@@ -145,3 +146,5 @@ export const awardsInfo: TAward[] = [
     exclusion: [],
   },
 ];
+
+export const awardNames = arrayToObject(awardsInfo);

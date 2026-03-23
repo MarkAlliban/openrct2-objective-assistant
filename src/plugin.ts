@@ -1,4 +1,4 @@
-/// <reference path="C:/Program Files/OpenRCT2/openrct2.d.ts" />
+/// <reference path="./lib/openrct2.d.ts" />
 import { startup } from "./startup";
 import { TITLE } from "./constants";
 

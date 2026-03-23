@@ -1,15 +1,18 @@
 # An OpenRCT2 plugin to help achieve your objective!
 
-A multi-tab plugin that helps montiro your objective progress and various other park statistics that aren't normally visible in-game.
+A multi-tab plugin that helps monitor your objective progress and various other park statistics that aren't normally visible in-game.
 
-**Tab 1: Objective progress**
+**Tab 1: Objective progress summary**
 
-**Tab 2: Guests** Soft guest cap, how much each ride / stall / facility contributes.
+**Tab 2: Guest number objectives** Soft guest cap, how much each ride / stall / facility contributes.
 
-**Tab 3: Park value** How much each ride and current park guests contribute.
+**Tab 3: Park value objectives** How much each ride and current park guests contribute.
 
-**Tab 4: Coasters** How many qualifying coasters are completed, which types have been built, any duplicate types, etc.
+**Tab 4: Coaster-building objectives** How many qualifying coasters are completed, which types have been built, any duplicate types.
 
+**Tab 5: Ride prices** Maximise your monthly ride ticket income.
+
+**Tab 5: Merch** Maximise your monthly food, drink and merchandise income.
 
 ## How to use
 
