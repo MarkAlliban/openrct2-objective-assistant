@@ -30,7 +30,10 @@ const addRequirementValue = (
   text,
 });
 
-export const getObjectiveWidgets = (objective: TObjectiveTarget) => {
+export const getObjectiveWidgets = (
+  objective: TObjectiveTarget,
+  goToObjectiveTab: Function,
+) => {
   const widgets: WidgetDesc[] = [];
   let y: number = 65;
 
@@ -119,7 +122,7 @@ export const getObjectiveWidgets = (objective: TObjectiveTarget) => {
     );
   }
 
-  widgets.unshift(
+  widgets.push(
     {
       name: "groupObjective",
       type: "groupbox",
@@ -140,6 +143,20 @@ export const getObjectiveWidgets = (objective: TObjectiveTarget) => {
       width: 350,
       height: 15,
       text: objective.description.join("\n"),
+    },
+    {
+      name: "goToObjectivePage",
+      type: "button",
+      x: 100,
+      y: Math.max(
+        objective.description.length * 10 + 22,
+        (widgets.length / 2) * UI_VALUE_HEIGHT + 20,
+      ),
+      width: 100,
+      height: UI_VALUE_HEIGHT * 2,
+      text: "More info",
+      onClick: () => goToObjectiveTab(objective.tab || 0),
+      isVisible: !!objective.tab,
     },
   );
 

@@ -75,6 +75,12 @@ export const openWindow = () => {
     handleShopPrice(window, dataShopPrices, row, col);
   const setAllShops = () => handleSetAllShops(window, dataShopPrices);
 
+  // TODO: Check this works
+  const goToObjectiveTab = (window: Window, tab: number) => {
+    console.log(tab);
+    window.tabIndex = tab;
+  };
+
   // Get and parse the objective
   const objective = getObjective(UI_LINE_LENGTH);
 
@@ -91,7 +97,7 @@ export const openWindow = () => {
     tabs: [
       {
         image: ICON_OBJECTIVE,
-        widgets: getObjectiveWidgets(objective),
+        widgets: getObjectiveWidgets(objective, goToObjectiveTab),
       },
       {
         image: ICON_CROWD,
@@ -131,8 +137,7 @@ export const openWindow = () => {
         dataRidePrices = updateRidesPrices(window, objective, tracker, sortBy);
       if (window.tabIndex === 5)
         dataShopPrices = updateShopsPrices(window, objective, tracker, sortBy);
-      if (window.tabIndex === 6)
-        updateAwardsValues(window, objective, tracker);
+      if (window.tabIndex === 6) updateAwardsValues(window, objective, tracker);
     },
   });
 };

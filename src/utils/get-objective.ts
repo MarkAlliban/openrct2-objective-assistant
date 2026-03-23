@@ -24,6 +24,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
         guests: scenario.objective.guests,
         year: scenario.objective.year,
         rating: 600,
+        tab: 1,
       };
     case "guestsAndRating":
       return {
@@ -33,6 +34,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
         ),
         guests: scenario.objective.guests,
         rating: 700,
+        tab: 1,
       };
     case "parkValueBy":
       return {
@@ -42,6 +44,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
         ),
         parkValue: scenario.objective.parkValue,
         year: scenario.objective.year,
+        tab: 2,
       };
     case "repayLoanAndParkValue":
       return {
@@ -51,6 +54,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
         ),
         parkValue: scenario.objective.parkValue,
         loan: 0,
+        tab: 2,
       };
     case "10Rollercoasters":
       return {
@@ -60,6 +64,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
         ),
         rollercoasters: 10,
         excitementTarget: 600,
+        tab: 3,
       };
     case "10RollercoastersLength":
       return {
@@ -70,6 +75,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
         rollercoasters: 10,
         excitementTarget: 700,
         lengthTarget: getLengthRequirement(scenario.objective),
+        tab: 3,
       };
     case "finish5Rollercoasters":
       return {
@@ -87,6 +93,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
           .slice(0, 5)
           .map((ride) => ride.id),
         excitementTarget: scenario.objective.excitement,
+        tab: 3,
       };
     case "monthlyRideIncome":
       return {
@@ -95,6 +102,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
           lineLength,
         ),
         rideIncome: scenario.objective.monthlyIncome,
+        tab: 4,
       };
     case "monthlyFoodIncome":
       return {
@@ -103,6 +111,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
           lineLength,
         ),
         stallsIncome: scenario.objective.monthlyIncome,
+        tab: 5,
       };
 
     case "haveFun":

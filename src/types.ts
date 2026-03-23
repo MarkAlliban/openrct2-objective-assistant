@@ -17,6 +17,7 @@ export type TObjectiveTarget = {
   rideIncome?: number;
   stallsIncome?: number;
   loan?: number;
+  tab?: number
 };
 
 export type TRideTypeInfo = {
