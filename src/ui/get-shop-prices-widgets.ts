@@ -1,3 +1,4 @@
+import { readValue, saveValue } from "../actions/shared-storage";
 import { UI_VALUE_HEIGHT } from "../constants";
 import { TSortTable } from "../types";
 import { renderRideTable } from "./render-ride-table";
@@ -27,16 +28,16 @@ export const getShopPricesWidgets = (
     text: "Set all to recommended",
     onClick: clickAction,
   },
-	{
-		name: "labelTemperature",
-		type: "label",
-		x: 206,
-		y: 50,
-		width: 71,
+  {
+    name: "labelTemperature",
+    type: "label",
+    x: 206,
+    y: 50,
+    width: 71,
     height: UI_VALUE_HEIGHT,
-		text: "Temperature:"
-	},
-	{
+    text: "Temperature:",
+  },
+  {
     name: "optionTemperature",
     type: "dropdown",
     x: 285,
@@ -44,17 +45,18 @@ export const getShopPricesWidgets = (
     width: 120,
     height: UI_VALUE_HEIGHT,
     items: ["Annual average", "This month", "Any temp", "Right now"],
-    selectedIndex: 0,
+    selectedIndex: readValue("shops.temperature").value,
+    onChange: (value: number) => saveValue("shops.temperature", {value}),
   },
-	{
-		name: "labelGuestMood",
-		type: "label",
-		x: 235,
-		y: 65,
-		width: 42,
+  {
+    name: "labelGuestMood",
+    type: "label",
+    x: 235,
+    y: 65,
+    width: 42,
     height: UI_VALUE_HEIGHT,
-		text: "Guests:"
-	},
+    text: "Guests:",
+  },
   {
     name: "optionGuestMood",
     type: "dropdown",
@@ -63,17 +65,18 @@ export const getShopPricesWidgets = (
     width: 120,
     height: UI_VALUE_HEIGHT,
     items: ["Happy guests", "Most guests", "All guests"],
-    selectedIndex: 0,
+    selectedIndex: readValue("shops.mood").value,
+    onChange: (value: number) => saveValue("shops.mood", {value}),
   },
-	{
-		name: "labelGreediness",
-		type: "label",
-		x: 226,
-		y: 80,
-		width: 51,
+  {
+    name: "labelGreediness",
+    type: "label",
+    x: 226,
+    y: 80,
+    width: 51,
     height: UI_VALUE_HEIGHT,
-		text: "Strategy:"
-	},
+    text: "Strategy:",
+  },
   {
     name: "optionFoodBuyChance",
     type: "dropdown",
@@ -82,7 +85,8 @@ export const getShopPricesWidgets = (
     width: 60,
     height: UI_VALUE_HEIGHT,
     items: ["100%", "75%", "50%", "25%", "12.5%"],
-    selectedIndex: 0,
+    selectedIndex: readValue("shops.foodBuy").value,
+    onChange: (value: number) => saveValue("shops.foodBuy", {value}),
   },
   {
     name: "optionMerchBuyChance",
@@ -92,7 +96,8 @@ export const getShopPricesWidgets = (
     width: 120,
     height: UI_VALUE_HEIGHT,
     items: ["100%", "75%", "50%", "25%", "12.5%"],
-    selectedIndex: 0,
+    selectedIndex: readValue("shops.merchBuy").value,
+    onChange: (value: number) => saveValue("shops.merchBuy", {value}),
   },
   ...renderRideTable(85 + UI_VALUE_HEIGHT, ["Shops"], clickRow, sortBy),
 ];

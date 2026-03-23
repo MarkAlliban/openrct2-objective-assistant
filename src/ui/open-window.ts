@@ -37,6 +37,7 @@ import { getShopPricesWidgets } from "./get-shop-prices-widgets";
 import { updateShopsPrices } from "./update-shops-prices";
 import { getAwardsWidgets } from "./get-awards-widgets";
 import { updateAwardsValues } from "./update-awards-values";
+import { readValue, saveValue } from "../actions/shared-storage";
 
 export const openWindow = () => {
   // Only allow one window to be open at a time
@@ -83,6 +84,7 @@ export const openWindow = () => {
 
   // Get and parse the objective
   const objective = getObjective(UI_LINE_LENGTH);
+  let savedTab: any = readValue("tab");
 
   let window: Window;
   window = ui.openWindow({
@@ -125,6 +127,10 @@ export const openWindow = () => {
       },
     ],
     onUpdate: () => {
+      if (window.tabIndex !== savedTab.value) {
+        savedTab = { value: window.tabIndex };
+        saveValue("tab", savedTab);
+      }
       if (window.tabIndex === 0)
         updateObjectiveValues(window, objective, tracker);
       if (window.tabIndex === 1)
