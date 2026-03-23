@@ -120,12 +120,12 @@ export const updateRidesData = (
   if (combineStalls) {
     rides.forEach((ride: TRideInfo) => {
       if (ride.classification === "stall" && ride.status === "open") {
-        stalls.count = (stalls.count || 0) + 1;
-        stalls.bonusValue = (stalls.bonusValue || 0) + (ride.bonusValue || 0);
+        stalls.count!++;
+        stalls.bonusValue!+= (ride.bonusValue || 0);
       }
     });
   }
-  if (stalls && (stalls.count || 0) > 0) {
+  if (stalls && stalls.count! > 0) {
     stalls.typeName = `x${stalls.count}`;
     rides.push(stalls);
   }
@@ -144,13 +144,13 @@ export const updateRidesData = (
   if (combineFacilities) {
     rides.forEach((ride) => {
       if (ride.classification === "facility" && ride.status === "open") {
-        facilities.count = (facilities.count || 0) + 1;
+        facilities.count!++;
         facilities.bonusValue =
-          (facilities.bonusValue || 0) + (ride.bonusValue || 0);
+          facilities.bonusValue!+= (ride.bonusValue || 0);
       }
     });
   }
-  if (facilities && (facilities.count || 0) > 0) {
+  if (facilities && facilities.count! > 0) {
     facilities.typeName = `x${facilities.count}`;
     rides.push(facilities);
   }

@@ -30,7 +30,6 @@ const getExclusions = (award: AwardType) => {
       has: awardsCurrent.indexOf(exclusion) !== -1,
     };
   });
-  console.log(exclusions);
   return { excluded: exclusions.some((e) => e.has), list: exclusions };
 };
 
@@ -52,8 +51,8 @@ export const updateAwardsValues = (
     "facility",
   ]);
 
-  // Count the guests thoughts that we're interested in
-  const thoughts: any = {
+  // Read all guest thoughts
+  const thoughts: Partial<Record<ThoughtType, number>> = {
     toilet: 0,
     bad_litter: 0,
     path_disgusting: 0,
@@ -68,15 +67,15 @@ export const updateAwardsValues = (
   for (const guest of guests) {
     for (const thought of guest.thoughts) {
       if (thought.freshness <= 5 && thoughts[thought.type] !== undefined) {
-        thoughts[thought.type]++;
+        thoughts[thought.type]!++;
       }
     }
   }
 
   // Most tidy park
-  const tidyThoughts = countThoughts(thoughts.very_clean, 64);
+  const tidyThoughts = countThoughts(thoughts.very_clean!, 64);
   const untidyThoughts = countThoughts(
-    thoughts.bad_litter + thoughts.path_disgusting + thoughts.vandalism,
+    thoughts.bad_litter! + thoughts.path_disgusting! + thoughts.vandalism!,
     null,
     null,
     null,
@@ -98,7 +97,7 @@ export const updateAwardsValues = (
     (ride) =>
       ride.category === "rollercoaster" &&
       ride.status === "open" &&
-      !((ride.flags || 0) & RIDE_LIFECYCLE_CRASHED),
+      !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
   ).length;
   const bestRollerCoasters: TAwardQualification = {
     eligible: coasters >= 6,
@@ -120,18 +119,16 @@ export const updateAwardsValues = (
       park.getFlag("freeParkEntry") || park.entranceFee === 0
         ? `${ERROR_COLOUR}None`
         : `${SUCCESS_COLOUR}Yes`,
-      park.getFlag("noMoney")
-        ? `${ERROR_COLOUR}No`
-        : `${SUCCESS_COLOUR}Yes`,
+      park.getFlag("noMoney") ? `${ERROR_COLOUR}No` : `${SUCCESS_COLOUR}Yes`,
       `${park.entranceFee + 0.1 > park.totalRideValueForMoney / 2 ? ERROR_COLOUR : SUCCESS_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney / 2)}`,
     ],
     exclusions: bestValueExclusions.list,
   };
 
   // Most beautiful park
-  const beautifultidyThoughts = countThoughts(thoughts.scenery, 128);
+  const beautifultidyThoughts = countThoughts(thoughts.scenery!, 128);
   const unbeautifulThoughts = countThoughts(
-    thoughts.bad_litter + thoughts.path_disgusting + thoughts.vandalism,
+    thoughts.bad_litter! + thoughts.path_disgusting! + thoughts.vandalism!,
     null,
     null,
     null,
@@ -152,7 +149,7 @@ export const updateAwardsValues = (
 
   // Safest park
   const vandalismThoughts = countThoughts(
-    thoughts.vandalism,
+    thoughts.vandalism!,
     null,
     null,
     null,
@@ -161,7 +158,7 @@ export const updateAwardsValues = (
   const recentCrashes = allRides.filter(
     (ride) =>
       ride.classification === "ride" &&
-      (ride.flags || 0) & RIDE_LIFECYCLE_CRASHED,
+      ride.flags! & RIDE_LIFECYCLE_CRASHED,
   ).length;
   const safest: TAwardQualification = {
     eligible: vandalismThoughts.passed && recentCrashes === 0,
@@ -181,11 +178,9 @@ export const updateAwardsValues = (
     },
     { handyman: 0, entertainer: 0, security: 0, mechanic: 0 },
   );
-  const staffTypes =
-    (staffBreakdown.handyman > 0 ? 1 : 0) +
-    (staffBreakdown.mechanic > 0 ? 1 : 0) +
-    (staffBreakdown.security > 0 ? 1 : 0) +
-    (staffBreakdown.entertainer > 0 ? 1 : 0);
+  const staffTypes = (
+    Object.keys(staffBreakdown) as (keyof typeof staffBreakdown)[]
+  ).filter((key: StaffType) => staffBreakdown[key] > 0).length;
   const bestStaffExclusions = getExclusions("bestStaff");
   const bestStaff: TAwardQualification = {
     eligible:
@@ -209,7 +204,7 @@ export const updateAwardsValues = (
     if (a.indexOf(r.object.shopItem) === -1) a.push(r.object.shopItem);
     return a;
   }, []);
-  const hungryGuests = countThoughts(thoughts.hungry, null, null, null, 13);
+  const hungryGuests = countThoughts(thoughts.hungry!, null, null, null, 13);
   const bestFoodExclusions = getExclusions("bestFood");
   const bestFood: TAwardQualification = {
     eligible:
@@ -231,7 +226,7 @@ export const updateAwardsValues = (
   const toilets = map.rides.filter(
     (ride) => ride.type === 36 && ride.status === "open",
   ).length;
-  const needToilet = countThoughts(thoughts.toilet, null, null, 128);
+  const needToilet = countThoughts(thoughts.toilet!, null, null, 128);
   const bestToilets: TAwardQualification = {
     eligible:
       toilets >= 4 &&
@@ -250,7 +245,7 @@ export const updateAwardsValues = (
     (ride) =>
       ride.category === "water" &&
       ride.status === "open" &&
-      !((ride.flags || 0) & RIDE_LIFECYCLE_CRASHED),
+      !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
   ).length;
   const bestWaterRides: TAwardQualification = {
     eligible: waterRides >= 6,
@@ -264,9 +259,9 @@ export const updateAwardsValues = (
   const customRides = allRides.filter(
     (ride) =>
       (ride.excitement || 0) >= 5.5 &&
-      !((ride.flags || 0) & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
+      !(ride.flags! & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
       ride.status === "open" &&
-      !((ride.flags || 0) & RIDE_LIFECYCLE_CRASHED),
+      !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
   ).length;
   const bestCustomDesignedRides: TAwardQualification = {
     eligible: customRides >= 6,
@@ -311,7 +306,7 @@ export const updateAwardsValues = (
 
   // Most untidy park
   const untidyThoughts2 = countThoughts(
-    thoughts.bad_litter + thoughts.path_disgusting + thoughts.vandalism,
+    thoughts.bad_litter! + thoughts.path_disgusting! + thoughts.vandalism!,
     null,
     null,
     16,
@@ -342,7 +337,7 @@ export const updateAwardsValues = (
   };
 
   // Worst food
-  const hungryGuests2 = countThoughts(thoughts.hungry, 16);
+  const hungryGuests2 = countThoughts(thoughts.hungry!, 16);
   const worstFoodExclusions = getExclusions("worstFood");
   const worstFood: TAwardQualification = {
     eligible:
@@ -376,9 +371,9 @@ export const updateAwardsValues = (
   };
 
   // Most confusing layout
-  const lostGuests = countThoughts(thoughts.lost + thoughts.cant_find, 10);
+  const lostGuests = countThoughts(thoughts.lost! + thoughts.cant_find!, 10);
   const lostGuests2 = countThoughts(
-    thoughts.lost + thoughts.cant_find,
+    thoughts.lost! + thoughts.cant_find!,
     null,
     64,
   );

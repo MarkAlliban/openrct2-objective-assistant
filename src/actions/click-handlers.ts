@@ -23,7 +23,6 @@ export const handleSetAllRides = (
   window: Window,
   dataRidePrices: TRidePrices[],
 ) => {
-  dataRidePrices.forEach((ride) => console.log(ride.currentPrice));
   const actionWidget: DropdownWidget = window.findWidget("optionAction");
   if (actionWidget.selectedIndex === 1) {
     dataRidePrices.forEach((ride) => {
