@@ -12,6 +12,7 @@ import { updateRidesData } from "./update-rides-data";
 import { formatCurrency } from "../utils/format-currency";
 import { awardNames, awardsInfo } from "../data/awards-info";
 import { countThoughts } from "../utils/count-thoughts";
+import { updateWidget } from "./update-widget";
 
 type TAwardQualification = {
   eligible: boolean;
@@ -421,10 +422,4 @@ export const updateAwardsValues = (
       updateWidget(window, `${award.name}Requirement${index}`, req);
     });
   });
-};
-
-const updateWidget = (window: Window, name: string, text: string) => {
-  const widget: LabelWidget = window.findWidget(name);
-  if (!widget) return;
-  if (widget.text !== text) widget.text = text;
 };

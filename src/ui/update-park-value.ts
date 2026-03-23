@@ -3,9 +3,10 @@ import { TObjectiveTarget, TSortTable } from "../types";
 import { formatCurrency } from "../utils/format-currency";
 import { updateRidesData } from "./update-rides-data";
 import { renderRideTableRow } from "./render-ride-table-row";
-import { fitListToWindow } from "./fit-list-to-window";
 import { updateTimeData } from "./update-time-data";
 import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
+import { updateWidget } from "./update-widget";
+import { updateWidgetList } from "./update-widget-list";
 
 export const updateParkValue = (
   window: Window,
@@ -34,21 +35,18 @@ export const updateParkValue = (
   );
 
   // Update park value widget
-  const label: LabelWidget = window.findWidget("textParkValue");
-  if (objective.parkValue)
-    label.text = `${park.value < objective.parkValue ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${formatCurrency(park.value)}{WHITE} / ${formatCurrency(objective.parkValue)}`;
-  else
-    label.text = `${formatCurrency(park.value)}`;
+  const text = objective.parkValue
+    ? `${park.value < objective.parkValue ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${formatCurrency(park.value)}{WHITE} / ${formatCurrency(objective.parkValue)}`
+    : `${formatCurrency(park.value)}`;
+  updateWidget(window, "textParkValue", text);
 
   // Update time limit indicator
   updateTimeData(window, objective, !!objective.parkValue);
 
   // Update ride list widget
-  const listview: ListViewWidget = window.findWidget("listRides");
-  listview.items = rides.map((ride) =>
+  updateWidgetList(window, "listRides", rides.map((ride) =>
     renderRideTableRow(ride, ["name", "riders", "bonus", "value"]),
-  );
-  fitListToWindow(window, listview, rides.length);
+  ));
 
   // Return the ride IDs
   return rides.map((ride) => ride.id);

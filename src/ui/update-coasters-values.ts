@@ -1,10 +1,24 @@
 import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
 import { TGuestTracker } from "../data/guest-tracker";
-import { TObjectiveTarget } from "../types";
-import { fitListToWindow } from "./fit-list-to-window";
+import { TObjectiveTarget, TRideInfo } from "../types";
 import { renderRideTableRow } from "./render-ride-table-row";
 import { updateRidesData } from "./update-rides-data";
 import { updateTimeData } from "./update-time-data";
+import { updateWidget } from "./update-widget";
+import { updateWidgetList } from "./update-widget-list";
+
+const getCoasterText = (
+  objective: TObjectiveTarget,
+  completed: number[],
+  uniqueTypes: (string | undefined)[],
+  rides: TRideInfo[],
+) => {
+  if (objective.rollercoastersToComplete)
+    return `${completed.length < objective.rollercoastersToComplete.length ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${completed.length}{WHITE} / ${objective.rollercoasters}`;
+  else if (objective.rollercoasters)
+    return `${uniqueTypes.length < objective.rollercoasters ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${uniqueTypes.length}{WHITE} / ${objective.rollercoasters}`;
+  else return `${rides.length}`;
+};
 
 export const updateCoastersValues = (
   window: Window,
@@ -50,22 +64,20 @@ export const updateCoastersValues = (
     ) || [];
 
   // Update the coasters count
-  const box: LabelWidget = window.findWidget("textCoasters");
-  if (objective.rollercoastersToComplete)
-    box.text = `${completed.length < objective.rollercoastersToComplete.length ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${completed.length}{WHITE} / ${objective.rollercoasters}`;
-  else if (objective.rollercoasters)
-    box.text = `${uniqueTypes.length < objective.rollercoasters ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${uniqueTypes.length}{WHITE} / ${objective.rollercoasters}`;
-  else box.text = `${rides.length}`;
+  const text = getCoasterText(objective, completed, uniqueTypes, rides);
+  updateWidget(window, "textCoasters", text);
 
   // Update time limit indicator
   updateTimeData(window, objective, !!objective.rollercoasters);
 
   // Update ride list widget
-  const listview: ListViewWidget = window.findWidget("listRides");
-  listview.items = rides.map((ride) =>
-    renderRideTableRow(ride, ["name", "type", "excitement", "length"]),
+  updateWidgetList(
+    window,
+    "listRides",
+    rides.map((ride) =>
+      renderRideTableRow(ride, ["name", "type", "excitement", "length"]),
+    ),
   );
-  fitListToWindow(window, listview, rides.length);
 
   // Return the ride IDs
   return rides.map((ride) => ride.id);

@@ -2,9 +2,10 @@ import { TGuestTracker } from "../data/guest-tracker";
 import { TObjectiveTarget } from "../types";
 import { renderRideTableRow } from "./render-ride-table-row";
 import { updateRidesData } from "./update-rides-data";
-import { fitListToWindow } from "./fit-list-to-window";
 import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
 import { updateTimeData } from "./update-time-data";
+import { updateWidget } from "./update-widget";
+import { updateWidgetList } from "./update-widget-list";
 
 export const updateGuestsValues = (
   window: Window,
@@ -45,7 +46,6 @@ export const updateGuestsValues = (
   }, 0);
 
   // Update current guests
-  const textGuests: TextBoxWidget = window.findWidget("textGuests");
   const colour =
     objective.guests &&
     (park.guests >= objective.guests
@@ -53,22 +53,28 @@ export const updateGuestsValues = (
       : park.guests >= objective.guests * 0.9
         ? WARNING_COLOUR
         : "");
-  textGuests.text = `${colour ? `{${colour}}` : ""}${park.guests}${objective.guests ? ` / ${objective.guests}` : ""}`;
+  updateWidget(
+    window,
+    "textGuests",
+    `${colour ? `{${colour}}` : ""}${park.guests}${objective.guests ? ` / ${objective.guests}` : ""}`,
+  );
 
   // Update the soft guest caps
-  const textSoftGuestCapPotential: TextBoxWidget =
-    window.findWidget("textSoftGuestCap");
-  textSoftGuestCapPotential.text = `${park.suggestedGuestMaximum} / ${softGuestCapPotential}${softGuestCapRealtime === park.suggestedGuestMaximum ? "" : ` {${WARNING_COLOUR}}(${softGuestCapRealtime})`}`;
+  updateWidget(
+    window,
+    "textSoftGuestCap",
+    `${park.suggestedGuestMaximum} / ${softGuestCapPotential}${softGuestCapRealtime === park.suggestedGuestMaximum ? "" : ` {${WARNING_COLOUR}}(${softGuestCapRealtime})`}`,
+  );
 
-	// Update time limit indicator
-	updateTimeData(window, objective, !!objective.guests);
+  // Update time limit indicator
+  updateTimeData(window, objective, !!objective.guests);
 
   // Update ride list widget
-  const listview: ListViewWidget = window.findWidget("listRides");
-  listview.items = rides.map((ride) =>
-    renderRideTableRow(ride, ["name", "type", "bonus"]),
+  updateWidgetList(
+    window,
+    "listRides",
+    rides.map((ride) => renderRideTableRow(ride, ["name", "type", "bonus"])),
   );
-  fitListToWindow(window, listview, rides.length);
 
   // Return the ride IDs
   return rides.map((ride) => ride.id);

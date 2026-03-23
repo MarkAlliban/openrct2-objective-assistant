@@ -2,9 +2,14 @@ import { TGuestTracker } from "../data/guest-tracker";
 import { getShopItem } from "../data/shop-info";
 import { TItemData, TObjectiveTarget, TSortTable } from "../types";
 import { getRecommendedPrice } from "../utils/price-adjustment";
-import { fitListToWindow } from "./fit-list-to-window";
 import { renderItemTableRow } from "./render-ride-table-row";
 import { updateRidesData } from "./update-rides-data";
+import { updateWidgetList } from "./update-widget-list";
+
+const getWidgetDropdownValue = (window: Window, name: string): number => {
+  const box: DropdownWidget = window.findWidget(name);
+  return box ? box.selectedIndex : 0;
+};
 
 export const updateShopsPrices = (
   window: Window,
@@ -20,12 +25,10 @@ export const updateShopsPrices = (
     },
   );
 
-  const boxTemp: DropdownWidget = window.findWidget("optionTemperature");
-  const optionTemperature = boxTemp.selectedIndex;
-  const boxGuestMood: DropdownWidget = window.findWidget("optionGuestMood");
-  const optionGuestMood = boxGuestMood.selectedIndex;
-  const boxGreediness: DropdownWidget = window.findWidget("optionGreediness");
-  const optionGreediness = boxGreediness.selectedIndex;
+  const optionTemperature = getWidgetDropdownValue(window, "optionTemperature");
+  const optionGuestMood = getWidgetDropdownValue(window, "optionGuestMood");
+  const optionFoodBuy = getWidgetDropdownValue(window, "optionFoodBuy");
+  const optionMerchBuy = getWidgetDropdownValue(window, "optionMerchBuy");
 
   // Get a list of the items for sale
   const items: TItemData[] = [];
@@ -44,7 +47,8 @@ export const updateShopsPrices = (
           shopItem,
           optionTemperature,
           optionGuestMood,
-          optionGreediness,
+          optionFoodBuy,
+          optionMerchBuy,
         );
 
         items[newIndex - 1].data.recommendedPrice = recommendedPrice;
@@ -55,10 +59,12 @@ export const updateShopsPrices = (
     });
   });
 
-	// Update ride list widget
-  const listview: ListViewWidget = window.findWidget("listRides");
-  listview.items = items.map((item) => renderItemTableRow(item));
-  fitListToWindow(window, listview, items.length);
+  // Update ride list widget
+  updateWidgetList(
+    window,
+    "listRides",
+    items.map((item) => renderItemTableRow(item)),
+  );
 
   // Return the item IDs and recommended prices
   return items.map((item) => ({

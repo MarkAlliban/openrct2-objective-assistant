@@ -5,10 +5,11 @@ export const fitListToWindow = (
   listview: ListViewWidget,
   n: number,
 ) => {
-  listview.height = window.height - 5 - listview.y;
+  const newHeight = window.height - 5 - listview.y;
+  if (listview.height !== newHeight) {
+    listview.height = newHeight;
+  }
   if (window.height - listview.y < n * UI_VALUE_HEIGHT + 20) {
     if (listview.scrollbars !== "vertical") listview.scrollbars = "vertical";
-  } else {
-    if (listview.scrollbars !== "none") listview.scrollbars = "none";
-  }
+  } else if (listview.scrollbars !== "none") listview.scrollbars = "none";
 };

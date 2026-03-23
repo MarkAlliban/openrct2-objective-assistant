@@ -1,8 +1,8 @@
 import { TGuestTracker } from "../data/guest-tracker";
 import { TObjectiveTarget, TRideInfo, TRidePrices, TSortTable } from "../types";
-import { fitListToWindow } from "./fit-list-to-window";
 import { renderRideTableRow } from "./render-ride-table-row";
 import { updateRidePricesMultiple, updateRidesData } from "./update-rides-data";
+import { updateWidgetList } from "./update-widget-list";
 
 export const updateRidesPrices = (
   window: Window,
@@ -24,17 +24,17 @@ export const updateRidesPrices = (
   rides.forEach((ride) => updateRidePricesMultiple(ride, rides));
 
   // Update ride list widget
-  const listview: ListViewWidget = window.findWidget("listRides");
-  listview.items = rides.map((ride) =>
-    renderRideTableRow(ride, ["name", "age", "prices"]),
+  updateWidgetList(
+    window,
+    "listRides",
+    rides.map((ride) => renderRideTableRow(ride, ["name", "age", "prices"])),
   );
-  fitListToWindow(window, listview, rides.length);
 
   // Return the ride IDs
   return rides.map((ride) => ({
     id: ride.id,
     age: ride.age || 0,
-		currentPrice: (ride.price?.[0] || 0),
+    currentPrice: ride.price?.[0] || 0,
     prices: ride.maxPrices || [],
   }));
 };
