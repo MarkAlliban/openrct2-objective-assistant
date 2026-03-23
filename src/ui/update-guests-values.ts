@@ -55,14 +55,14 @@ export const updateGuestsValues = (
   updateWidget(
     window,
     "textGuests",
-    `${colour ? `{${colour}}` : ""}${park.guests}${objective.guests ? ` / ${objective.guests}` : ""}`,
+    `${colour || ""}${park.guests}${objective.guests ? ` / ${objective.guests}` : ""}`,
   );
 
   // Update the soft guest caps
   updateWidget(
     window,
     "textSoftGuestCap",
-    `${park.suggestedGuestMaximum} / ${softGuestCapPotential}${softGuestCapRealtime === park.suggestedGuestMaximum ? "" : ` {${WARNING_COLOUR}}(${softGuestCapRealtime})`}`,
+    `${park.suggestedGuestMaximum} / ${softGuestCapPotential}${softGuestCapRealtime === park.suggestedGuestMaximum ? "" : ` ${WARNING_COLOUR}(${softGuestCapRealtime})`}`,
   );
 
   // Update time limit indicator

@@ -2,6 +2,7 @@
 
 A multi-tab plugin that helps monitor your objective progress and various other park statistics that aren't normally visible in-game.
 
+
 **Tab 1: Objective progress summary**
 
 **Tab 2: Guest number objectives** Soft guest cap, how much each ride / stall / facility contributes.
@@ -12,7 +13,10 @@ A multi-tab plugin that helps monitor your objective progress and various other 
 
 **Tab 5: Ride prices** Maximise your monthly ride ticket income.
 
-**Tab 5: Merch** Maximise your monthly food, drink and merchandise income.
+**Tab 6: Merch** Maximise your monthly food, drink and merchandise income.
+
+**Tab 7: Awards** Maximise your guest generation by tracking your awards progress.
+
 
 ## How to use
 

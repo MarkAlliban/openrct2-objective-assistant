@@ -35,7 +35,7 @@ export const updateParkValue = (
 
   // Update park value widget
   const text = objective.parkValue
-    ? `${park.value < objective.parkValue ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${formatCurrency(park.value)}{WHITE} / ${formatCurrency(objective.parkValue)}`
+    ? `${park.value < objective.parkValue ? WARNING_COLOUR : SUCCESS_COLOUR}${formatCurrency(park.value)}{WHITE} / ${formatCurrency(objective.parkValue)}`
     : `${formatCurrency(park.value)}`;
   updateWidget(window, "textParkValue", text);
 

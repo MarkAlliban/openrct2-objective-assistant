@@ -38,11 +38,11 @@ PEARLAQUA			Light bluish			#83CFCF
 PALESILVER		Grey-yellow				#CFC3AB
 */
 
-export const SUCCESS_COLOUR = "GREEN";
-export const ERROR_COLOUR = "RED";
-export const WARNING_COLOUR = "TOPAZ";
-export const BUTTON_TEXT_COLOUR = "BLACK";
-export const INFO_COLOUR = "PALEGOLD";
+export const SUCCESS_COLOUR = "{GREEN}";
+export const ERROR_COLOUR = "{RED}";
+export const WARNING_COLOUR = "{TOPAZ}";
+export const BUTTON_TEXT_COLOUR = "{BLACK}";
+export const INFO_COLOUR = "{PALEGOLD}";
 export const UI_VALUE_WIDTH = 100;
 export const UI_VALUE_HEIGHT = 12;
 export const UI_LINE_LENGTH = 40;

@@ -8,22 +8,22 @@ import {
 } from "../utils/ride-pricing";
 
 const getRideName = (ride: TRideInfo) => {
-  if (ride.breakdown !== "none") return `{${ERROR_COLOUR}}${ride.name}`;
+  if (ride.breakdown !== "none") return `${ERROR_COLOUR}${ride.name}`;
   if (ride.status === "open") return ride.name;
   return ride.status === "testing"
-    ? `{${WARNING_COLOUR}}${ride.name}`
-    : `{${ERROR_COLOUR}}${ride.name}`;
+    ? `${WARNING_COLOUR}${ride.name}`
+    : `${ERROR_COLOUR}${ride.name}`;
 };
 const getColour = (ride: TRideInfo) => {
   return ride.duplicateType
-    ? `{${WARNING_COLOUR}}`
+    ? WARNING_COLOUR
     : ride.meetsRequirements
-      ? `{${SUCCESS_COLOUR}}`
+      ? SUCCESS_COLOUR
       : "";
 };
 
 const getTypeName = (ride: TRideInfo) => {
-  if (!ride.typeName) return `{${ERROR_COLOUR}}UNKNOWN`;
+  if (!ride.typeName) return `${ERROR_COLOUR}UNKNOWN`;
   return `${getColour(ride)}${ride.typeName}`;
 };
 
@@ -34,48 +34,48 @@ const getAgeName = (ride: TRideInfo) => {
 const getExcitementString = (ride: TRideInfo) => {
   if (ride.classification !== "ride") return "-";
   if (ride.excitement === -1 || ride.excitement === undefined)
-    return `{${ERROR_COLOUR}}???`;
+    return `${ERROR_COLOUR}???`;
   return `${getColour(ride)}${(ride.excitement / 100).toFixed(2)}`;
 };
 
 const getLengthString = (ride: TRideInfo) => {
   if (ride.classification !== "ride") return "-";
-  if (ride.excitement === -1) return `{${ERROR_COLOUR}}???`;
+  if (ride.excitement === -1) return `${ERROR_COLOUR}???`;
   if (ride.rideLength === 0) return "-";
-  return `${ride.meetsLengthRequirement ? (ride.duplicateType ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`) : ""}${context.formatString("{LENGTH}", ride.rideLength)}`;
+  return `${ride.meetsLengthRequirement ? (ride.duplicateType ? WARNING_COLOUR : SUCCESS_COLOUR) : ""}${context.formatString("{LENGTH}", ride.rideLength)}`;
 };
 
 const getRidersString = (ride: TRideInfo) => {
   if (ride.error && ride.error > 0)
-    return `{${WARNING_COLOUR}}In ${(ride.error / 40).toFixed(0)}`;
+    return `${WARNING_COLOUR}In ${(ride.error / 40).toFixed(0)}`;
   return `${ride.count?.toFixed(0) || 0}`;
 };
 
 const getValueString = (ride: TRideInfo) => {
   if (ride.valueCalculated === null || ride.valueCalculated === undefined)
-    return `{${ERROR_COLOUR}}???`;
-  return `${ride.incomplete ? `{${ERROR_COLOUR}}` : ""}${formatCurrency(ride.valueCalculated * 10)}`;
+    return `${ERROR_COLOUR}???`;
+  return `${ride.incomplete ? ERROR_COLOUR : ""}${formatCurrency(ride.valueCalculated * 10)}`;
 };
 
 const getActualPriceString = (ride: TRideInfo) => {
-  if (ride.price?.[0] === undefined) return `{${ERROR_COLOUR}}???`;
+  if (ride.price?.[0] === undefined) return `${ERROR_COLOUR}???`;
   if (ride.price[0] === 0) return `Free`;
   const currentPrice = ride.price?.[0];
   const bestPrice = getBestPrice(ride.age || 0, ride.maxPrices || []);
   if (currentPrice * 10 > bestPrice)
-    return `{${ERROR_COLOUR}}${formatCurrency2dp(currentPrice)}`;
+    return `${ERROR_COLOUR}${formatCurrency2dp(currentPrice)}`;
   if (currentPrice * 10 === bestPrice)
-    return `{${SUCCESS_COLOUR}}${formatCurrency2dp(currentPrice)}`;
+    return `${SUCCESS_COLOUR}${formatCurrency2dp(currentPrice)}`;
   const longTermPrice = getLongTermPrice(ride.age || 0, ride.maxPrices || []);
   if (currentPrice * 10 >= longTermPrice)
     return `${formatCurrency2dp(currentPrice)}`;
-  return `{${WARNING_COLOUR}}${formatCurrency2dp(ride.price?.[0])}`;
+  return `${WARNING_COLOUR}${formatCurrency2dp(ride.price?.[0])}`;
 };
 
 const getMaxPriceString = (ride: TRideInfo) => {
   if (ride.maxPrices) {
     return ride.maxPrices.map((price, index) => {
-      return `${getAgeCategory(ride.age || 0) === index ? `{${WARNING_COLOUR}}` : ""}${formatCurrency2dp(price)}`;
+      return `${getAgeCategory(ride.age || 0) === index ? WARNING_COLOUR : ""}${formatCurrency2dp(price)}`;
     });
   }
   return [""];
@@ -98,13 +98,14 @@ export const renderRideTableRow = (ride: TRideInfo, columns: string[]) => {
 };
 
 const getItemName = (data: TShopItem) => {
-  return `${data.oneOff ? `{${WARNING_COLOUR}}` : ""}${data.name}`;
+  return `${data.oneOff ? WARNING_COLOUR : ""}${data.name}`;
 };
 const getCurrentPrice = (item: TItemData) => {
   if (item.minPrice === item.maxPrice && item.minPrice === 0) return "Free";
-	if(item.minPrice !== item.maxPrice) return `{${WARNING_COLOUR}}${formatCurrency2dp(item.maxPrice || 0)}`;
+  if (item.minPrice !== item.maxPrice)
+    return `${WARNING_COLOUR}${formatCurrency2dp(item.maxPrice || 0)}`;
 
-	return `${Math.round(item.minPrice) === Math.round((item.data.recommendedPrice || 0) * 10) ? `{${SUCCESS_COLOUR}}` : ""}${formatCurrency2dp(item.maxPrice || 0)}`;
+  return `${Math.round(item.minPrice) === Math.round((item.data.recommendedPrice || 0) * 10) ? SUCCESS_COLOUR : ""}${formatCurrency2dp(item.maxPrice || 0)}`;
 };
 
 export const renderItemTableRow = (item: TItemData) => [

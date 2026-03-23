@@ -22,7 +22,7 @@ export const updateTimeData = (
       updateWidget(
         window,
         "textYear",
-        `${daysRemaining < WARNING_DAYS ? `{${WARNING_COLOUR}}` : ""}${daysRemaining} day${daysRemaining === 1 ? "" : "s"}`,
+        `${daysRemaining < WARNING_DAYS ? WARNING_COLOUR : ""}${daysRemaining} day${daysRemaining === 1 ? "" : "s"}`,
         true,
       );
       updateWidget(window, "labelYear", null, true);

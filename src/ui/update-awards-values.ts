@@ -87,8 +87,8 @@ export const updateAwardsValues = (
     eligible:
       tidyThoughts.passed && untidyThoughts.passed && !tidyExclusions.excluded,
     requirements: [
-      `${tidyThoughts.passed ? `{${SUCCESS_COLOUR}}` : `{${ERROR_COLOUR}}`}${tidyThoughts.actual} / ${tidyThoughts.required}`,
-      `${untidyThoughts.passed ? `{${SUCCESS_COLOUR}}` : `{${ERROR_COLOUR}}`}${untidyThoughts.actual} / ${untidyThoughts.required}`,
+      `{${tidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${tidyThoughts.actual} / ${tidyThoughts.required}`,
+      `{${untidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${untidyThoughts.actual} / ${untidyThoughts.required}`,
     ],
     exclusions: tidyExclusions.list,
   };
@@ -103,7 +103,7 @@ export const updateAwardsValues = (
   const bestRollerCoasters: TAwardQualification = {
     eligible: coasters >= 6,
     requirements: [
-      `${coasters >= 6 ? `{${SUCCESS_COLOUR}}` : `{${ERROR_COLOUR}}`}${coasters} / 6`,
+      `{${coasters >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}}${coasters} / 6`,
     ],
     exclusions: [],
   };
@@ -118,12 +118,12 @@ export const updateAwardsValues = (
       !bestValueExclusions.excluded,
     requirements: [
       park.getFlag("freeParkEntry") || park.entranceFee === 0
-        ? `{${ERROR_COLOUR}}None`
-        : `{${SUCCESS_COLOUR}}Yes`,
+        ? `${ERROR_COLOUR}None`
+        : `${SUCCESS_COLOUR}Yes`,
       park.getFlag("noMoney")
-        ? `{${ERROR_COLOUR}}No`
-        : `{${SUCCESS_COLOUR}}Yes`,
-      `${park.entranceFee + 0.1 > park.totalRideValueForMoney / 2 ? `{${ERROR_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney / 2)}`,
+        ? `${ERROR_COLOUR}No`
+        : `${SUCCESS_COLOUR}Yes`,
+      `${park.entranceFee + 0.1 > park.totalRideValueForMoney / 2 ? ERROR_COLOUR : SUCCESS_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney / 2)}`,
     ],
     exclusions: bestValueExclusions.list,
   };
@@ -144,8 +144,8 @@ export const updateAwardsValues = (
       unbeautifulThoughts.passed &&
       !mostBeautifulExclusions.excluded,
     requirements: [
-      `${beautifultidyThoughts.passed ? `{${SUCCESS_COLOUR}}` : `{${ERROR_COLOUR}}`}${beautifultidyThoughts.actual} / ${beautifultidyThoughts.required}`,
-      `${unbeautifulThoughts.passed ? `{${SUCCESS_COLOUR}}` : `{${ERROR_COLOUR}}`}${unbeautifulThoughts.actual} / ${unbeautifulThoughts.required}`,
+      `${beautifultidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${beautifultidyThoughts.actual} / ${beautifultidyThoughts.required}`,
+      `${unbeautifulThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${unbeautifulThoughts.actual} / ${unbeautifulThoughts.required}`,
     ],
     exclusions: mostBeautifulExclusions.list,
   };
@@ -166,8 +166,8 @@ export const updateAwardsValues = (
   const safest: TAwardQualification = {
     eligible: vandalismThoughts.passed && recentCrashes === 0,
     requirements: [
-      `{${vandalismThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${vandalismThoughts.actual} / ${vandalismThoughts.required}`,
-      `{${recentCrashes === 0 ? SUCCESS_COLOUR : ERROR_COLOUR}}${recentCrashes}`,
+      `${vandalismThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${vandalismThoughts.actual} / ${vandalismThoughts.required}`,
+      `${recentCrashes === 0 ? SUCCESS_COLOUR : ERROR_COLOUR}${recentCrashes}`,
     ],
     exclusions: [],
   };
@@ -194,9 +194,9 @@ export const updateAwardsValues = (
       staff.length >= Math.floor(park.guests / 32) &&
       !bestStaffExclusions.excluded,
     requirements: [
-      `{${staff.length >= 20 ? SUCCESS_COLOUR : ERROR_COLOUR}}${staff.length} / 20`,
-      `{${staffTypes === 4 ? SUCCESS_COLOUR : ERROR_COLOUR}}${staffTypes} / 4`,
-      `{${staff.length >= Math.floor(park.guests / 32) ? SUCCESS_COLOUR : ERROR_COLOUR}}${staff.length} / ${Math.floor(park.guests / 32)}`,
+      `${staff.length >= 20 ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / 20`,
+      `${staffTypes === 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${staffTypes} / 4`,
+      `${staff.length >= Math.floor(park.guests / 32) ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / ${Math.floor(park.guests / 32)}`,
     ],
     exclusions: bestStaffExclusions.list,
   };
@@ -219,10 +219,10 @@ export const updateAwardsValues = (
       hungryGuests.passed &&
       !bestFoodExclusions,
     requirements: [
-      `{${foodStalls.length >= 7 ? SUCCESS_COLOUR : ERROR_COLOUR}}${foodStalls.length} / 7`,
-      `{${foodTypes.length >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}}${foodTypes.length} / 4`,
-      `{${foodStalls.length >= Math.floor(park.guests / 128) ? SUCCESS_COLOUR : ERROR_COLOUR}}${foodStalls.length} / ${Math.floor(park.guests / 128)}`,
-      `{${hungryGuests.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${hungryGuests.actual} / 12`,
+      `${foodStalls.length >= 7 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / 7`,
+      `${foodTypes.length >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodTypes.length} / 4`,
+      `${foodStalls.length >= Math.floor(park.guests / 128) ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.floor(park.guests / 128)}`,
+      `${hungryGuests.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${hungryGuests.actual} / 12`,
     ],
     exclusions: bestFoodExclusions.list,
   };
@@ -238,9 +238,9 @@ export const updateAwardsValues = (
       toilets >= Math.floor(park.guests / 128) &&
       needToilet.passed,
     requirements: [
-      `{${toilets >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}}${toilets} / 4`,
-      `{${toilets >= Math.floor(park.guests) / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}}${toilets} / ${Math.floor(park.guests / 128)}`,
-      `{${needToilet.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${needToilet.actual} / ${needToilet.required}`,
+      `${toilets >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets} / 4`,
+      `${toilets >= Math.floor(park.guests) / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets} / ${Math.floor(park.guests / 128)}`,
+      `${needToilet.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${needToilet.actual} / ${needToilet.required}`,
     ],
     exclusions: [],
   };
@@ -255,7 +255,7 @@ export const updateAwardsValues = (
   const bestWaterRides: TAwardQualification = {
     eligible: waterRides >= 6,
     requirements: [
-      `{${waterRides >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}}${waterRides} / 6`,
+      `${waterRides >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}${waterRides} / 6`,
     ],
     exclusions: [],
   };
@@ -271,7 +271,7 @@ export const updateAwardsValues = (
   const bestCustomDesignedRides: TAwardQualification = {
     eligible: customRides >= 6,
     requirements: [
-      `{${customRides >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}}${customRides} / 6`,
+      `${customRides >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}${customRides} / 6`,
     ],
     exclusions: [],
   };
@@ -291,8 +291,8 @@ export const updateAwardsValues = (
       2 * dazzlingRides >= openRides.length &&
       !mostDazzlingExclusions.excluded,
     requirements: [
-      `{${openRides.length >= 5 ? SUCCESS_COLOUR : ERROR_COLOUR}}${openRides.length} / 5`,
-      `{${2 * dazzlingRides >= openRides.length ? SUCCESS_COLOUR : ERROR_COLOUR}}${dazzlingRides} / ${Math.ceil(openRides.length / 2)}`,
+      `${openRides.length >= 5 ? SUCCESS_COLOUR : ERROR_COLOUR}${openRides.length} / 5`,
+      `${2 * dazzlingRides >= openRides.length ? SUCCESS_COLOUR : ERROR_COLOUR}${dazzlingRides} / ${Math.ceil(openRides.length / 2)}`,
     ],
     exclusions: mostDazzlingExclusions.list,
   };
@@ -304,7 +304,7 @@ export const updateAwardsValues = (
   const bestGentleRides: TAwardQualification = {
     eligible: gentleRides >= 10,
     requirements: [
-      `{${gentleRides >= 10 ? SUCCESS_COLOUR : ERROR_COLOUR}}${gentleRides} / 10`,
+      `${gentleRides >= 10 ? SUCCESS_COLOUR : ERROR_COLOUR}${gentleRides} / 10`,
     ],
     exclusions: [],
   };
@@ -320,7 +320,7 @@ export const updateAwardsValues = (
   const mostUntidy: TAwardQualification = {
     eligible: untidyThoughts2.passed && !untidyExclusions.excluded,
     requirements: [
-      `{${untidyThoughts2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${untidyThoughts2.actual} / ${untidyThoughts2.required}`,
+      `${untidyThoughts2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${untidyThoughts2.actual} / ${untidyThoughts2.required}`,
     ],
     exclusions: untidyExclusions.list,
   };
@@ -334,9 +334,9 @@ export const updateAwardsValues = (
       !worstValueExclusions.excluded,
     requirements: [
       park.getFlag("freeParkEntry") || park.entranceFee === 0
-        ? `{${ERROR_COLOUR}}None`
-        : `{${SUCCESS_COLOUR}}Yes`,
-      `${park.entranceFee > park.totalRideValueForMoney ? `{${SUCCESS_COLOUR}}` : `{${ERROR_COLOUR}}`}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney)}`,
+        ? `${ERROR_COLOUR}None`
+        : `${SUCCESS_COLOUR}Yes`,
+      `${park.entranceFee > park.totalRideValueForMoney ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney)}`,
     ],
     exclusions: worstValueExclusions.list,
   };
@@ -351,9 +351,9 @@ export const updateAwardsValues = (
       hungryGuests2.passed &&
       !worstFoodExclusions,
     requirements: [
-      `{${foodTypes.length <= 2 ? SUCCESS_COLOUR : ERROR_COLOUR}}${foodTypes.length} / 2`,
-      `{${foodStalls.length > Math.floor(park.guests / 256) ? SUCCESS_COLOUR : ERROR_COLOUR}}${foodStalls.length} / ${Math.floor(park.guests / 256)}`,
-      `{${hungryGuests2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${hungryGuests2.actual} / 16`,
+      `${foodTypes.length <= 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodTypes.length} / 2`,
+      `${foodStalls.length > Math.floor(park.guests / 256) ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.floor(park.guests / 256)}`,
+      `${hungryGuests2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${hungryGuests2.actual} / 16`,
     ],
     exclusions: worstFoodExclusions.list,
   };
@@ -369,8 +369,8 @@ export const updateAwardsValues = (
       2 * disappointingRides > rides.length &&
       !disappointingExclusions.excluded,
     requirements: [
-      `{${park.rating <= 650 ? SUCCESS_COLOUR : ERROR_COLOUR}}${park.rating} / 650`,
-      `{${2 * disappointingRides > rides.length ? SUCCESS_COLOUR : ERROR_COLOUR}}${disappointingRides} / ${Math.floor(rides.length / 2)}`,
+      `${park.rating <= 650 ? SUCCESS_COLOUR : ERROR_COLOUR}${park.rating} / 650`,
+      `${2 * disappointingRides > rides.length ? SUCCESS_COLOUR : ERROR_COLOUR}${disappointingRides} / ${Math.floor(rides.length / 2)}`,
     ],
     exclusions: disappointingExclusions.list,
   };
@@ -385,8 +385,8 @@ export const updateAwardsValues = (
   const mostConfusingLayout: TAwardQualification = {
     eligible: lostGuests.passed && lostGuests2.passed,
     requirements: [
-      `{${lostGuests.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${lostGuests.actual} / ${lostGuests.required}`,
-      `{${lostGuests2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${lostGuests2.actual} / ${lostGuests2.required}`,
+      `${lostGuests.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${lostGuests.actual} / ${lostGuests.required}`,
+      `${lostGuests2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${lostGuests2.actual} / ${lostGuests2.required}`,
     ],
     exclusions: [],
   };
@@ -416,7 +416,7 @@ export const updateAwardsValues = (
     updateWidget(
       window,
       `labelAward${award.name}`,
-      `${!!park.awards.filter((a) => a.type === award.name).length ? `{${INFO_COLOUR}}` : awards[award.name].eligible ? `{${SUCCESS_COLOUR}}` : ""}${award.text}`,
+      `${park.awards.filter((a) => a.type === award.name).length ? INFO_COLOUR : awards[award.name].eligible ? SUCCESS_COLOUR : ""}${award.text}`,
     );
     awards[award.name].requirements.forEach((req, index) => {
       updateWidget(window, `${award.name}Requirement${index}`, req);

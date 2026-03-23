@@ -13,9 +13,9 @@ const getCoasterText = (
   rides: TRideInfo[],
 ) => {
   if (objective.rollercoastersToComplete)
-    return `${completed.length < objective.rollercoastersToComplete.length ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${completed.length}{WHITE} / ${objective.rollercoasters}`;
+    return `${completed.length < objective.rollercoastersToComplete.length ? WARNING_COLOUR : SUCCESS_COLOUR}${completed.length}{WHITE} / ${objective.rollercoasters}`;
   else if (objective.rollercoasters)
-    return `${uniqueTypes.length < objective.rollercoasters ? `{${WARNING_COLOUR}}` : `{${SUCCESS_COLOUR}}`}${uniqueTypes.length}{WHITE} / ${objective.rollercoasters}`;
+    return `${uniqueTypes.length < objective.rollercoasters ? WARNING_COLOUR : SUCCESS_COLOUR}${uniqueTypes.length}{WHITE} / ${objective.rollercoasters}`;
   else return `${rides.length}`;
 };
 

@@ -25,8 +25,8 @@ export const updateObjectiveValues = (
     scenario.status === "inProgress"
       ? "In progress"
       : scenario.status === "completed"
-        ? `{${SUCCESS_COLOUR}}Completed`
-        : `{${ERROR_COLOUR}}Failed`,
+        ? `${SUCCESS_COLOUR}Completed`
+        : `${ERROR_COLOUR}Failed`,
   );
 
   // Time left
@@ -39,8 +39,8 @@ export const updateObjectiveValues = (
       window,
       "valueYear",
       daysRemaining <= 0
-        ? `{${scenario.status === "failed" ? ERROR_COLOUR : ""}}${-daysRemaining} day${daysRemaining === -1 ? "" : "s"} ago`
-        : `${daysRemaining < WARNING_DAYS ? `{${WARNING_COLOUR}}` : ""}${daysRemaining} day${daysRemaining === 1 ? "" : "s"}`,
+        ? `${scenario.status === "failed" ? ERROR_COLOUR : ""}${-daysRemaining} day${daysRemaining === -1 ? "" : "s"} ago`
+        : `${daysRemaining < WARNING_DAYS ? WARNING_COLOUR : ""}${daysRemaining} day${daysRemaining === 1 ? "" : "s"}`,
     );
   }
   // Guest number
@@ -48,7 +48,7 @@ export const updateObjectiveValues = (
     updateWidget(
       window,
       "valueGuests",
-      `${park.guests >= objective.guests ? `{${SUCCESS_COLOUR}}` : ""}${park.guests} / ${objective.guests}`,
+      `${park.guests >= objective.guests ? SUCCESS_COLOUR : ""}${park.guests} / ${objective.guests}`,
     );
   }
   // Park value
@@ -56,7 +56,7 @@ export const updateObjectiveValues = (
     updateWidget(
       window,
       "valueParkValue",
-      `${park.value >= objective.parkValue ? `{${SUCCESS_COLOUR}}` : ""}${formatCurrency(park.value)}`,
+      `${park.value >= objective.parkValue ? SUCCESS_COLOUR : ""}${formatCurrency(park.value)}`,
     );
   }
   // Park rating
@@ -64,7 +64,7 @@ export const updateObjectiveValues = (
     updateWidget(
       window,
       "valueRating",
-      `${park.rating >= objective.rating ? `{${SUCCESS_COLOUR}}` : ""}${park.rating} / ${objective.rating}`,
+      `${park.rating >= objective.rating ? SUCCESS_COLOUR : ""}${park.rating} / ${objective.rating}`,
     );
   }
   // Rollercoaster stats
@@ -119,7 +119,7 @@ export const updateObjectiveValues = (
     updateWidget(
       window,
       "valueLoan",
-      `${park.bankLoan <= objective.loan ? `{${SUCCESS_COLOUR}}` : ""}${formatCurrency(park.bankLoan)}`,
+      `${park.bankLoan <= objective.loan ? SUCCESS_COLOUR : ""}${formatCurrency(park.bankLoan)}`,
     );
   }
 };
