@@ -62,6 +62,27 @@ export const openWindow = () => {
     },
   };
 
+  // Initialise guest thoughts
+  const thoughts: Partial<Record<ThoughtType, number>> = {
+    toilet: 0,
+    bad_litter: 0,
+    path_disgusting: 0,
+    vandalism: 0,
+    very_clean: 0,
+    scenery: 0,
+    hungry: 0,
+    lost: 0,
+    cant_find: 0,
+  };
+  const guests = map.getAllEntities("guest");
+  for (const guest of guests) {
+    for (const thought of guest.thoughts) {
+      if (thought.freshness <= 5 && thoughts[thought.type] !== undefined) {
+        thoughts[thought.type]!++;
+      }
+    }
+  }
+
   // Closure of the ride ID's to make the ride lists clickable
   let dataRideIDs: number[] = [];
   const clickRideList = (row: number) => openRideWindow(dataRideIDs[row]);
@@ -75,16 +96,18 @@ export const openWindow = () => {
   const clickShopPrice = (row: number, col: number) =>
     handleShopPrice(window, dataShopPrices, row, col);
   const setAllShops = () => handleSetAllShops(window, dataShopPrices);
-
-  // TODO: Check this works
-  const goToObjectiveTab = (window: Window, tab: number) => {
-    console.log(tab);
+  // Change tab button
+  const goToObjectiveTab = (tab: number) => {
     window.tabIndex = tab;
+  };
+  const changeColourBack = (widgetName: string, colour: number) => {
+    const w: ColourPickerWidget = window.findWidget(widgetName);
+    w.colour = colour;
   };
 
   // Get and parse the objective
   const objective = getObjective(UI_LINE_LENGTH);
-  let savedTab: any = readValue("tab");
+  let savedTab = readValue("tab") || 0;
 
   let window: Window;
   window = ui.openWindow({
@@ -123,14 +146,17 @@ export const openWindow = () => {
       },
       {
         image: "awards",
-        widgets: getAwardsWidgets(),
+        widgets: getAwardsWidgets(changeColourBack),
       },
     ],
-    onUpdate: () => {
-      if (window.tabIndex !== savedTab.value) {
-        savedTab = { value: window.tabIndex };
+    tabIndex: savedTab,
+    onTabChange: () => {
+      if (window.tabIndex !== savedTab) {
+        savedTab = window.tabIndex;
         saveValue("tab", savedTab);
       }
+    },
+    onUpdate: () => {
       if (window.tabIndex === 0)
         updateObjectiveValues(window, objective, tracker);
       if (window.tabIndex === 1)
@@ -143,7 +169,8 @@ export const openWindow = () => {
         dataRidePrices = updateRidesPrices(window, objective, tracker, sortBy);
       if (window.tabIndex === 5)
         dataShopPrices = updateShopsPrices(window, objective, tracker, sortBy);
-      if (window.tabIndex === 6) updateAwardsValues(window, objective, tracker);
+      if (window.tabIndex === 6)
+        updateAwardsValues(window, objective, tracker, thoughts);
     },
   });
 };

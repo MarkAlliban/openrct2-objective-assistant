@@ -91,5 +91,5 @@ export const ICONS = {
   thumbsDown: 5480,
   rosetteBlue: 5481,
   arrowGreenUp: 5130,
-  arrowRedDownimage: 5131,
+  arrowRedDown: 5131,
 };

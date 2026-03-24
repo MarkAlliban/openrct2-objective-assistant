@@ -12,13 +12,7 @@ export const updateShopsPrices = (
   tracker: TGuestTracker,
   sortBy: TSortTable,
 ) => {
-  const rides = updateRidesData(objective, tracker, ["stall", "facility"]).sort(
-    (a, b) => {
-      if (sortBy.key === "Ride")
-        return a.name > b.name ? sortBy.direction : -sortBy.direction;
-      return a.id > b.id ? 1 : -1;
-    },
-  );
+  const rides = updateRidesData(objective, tracker, ["stall", "facility"]);
 
   const optionTemperature = getWidgetDropdownValue(window, "optionTemperature");
   const optionGuestMood = getWidgetDropdownValue(window, "optionGuestMood");
@@ -54,15 +48,20 @@ export const updateShopsPrices = (
     });
   });
 
+  const itemsSorted = items.sort((a, b) => {
+    if (sortBy.key === "Name")
+      return a.data.name > b.data.name ? sortBy.direction : -sortBy.direction;
+    return a.id > b.id ? 1 : -1;
+  });
   // Update ride list widget
   updateWidgetList(
     window,
     "listRides",
-    items.map((item) => renderItemTableRow(item)),
+    itemsSorted.map((item) => renderItemTableRow(item)),
   );
 
   // Return the item IDs and recommended prices
-  return items.map((item) => ({
+  return itemsSorted.map((item) => ({
     id: item.id,
     price: item.data.recommendedPrice || 0,
     basePrice: item.data.basePrice,

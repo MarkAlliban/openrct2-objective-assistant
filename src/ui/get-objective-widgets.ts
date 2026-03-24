@@ -147,13 +147,15 @@ export const getObjectiveWidgets = (
     {
       name: "goToObjectivePage",
       type: "button",
-      x: 100,
-      y: Math.max(
-        objective.description.length * 10 + 22,
-        (widgets.length / 2) * UI_VALUE_HEIGHT + 20,
-      ),
+      x: 150,
+      y:
+        55 +
+        Math.max(
+          objective.description.length * 10 + 22,
+          (widgets.length / 2) * UI_VALUE_HEIGHT + 20,
+        ),
       width: 100,
-      height: UI_VALUE_HEIGHT * 2,
+      height: UI_VALUE_HEIGHT * 1.5,
       text: "More info",
       onClick: () => goToObjectiveTab(objective.tab || 0),
       isVisible: !!objective.tab,

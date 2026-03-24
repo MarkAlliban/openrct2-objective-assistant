@@ -34,15 +34,33 @@ export const updateGuestsValues = (
   });
 
   // Calculate soft guest cap
-  const softGuestCapPotential = rides.reduce(
+  let softGuestCapPotential = rides.reduce(
     (a, ride) => a + (ride.bonusValue || 0),
     0,
   );
-  const softGuestCapRealtime = rides.reduce((a, ride) => {
-    if (ride.status === "open" && ride.breakdown === "none")
-      return a + (ride.bonusValue || 0);
-    return a;
-  }, 0);
+  let softGuestCapRealtime = rides.reduce(
+    (a, ride) =>
+      ride.status === "open" && ride.breakdown === "none"
+        ? a + (ride.bonusValue || 0)
+        : a,
+    0,
+  );
+  // Harder guest generation
+  const harderWidget: LabelWidget = window.findWidget("labelHarder");
+  if (park.getFlag("difficultGuestGeneration")) {
+    if (!harderWidget.isVisible) harderWidget.isVisible = true;
+    if (softGuestCapPotential > 1000) {
+      softGuestCapPotential = 1000;
+      softGuestCapRealtime = 1000;
+    }
+    rides.forEach((ride) => {
+      if ((ride.rideLength || 0) >= 600 && (ride.excitement || 0) >= 600) {
+        softGuestCapPotential += (ride.bonusValue || 0) * 2;
+        if (ride.status === "open")
+          softGuestCapRealtime += (ride.bonusValue || 0) * 2;
+      }
+    });
+  } else if (harderWidget.isVisible) harderWidget.isVisible = false;
 
   // Update current guests
   const colour =

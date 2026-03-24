@@ -17,7 +17,7 @@ export type TObjectiveTarget = {
   rideIncome?: number;
   stallsIncome?: number;
   loan?: number;
-  tab?: number
+  tab?: number;
 };
 
 export type TRideTypeInfo = {
@@ -51,7 +51,8 @@ export type TRideInfo = {
   intensity?: number;
   nausea?: number;
   value?: number;
-	flags?: number;
+  flags?: number;
+  mode?: number;
 
   typeName?: string;
   category?: string;
@@ -68,14 +69,14 @@ export type TRideInfo = {
   error?: number;
   count?: number;
   incomplete?: boolean;
-	agedValues?: number[],
+  agedValues?: number[];
   maxPrices?: number[];
 };
 
 export type TRidePrices = {
   id: number;
   age: number;
-	currentPrice: number;
+  currentPrice: number;
   prices: number[];
 };
 
@@ -99,8 +100,8 @@ export type TShopItem = {
 
 export type TAward = {
   name: AwardType;
-	text: string;
+  text: string;
   positive: boolean;
-	requirements: string[];
+  requirements: string[];
   exclusion: AwardType[];
 };

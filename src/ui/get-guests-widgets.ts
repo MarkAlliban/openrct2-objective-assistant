@@ -1,4 +1,4 @@
-import { UI_VALUE_HEIGHT, UI_VALUE_WIDTH, WINDOW_WIDTH } from "../constants";
+import { UI_VALUE_HEIGHT, UI_VALUE_WIDTH, WARNING_COLOUR, WINDOW_WIDTH } from "../constants";
 import { TSortTable } from "../types";
 import { renderRideTable } from "./render-ride-table";
 
@@ -23,6 +23,14 @@ export const getGuestsWidgets = (clickRow: Function, sortBy: TSortTable) => [
     text: "",
     isVisible: false,
   },
+	{name: "labelHarder",
+		type:"label",
+		x: 5, y: 50,
+		width: 50,
+		height:UI_VALUE_HEIGHT,
+		text:`${WARNING_COLOUR}HARDER!`,
+		isVisible: false
+	},
   {
     name: "labelGuests",
     type: "label",

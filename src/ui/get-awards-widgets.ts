@@ -21,7 +21,11 @@ const addRequirementLabel = (
   text,
 });
 
-const addRequirements = (award: TAward, y: number): any => {
+const addRequirements = (
+  award: TAward,
+  y: number,
+  changeColourBack: Function = () => {},
+): any => {
   const results: WidgetDesc[] = [
     addRequirementLabel(`labelAward${award.name}`, award.text, y),
   ];
@@ -36,6 +40,11 @@ const addRequirements = (award: TAward, y: number): any => {
           width: 12,
           height: UI_VALUE_HEIGHT,
           colour,
+          onChange: () =>
+            changeColourBack(
+              `${award.name}Requirement${index}-${index2}`,
+              colour,
+            ),
         });
       });
     } else {
@@ -61,14 +70,15 @@ const addExclusions = (award: TAward, y: number): any =>
     y,
     width: 16,
     height: 14,
-    tooltip: `Can't win when you have the ${exclusion.replace(/([A-Z])/g, " $1").toLowerCase()} award`,
+    tooltip: `Can't be awarded when you have the ${exclusion.replace(/([A-Z])/g, " $1").toLowerCase()} award`,
     image: ICONS.certificate,
   }));
 
-export const getAwardsWidgets = () => {
+export const getAwardsWidgets = (changeColourBack: Function) => {
   const widgets: WidgetDesc[] = [];
   let y: number = 65;
 
+  // Positive awards
   widgets.push({
     name: "groupPositive",
     type: "groupbox",
@@ -78,18 +88,18 @@ export const getAwardsWidgets = () => {
     height: awardsInfo.filter((award) => award.positive).length * 15 + 17,
     text: "{CELADON}Positive awards",
   });
-
   awardsInfo
     .filter((award) => award.positive)
     .forEach((award) => {
-      if (award.name === "mostDazzlingRideColours")
-        console.log(addRequirements(award, y));
-      else
-        widgets.push(...addRequirements(award, y), ...addExclusions(award, y));
+      widgets.push(
+        ...addRequirements(award, y, changeColourBack),
+        ...addExclusions(award, y),
+      );
       y += UI_VALUE_HEIGHT + 3;
     });
   y += 12;
 
+  // Negative awards
   widgets.push({
     name: "groupNegative",
     type: "groupbox",
@@ -100,11 +110,10 @@ export const getAwardsWidgets = () => {
     text: "{LIGHTPINK}Negative awards",
   });
   y += 15;
-
   awardsInfo
     .filter((award) => !award.positive)
     .forEach((award) => {
-      widgets.push(...addRequirements(award, y));
+      widgets.push(...addRequirements(award, y), ...addExclusions(award, y));
       y += UI_VALUE_HEIGHT + 3;
     });
 

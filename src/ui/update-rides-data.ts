@@ -24,7 +24,8 @@ const rideAddMoreInfo = (
     intensity: ride.intensity,
     nausea: ride.nausea,
     value: ride.value,
-		flags: ride.flags,
+    flags: ride.lifecycleFlags,
+    mode: ride.mode,
     ...rideInfo,
   };
 
@@ -121,7 +122,7 @@ export const updateRidesData = (
     rides.forEach((ride: TRideInfo) => {
       if (ride.classification === "stall" && ride.status === "open") {
         stalls.count!++;
-        stalls.bonusValue!+= (ride.bonusValue || 0);
+        stalls.bonusValue! += ride.bonusValue || 0;
       }
     });
   }
@@ -145,8 +146,7 @@ export const updateRidesData = (
     rides.forEach((ride) => {
       if (ride.classification === "facility" && ride.status === "open") {
         facilities.count!++;
-        facilities.bonusValue =
-          facilities.bonusValue!+= (ride.bonusValue || 0);
+        facilities.bonusValue = facilities.bonusValue! += ride.bonusValue || 0;
       }
     });
   }
@@ -214,8 +214,8 @@ export const updateRidePricesMultiple = (
   let agedValues = getAgeFactors(value).map(
     (value) => value - Math.floor(value * (numOfType === 1 ? 0 : 0.25)),
   );
-	// Reduce by 75% if there is an entrance fee
-	// (Actually this applies per guest but if some have and some haven't, it's difficult to know whether to apply it or not. We use the current park status for simplicity)
+  // Reduce by 75% if there is an entrance fee
+  // (Actually this applies per guest but if some have and some haven't, it's difficult to know whether to apply it or not. We use the current park status for simplicity)
   if (park.entranceFee) {
     agedValues.forEach((value, index) => {
       agedValues[index] = value - Math.floor(value * 0.75);

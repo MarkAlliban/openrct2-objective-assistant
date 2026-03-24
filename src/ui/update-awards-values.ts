@@ -3,6 +3,7 @@ import { TGuestTracker } from "../data/guest-tracker";
 import {
   DAZZLING_COLOURS,
   ERROR_COLOUR,
+  ICONS,
   INFO_COLOUR,
   RIDE_LIFECYCLE_CRASHED,
   RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN,
@@ -37,6 +38,7 @@ export const updateAwardsValues = (
   window: Window,
   objective: TObjectiveTarget,
   tracker: TGuestTracker,
+  thoughts: Partial<Record<ThoughtType, number>>,
 ) => {
   window.height = 355;
   window.minHeight = 355;
@@ -51,23 +53,17 @@ export const updateAwardsValues = (
     "facility",
   ]);
 
-  // Read all guest thoughts
-  const thoughts: Partial<Record<ThoughtType, number>> = {
-    toilet: 0,
-    bad_litter: 0,
-    path_disgusting: 0,
-    vandalism: 0,
-    very_clean: 0,
-    scenery: 0,
-    hungry: 0,
-    lost: 0,
-    cant_find: 0,
-  };
-  const guests = map.getAllEntities("guest");
-  for (const guest of guests) {
-    for (const thought of guest.thoughts) {
-      if (thought.freshness <= 5 && thoughts[thought.type] !== undefined) {
-        thoughts[thought.type]!++;
+  // Update thoughts count once per second to avoid lag
+  if (date.ticksElapsed % 40 === 0) {
+    (Object.keys(thoughts) as Array<keyof typeof thoughts>).forEach(
+      (key) => (thoughts[key] = 0),
+    );
+    const guests = map.getAllEntities("guest");
+    for (const guest of guests) {
+      for (const thought of guest.thoughts) {
+        if (thought.freshness <= 5 && thoughts[thought.type] !== undefined) {
+          thoughts[thought.type]!++;
+        }
       }
     }
   }
@@ -86,8 +82,8 @@ export const updateAwardsValues = (
     eligible:
       tidyThoughts.passed && untidyThoughts.passed && !tidyExclusions.excluded,
     requirements: [
-      `{${tidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${tidyThoughts.actual} / ${tidyThoughts.required}`,
-      `{${untidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}}${untidyThoughts.actual} / ${untidyThoughts.required}`,
+      `${tidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${tidyThoughts.actual} / ${tidyThoughts.required}`,
+      `${untidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${untidyThoughts.actual} / ${untidyThoughts.required - 1}`,
     ],
     exclusions: tidyExclusions.list,
   };
@@ -102,7 +98,7 @@ export const updateAwardsValues = (
   const bestRollerCoasters: TAwardQualification = {
     eligible: coasters >= 6,
     requirements: [
-      `{${coasters >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}}${coasters} / 6`,
+      `${coasters >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}${coasters} / 6`,
     ],
     exclusions: [],
   };
@@ -113,14 +109,14 @@ export const updateAwardsValues = (
     eligible:
       !park.getFlag("noMoney") &&
       !park.getFlag("freeParkEntry") &&
-      park.entranceFee + 0.1 > park.totalRideValueForMoney / 2 &&
+      park.entranceFee + 0.1 < park.totalRideValueForMoney / 2 &&
       !bestValueExclusions.excluded,
     requirements: [
       park.getFlag("freeParkEntry") || park.entranceFee === 0
         ? `${ERROR_COLOUR}None`
         : `${SUCCESS_COLOUR}Yes`,
       park.getFlag("noMoney") ? `${ERROR_COLOUR}No` : `${SUCCESS_COLOUR}Yes`,
-      `${park.entranceFee + 0.1 > park.totalRideValueForMoney / 2 ? ERROR_COLOUR : SUCCESS_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney / 2)}`,
+      `${park.entranceFee + 0.1 < park.totalRideValueForMoney / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney / 2)}`,
     ],
     exclusions: bestValueExclusions.list,
   };
@@ -142,7 +138,7 @@ export const updateAwardsValues = (
       !mostBeautifulExclusions.excluded,
     requirements: [
       `${beautifultidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${beautifultidyThoughts.actual} / ${beautifultidyThoughts.required}`,
-      `${unbeautifulThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${unbeautifulThoughts.actual} / ${unbeautifulThoughts.required}`,
+      `${unbeautifulThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${unbeautifulThoughts.actual} / ${unbeautifulThoughts.required - 1}`,
     ],
     exclusions: mostBeautifulExclusions.list,
   };
@@ -157,8 +153,7 @@ export const updateAwardsValues = (
   );
   const recentCrashes = allRides.filter(
     (ride) =>
-      ride.classification === "ride" &&
-      ride.flags! & RIDE_LIFECYCLE_CRASHED,
+      ride.classification === "ride" && ride.flags! & RIDE_LIFECYCLE_CRASHED,
   ).length;
   const safest: TAwardQualification = {
     eligible: vandalismThoughts.passed && recentCrashes === 0,
@@ -212,7 +207,7 @@ export const updateAwardsValues = (
       foodStalls.length >= Math.floor(park.guests / 128) &&
       foodTypes.length >= 4 &&
       hungryGuests.passed &&
-      !bestFoodExclusions,
+      !bestFoodExclusions.excluded,
     requirements: [
       `${foodStalls.length >= 7 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / 7`,
       `${foodTypes.length >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodTypes.length} / 4`,
@@ -226,7 +221,7 @@ export const updateAwardsValues = (
   const toilets = map.rides.filter(
     (ride) => ride.type === 36 && ride.status === "open",
   ).length;
-  const needToilet = countThoughts(thoughts.toilet!, null, null, 128);
+  const needToilet = countThoughts(thoughts.toilet!, null, null, null, 17);
   const bestToilets: TAwardQualification = {
     eligible:
       toilets >= 4 &&
@@ -235,7 +230,7 @@ export const updateAwardsValues = (
     requirements: [
       `${toilets >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets} / 4`,
       `${toilets >= Math.floor(park.guests) / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets} / ${Math.floor(park.guests / 128)}`,
-      `${needToilet.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${needToilet.actual} / ${needToilet.required}`,
+      `${needToilet.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${needToilet.actual} / ${needToilet.required - 1}`,
     ],
     exclusions: [],
   };
@@ -258,7 +253,7 @@ export const updateAwardsValues = (
   // Best custom designed rides
   const customRides = allRides.filter(
     (ride) =>
-      (ride.excitement || 0) >= 5.5 &&
+      (ride.excitement || 0) >= 550 &&
       !(ride.flags! & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
       ride.status === "open" &&
       !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
@@ -307,8 +302,6 @@ export const updateAwardsValues = (
   // Most untidy park
   const untidyThoughts2 = countThoughts(
     thoughts.bad_litter! + thoughts.path_disgusting! + thoughts.vandalism!,
-    null,
-    null,
     16,
   );
   const untidyExclusions = getExclusions("mostUntidy");
@@ -337,17 +330,17 @@ export const updateAwardsValues = (
   };
 
   // Worst food
-  const hungryGuests2 = countThoughts(thoughts.hungry!, 16);
+  const hungryGuests2 = countThoughts(thoughts.hungry!, null, 16);
   const worstFoodExclusions = getExclusions("worstFood");
   const worstFood: TAwardQualification = {
     eligible:
-      foodStalls.length >= Math.floor(park.guests / 256) &&
       foodTypes.length <= 2 &&
+      foodStalls.length < Math.floor(park.guests / 256) &&
       hungryGuests2.passed &&
-      !worstFoodExclusions,
+      !worstFoodExclusions.excluded,
     requirements: [
       `${foodTypes.length <= 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodTypes.length} / 2`,
-      `${foodStalls.length > Math.floor(park.guests / 256) ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.floor(park.guests / 256)}`,
+      `${foodStalls.length < Math.floor(park.guests / 256) ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.floor(park.guests / 256)}`,
       `${hungryGuests2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${hungryGuests2.actual} / 16`,
     ],
     exclusions: worstFoodExclusions.list,
@@ -371,12 +364,12 @@ export const updateAwardsValues = (
   };
 
   // Most confusing layout
-  const lostGuests = countThoughts(thoughts.lost! + thoughts.cant_find!, 10);
-  const lostGuests2 = countThoughts(
+  const lostGuests = countThoughts(
     thoughts.lost! + thoughts.cant_find!,
     null,
-    64,
+    10,
   );
+  const lostGuests2 = countThoughts(thoughts.lost! + thoughts.cant_find!, 64);
   const mostConfusingLayout: TAwardQualification = {
     eligible: lostGuests.passed && lostGuests2.passed,
     requirements: [
@@ -416,5 +409,10 @@ export const updateAwardsValues = (
     awards[award.name].requirements.forEach((req, index) => {
       updateWidget(window, `${award.name}Requirement${index}`, req);
     });
+		awards[award.name].exclusions.forEach((exc, index) => {
+			const w:ButtonWidget = window.findWidget(`${award.name}Exclusion${index}`);
+			w.image = exc.has ? ICONS.arrowRedDown : ICONS.certificate;
+			// console.log(exc);
+		});
   });
 };

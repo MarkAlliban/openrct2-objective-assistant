@@ -63,7 +63,7 @@ export const awardsInfo: TAward[] = [
   },
   {
     name: "worstValue",
-		text: "Worse value park",
+		text: "Worst value park",
     positive: false,
 		requirements: ["Must have an entrance fee", "Entrance fee is more than the total ride value for money"],
     exclusion: ["bestValue"],
@@ -91,7 +91,7 @@ export const awardsInfo: TAward[] = [
   },
   {
     name: "worstFood",
-		text: "Worse food",
+		text: "Worst food",
     positive: false,
 		requirements: ["No more than 2 types of food shop", "Fewer than 1 food shop per 256 guests", "More than 15 hungry guests"],
     exclusion: ["bestFood"],
