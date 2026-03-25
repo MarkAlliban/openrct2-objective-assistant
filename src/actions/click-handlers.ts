@@ -28,7 +28,7 @@ export const handleSetAllRides = (
     dataRidePrices.forEach((ride) => {
       if (ride.currentPrice !== 0) {
         const bestPrice = getBestPrice(ride.age, ride.prices);
-        setRidePrice(ride.id, bestPrice / 10, true);
+        setRidePrice(ride.id, bestPrice && bestPrice / 10, true);
       }
     });
   }
@@ -36,7 +36,7 @@ export const handleSetAllRides = (
     dataRidePrices.forEach((ride) => {
       if (ride.currentPrice !== 0) {
         const bestPrice = getLongTermPrice(ride.age, ride.prices);
-        setRidePrice(ride.id, bestPrice / 10, true);
+        setRidePrice(ride.id, bestPrice && bestPrice / 10, true);
       }
     });
   }

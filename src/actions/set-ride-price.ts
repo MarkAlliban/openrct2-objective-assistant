@@ -1,11 +1,14 @@
 export const setRidePrice = (
   ride: number,
-  price: number,
+  price: number | null,
   isPrimaryPrice: boolean,
 ) => {
-  context.executeAction("ridesetprice", {
-    ride,
-    price: price > 200 ? 200 : price,
-    isPrimaryPrice,
-  });
+	console.log("Setting ride ", ride, price);
+  if (price !== null) {
+    context.executeAction("ridesetprice", {
+      ride,
+      price: price > 200 ? 200 : price,
+      isPrimaryPrice,
+    });
+  }
 };

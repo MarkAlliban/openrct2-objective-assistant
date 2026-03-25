@@ -197,32 +197,35 @@ export const updateRidePricesMultiple = (
 
   // Initial value of excitement, intensity and nausea values
   let value =
-    Math.floor(
-      ((ride.excitement || 0) * (ride.ratingsMultipliers?.[0] || 0)) / 1024,
-    ) +
-    Math.floor(
-      ((ride.intensity || 0) * (ride.ratingsMultipliers?.[1] || 0)) / 1024,
-    ) +
-    Math.floor(
-      ((ride.nausea || 0) * (ride.ratingsMultipliers?.[2] || 0)) / 1024,
-    );
+    ride.excitement && ride.intensity && ride.nausea
+      ? Math.floor(
+          (ride.excitement * (ride.ratingsMultipliers?.[0] || 0)) / 1024,
+        ) +
+        Math.floor(
+          (ride.intensity * (ride.ratingsMultipliers?.[1] || 0)) / 1024,
+        ) +
+        Math.floor((ride.nausea * (ride.ratingsMultipliers?.[2] || 0)) / 1024)
+      : null;
 
   // Adjust for age, and reduce by 25% if there are multiple rides of the same type
   const numOfType = rides.filter(
     (r) => (r.sameTypeAs || r.typeName) === (ride.sameTypeAs || ride.typeName),
   ).length;
-  let agedValues = getAgeFactors(value).map(
-    (value) => value - Math.floor(value * (numOfType === 1 ? 0 : 0.25)),
-  );
+  let agedValues = value
+    ? getAgeFactors(value).map(
+        (value) => value - Math.floor(value * (numOfType === 1 ? 0 : 0.25)),
+      )
+    : [null, null, null, null, null, null, null, null, null, null];
   // Reduce by 75% if there is an entrance fee
   // (Actually this applies per guest but if some have and some haven't, it's difficult to know whether to apply it or not. We use the current park status for simplicity)
   if (park.entranceFee) {
     agedValues.forEach((value, index) => {
-      agedValues[index] = value - Math.floor(value * 0.75);
+      if (value)
+        agedValues[index] = Math.max(value - Math.floor(value * 0.75), 0);
     });
   }
 
   // Calculate the max prices from the value
-  ride.maxPrices = agedValues.map((value) => value * 2);
+  ride.maxPrices = agedValues.map((value) => (value ? value * 2 : null));
   return ride;
 };

@@ -70,14 +70,14 @@ export type TRideInfo = {
   count?: number;
   incomplete?: boolean;
   agedValues?: number[];
-  maxPrices?: number[];
+  maxPrices?: (number | null)[];
 };
 
 export type TRidePrices = {
   id: number;
   age: number;
   currentPrice: number;
-  prices: number[];
+  prices: (number | null)[];
 };
 
 export type TItemData = {

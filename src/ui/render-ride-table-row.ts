@@ -62,12 +62,12 @@ const getActualPriceString = (ride: TRideInfo) => {
   if (ride.price[0] === 0) return `Free`;
   const currentPrice = ride.price?.[0];
   const bestPrice = getBestPrice(ride.age || 0, ride.maxPrices || []);
-  if (currentPrice * 10 > bestPrice)
+  if (bestPrice && currentPrice * 10 > bestPrice)
     return `${ERROR_COLOUR}${formatCurrency2dp(currentPrice)}`;
   if (currentPrice * 10 === bestPrice)
     return `${SUCCESS_COLOUR}${formatCurrency2dp(currentPrice)}`;
   const longTermPrice = getLongTermPrice(ride.age || 0, ride.maxPrices || []);
-  if (currentPrice * 10 >= longTermPrice)
+  if (longTermPrice && currentPrice * 10 >= longTermPrice)
     return `${formatCurrency2dp(currentPrice)}`;
   return `${WARNING_COLOUR}${formatCurrency2dp(ride.price?.[0])}`;
 };
@@ -75,7 +75,7 @@ const getActualPriceString = (ride: TRideInfo) => {
 const getMaxPriceString = (ride: TRideInfo) => {
   if (ride.maxPrices) {
     return ride.maxPrices.map((price, index) => {
-      return `${getAgeCategory(ride.age || 0) === index ? WARNING_COLOUR : ""}${formatCurrency2dp(price)}`;
+      return `${getAgeCategory(ride.age || 0) === index ? WARNING_COLOUR : ""}${price === null ? `${ERROR_COLOUR}???` : formatCurrency2dp(price)}`;
     });
   }
   return [""];
