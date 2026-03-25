@@ -3,7 +3,6 @@ export const setRidePrice = (
   price: number | null,
   isPrimaryPrice: boolean,
 ) => {
-	console.log("Setting ride ", ride, price);
   if (price !== null) {
     context.executeAction("ridesetprice", {
       ride,

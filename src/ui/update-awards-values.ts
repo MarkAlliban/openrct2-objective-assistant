@@ -412,7 +412,6 @@ export const updateAwardsValues = (
 		awards[award.name].exclusions.forEach((exc, index) => {
 			const w:ButtonWidget = window.findWidget(`${award.name}Exclusion${index}`);
 			w.image = exc.has ? ICONS.arrowRedDown : ICONS.certificate;
-			// console.log(exc);
 		});
   });
 };
