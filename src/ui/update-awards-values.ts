@@ -158,7 +158,7 @@ export const updateAwardsValues = (
   const safest: TAwardQualification = {
     eligible: vandalismThoughts.passed && recentCrashes === 0,
     requirements: [
-      `${vandalismThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${vandalismThoughts.actual} / ${vandalismThoughts.required}`,
+      `${vandalismThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${vandalismThoughts.actual} / ${vandalismThoughts.required - 1}`,
       `${recentCrashes === 0 ? SUCCESS_COLOUR : ERROR_COLOUR}${recentCrashes}`,
     ],
     exclusions: [],
