@@ -229,7 +229,7 @@ export const updateAwardsValues = (
       needToilet.passed,
     requirements: [
       `${toilets >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets} / 4`,
-      `${toilets >= Math.floor(park.guests) / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets} / ${Math.floor(park.guests / 128)}`,
+      `${toilets >= Math.floor(park.guests / 128) ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets} / ${Math.floor(park.guests / 128)}`,
       `${needToilet.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${needToilet.actual} / ${needToilet.required - 1}`,
     ],
     exclusions: [],
