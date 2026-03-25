@@ -86,7 +86,7 @@ export const getAwardsWidgets = (changeColourBack: Function) => {
     y: 50,
     width: WINDOW_WIDTH - 10,
     height: awardsInfo.filter((award) => award.positive).length * 15 + 17,
-    text: "{CELADON}Positive awards",
+    text: "Positive awards",
   });
   awardsInfo
     .filter((award) => award.positive)
@@ -107,7 +107,7 @@ export const getAwardsWidgets = (changeColourBack: Function) => {
     y,
     width: WINDOW_WIDTH - 10,
     height: awardsInfo.filter((award) => !award.positive).length * 15 + 17,
-    text: "{LIGHTPINK}Negative awards",
+    text: "Negative awards",
   });
   y += 15;
   awardsInfo
