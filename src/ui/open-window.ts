@@ -1,4 +1,4 @@
-import { guestTracker } from "../data/guest-tracker";
+import { TGuestTracker } from "../data/guest-tracker";
 import { getObjective } from "../utils/get-objective";
 import { getObjectiveWidgets } from "./get-objective-widgets";
 import { updateObjectiveValues } from "./update-objective-values";
@@ -39,7 +39,7 @@ import { getAwardsWidgets } from "./get-awards-widgets";
 import { updateAwardsValues } from "./update-awards-values";
 import { readValue, saveValue } from "../actions/shared-storage";
 
-export const openWindow = () => {
+export const openWindow = (tracker: TGuestTracker) => {
   // Only allow one window to be open at a time
   for (let i = 0; i < ui.windows; i++) {
     if (ui.getWindow(i).title === TITLE) {
@@ -47,11 +47,6 @@ export const openWindow = () => {
       return;
     }
   }
-  // Initialise guest tracker
-  const tracker = guestTracker();
-  context.subscribe("interval.day", function () {
-    tracker.updateGuestCount();
-  });
   //Initialise the sorting mechanic
   const sortBy: TSortTable = {
     key: "Ride",
