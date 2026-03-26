@@ -89,6 +89,7 @@ export const updateAwardsValues = (
   };
 
   // Best rollercoasters
+	// BUG: This detects the current crashed state of the ride, but it doesn't check for recent crashes. The API doesn't currently expose that.
   const coasters = allRides.filter(
     (ride) =>
       ride.category === "rollercoaster" &&
@@ -151,7 +152,8 @@ export const updateAwardsValues = (
     null,
     3,
   );
-  const recentCrashes = allRides.filter(
+	// BUG: This detects the current crashed state of the ride, but it doesn't check for recent crashes. The API doesn't currently expose that.
+	const recentCrashes = allRides.filter(
     (ride) =>
       ride.classification === "ride" && ride.flags! & RIDE_LIFECYCLE_CRASHED,
   ).length;
@@ -236,6 +238,7 @@ export const updateAwardsValues = (
   };
 
   // Best water rides
+	// BUG: This detects the current crashed state of the ride, but it doesn't check for recent crashes. The API doesn't currently expose that.
   const waterRides = allRides.filter(
     (ride) =>
       ride.category === "water" &&
@@ -251,6 +254,7 @@ export const updateAwardsValues = (
   };
 
   // Best custom designed rides
+	// BUG: This detects the current crashed state of the ride, but it doesn't check for recent crashes. The API doesn't currently expose that.
   const customRides = allRides.filter(
     (ride) =>
       (ride.excitement || 0) >= 550 &&
@@ -347,10 +351,11 @@ export const updateAwardsValues = (
   };
 
   // Most disappointing
-  const disappointingExclusions = getExclusions("mostDisappointing");
+	// BUG: This should be based on popularity, not satisfaction. Popularity is exposed by the API, but it's always 0.
   const disappointingRides = rides.filter(
     (ride) => ride.satisfaction < 6,
   ).length;
+  const disappointingExclusions = getExclusions("mostDisappointing");
   const mostDisappointing: TAwardQualification = {
     eligible:
       park.rating <= 650 &&
