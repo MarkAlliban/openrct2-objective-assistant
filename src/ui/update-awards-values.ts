@@ -351,7 +351,8 @@ export const updateAwardsValues = (
   };
 
   // Most disappointing
-	// BUG: This should be based on popularity, not satisfaction. Popularity is exposed by the API, but it's always 0.
+	// BUG: https://github.com/OpenRCT2/OpenRCT2/issues/26266
+	// This should be based on popularity, not satisfaction. Popularity is not exposed by the API.
   const disappointingRides = rides.filter(
     (ride) => ride.satisfaction < 6,
   ).length;
