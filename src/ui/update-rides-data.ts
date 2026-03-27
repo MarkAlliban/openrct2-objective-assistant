@@ -197,7 +197,15 @@ export const updateRidePricesMultiple = (
 
   // Initial value of excitement, intensity and nausea values
   let value =
-    ride.excitement && ride.intensity && ride.nausea
+    ride.excitement !== null &&
+    ride.intensity !== null &&
+    ride.nausea !== null &&
+    ride.excitement !== undefined &&
+    ride.intensity !== undefined &&
+    ride.nausea !== undefined &&
+    ride.excitement !== -1 &&
+    ride.intensity !== -1 &&
+    ride.nausea !== -1
       ? Math.floor(
           (ride.excitement * (ride.ratingsMultipliers?.[0] || 0)) / 1024,
         ) +
