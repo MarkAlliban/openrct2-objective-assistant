@@ -80,7 +80,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
     case "finish5Rollercoasters":
       return {
         description: wrapWords(
-          `To finish building all 5 of the partially built roller coasters in this park, designing them to achieve excitement ratings of at least ${(scenario.objective.excitement / 100).toFixed(2)}`,
+          `To finish building all 5 of the partially built roller coasters in this park, designing them to achieve excitement ratings of at least ${((scenario.objective.excitement % 65536) / 100).toFixed(2)}`,
           lineLength,
         ),
         rollercoasters: 5,
@@ -92,7 +92,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
           )
           .slice(0, 5)
           .map((ride) => ride.id),
-        excitementTarget: scenario.objective.excitement,
+        excitementTarget: scenario.objective.excitement % 65536,
         tab: 3,
       };
     case "monthlyRideIncome":
