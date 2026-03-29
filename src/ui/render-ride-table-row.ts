@@ -64,7 +64,7 @@ const getActualPriceString = (ride: TRideInfo) => {
   const bestPrice = getBestPrice(ride.age || 0, ride.maxPrices || []);
   if (bestPrice && currentPrice * 10 > bestPrice)
     return `${ERROR_COLOUR}${formatCurrency2dp(currentPrice)}`;
-  if (currentPrice * 10 === bestPrice)
+  if (currentPrice * 10 === bestPrice || currentPrice === 200)
     return `${SUCCESS_COLOUR}${formatCurrency2dp(currentPrice)}`;
   const longTermPrice = getLongTermPrice(ride.age || 0, ride.maxPrices || []);
   if (longTermPrice && currentPrice * 10 >= longTermPrice)

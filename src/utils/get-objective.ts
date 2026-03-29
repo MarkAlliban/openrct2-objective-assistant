@@ -79,6 +79,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
       };
     case "finish5Rollercoasters":
       return {
+				// BUG: scenario.objective.excitement is 65536 too much on custom scenarios
         description: wrapWords(
           `To finish building all 5 of the partially built roller coasters in this park, designing them to achieve excitement ratings of at least ${((scenario.objective.excitement % 65536) / 100).toFixed(2)}`,
           lineLength,

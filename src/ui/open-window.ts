@@ -149,6 +149,14 @@ export const openWindow = (tracker: TGuestTracker) => {
       if (window.tabIndex !== savedTab) {
         savedTab = window.tabIndex;
         saveValue("tab", savedTab);
+        if (window.tabIndex === 6) {
+          window.height = 355;
+          window.minHeight = 355;
+          window.maxHeight = 355;
+        } else {
+          window.minHeight = WINDOW_HEIGHT_MIN;
+          window.maxHeight = 1000;
+				}
       }
     },
     onUpdate: () => {
