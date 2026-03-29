@@ -1,3 +1,4 @@
+import { saveValue } from "../actions/shared-storage";
 import { UI_VALUE_HEIGHT } from "../constants";
 import { TSortTable } from "../types";
 import { renderRideTable } from "./render-ride-table";
@@ -6,6 +7,7 @@ export const getRidePricesWidgets = (
   clickRow: Function,
   sortBy: TSortTable,
   clickAction: Function,
+  automatePrices: boolean,
 ) => [
   {
     name: "optionClickModify",
@@ -18,6 +20,20 @@ export const getRidePricesWidgets = (
     isChecked: false,
   },
   {
+    name: "optionAutoPrices",
+    type: "checkbox",
+    x: 140,
+    y: 50,
+    width: 100,
+    height: UI_VALUE_HEIGHT,
+    text: "Auto prices?",
+    isChecked: automatePrices,
+    onChange: (e: boolean) => {
+      automatePrices = e;
+      saveValue("automatePrices", e ? 1 : 0);
+    },
+  },
+  {
     name: "optionAction",
     type: "dropdown",
     x: 250,
@@ -25,7 +41,6 @@ export const getRidePricesWidgets = (
     width: 100,
     height: UI_VALUE_HEIGHT,
     items: ["Actions...", "Optimise all", "Set long term"],
-    text: "Text?",
     selectedIndex: 0,
   },
   {

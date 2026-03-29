@@ -11,7 +11,6 @@ export const updateRidesPrices = (
   sortBy: TSortTable,
 ): TRidePrices[] => {
   const rides: TRideInfo[] = updateRidesData(objective, tracker, ["ride"])
-    .map((ride: TRideInfo) => ride)
     .sort((a, b) => {
       if (sortBy.key === "Ride")
         return a.name > b.name ? sortBy.direction : -sortBy.direction;

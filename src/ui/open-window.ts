@@ -102,7 +102,12 @@ export const openWindow = (tracker: TGuestTracker) => {
 
   // Get and parse the objective
   const objective = getObjective(UI_LINE_LENGTH);
+
+  // Remember the active tab
   let savedTab = readValue("tab") || 0;
+
+  // Automate prices
+  let automatePrices = !!readValue("automatePrices") || false;
 
   let window: Window;
   window = ui.openWindow({
@@ -133,7 +138,12 @@ export const openWindow = (tracker: TGuestTracker) => {
       },
       {
         image: ICON_MONEY,
-        widgets: getRidePricesWidgets(clickRidePrice, sortBy, setAllRides),
+        widgets: getRidePricesWidgets(
+          clickRidePrice,
+          sortBy,
+          setAllRides,
+          automatePrices,
+        ),
       },
       {
         image: ICON_BURGER,
@@ -156,7 +166,7 @@ export const openWindow = (tracker: TGuestTracker) => {
         } else {
           window.minHeight = WINDOW_HEIGHT_MIN;
           window.maxHeight = 1000;
-				}
+        }
       }
     },
     onUpdate: () => {
