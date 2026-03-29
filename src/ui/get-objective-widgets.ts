@@ -38,7 +38,7 @@ export const getObjectiveWidgets = (
   let y: number = 65;
 
   widgets.push(
-    addRequirementLabel("labelScenarioStatus", 50, "Status:", y),
+    addRequirementLabel("labelScenarioStatus", 40, "Status:", y),
     addRequirementValue("valueScenarioStatus", y),
   );
   y += UI_VALUE_HEIGHT;
@@ -47,8 +47,10 @@ export const getObjectiveWidgets = (
     widgets.push(
       addRequirementLabel("labelGuests", 42, "Guests:", y),
       addRequirementValue("valueGuests", y),
+      addRequirementLabel("labelSoftCap", 48, "Soft cap:", y + UI_VALUE_HEIGHT),
+      addRequirementValue("valueSoftCap", y + UI_VALUE_HEIGHT),
     );
-    y += UI_VALUE_HEIGHT;
+    y += UI_VALUE_HEIGHT + UI_VALUE_HEIGHT;
   }
   if (objective.parkValue) {
     widgets.push(

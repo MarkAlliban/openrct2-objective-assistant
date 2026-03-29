@@ -50,6 +50,11 @@ export const updateObjectiveValues = (
       "valueGuests",
       `${park.guests >= objective.guests ? SUCCESS_COLOUR : ""}${park.guests} / ${objective.guests}`,
     );
+    updateWidget(
+      window,
+      "valueSoftCap",
+      `${park.suggestedGuestMaximum >= objective.guests ? SUCCESS_COLOUR : ""}${park.suggestedGuestMaximum}`,
+    );
   }
   // Park value
   if (objective.parkValue) {
