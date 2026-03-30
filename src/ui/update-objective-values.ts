@@ -9,7 +9,7 @@ import {
   WARNING_COLOUR,
   WARNING_DAYS,
 } from "../constants";
-import { updateRidesData } from "./update-rides-data";
+import { ridesAddMoreInfo } from "../utils/rides-add-more-info";
 import { TGuestTracker } from "../data/guest-tracker";
 import { updateWidget } from "./update-widget";
 
@@ -28,7 +28,6 @@ export const updateObjectiveValues = (
         ? `${SUCCESS_COLOUR}Completed`
         : `${ERROR_COLOUR}Failed`,
   );
-
   // Time left
   if (objective.year) {
     const ticksElapsed =
@@ -74,7 +73,7 @@ export const updateObjectiveValues = (
   }
   // Rollercoaster stats
   if (objective.rollercoasters) {
-    const rides = updateRidesData(objective, tracker, ["ride"]);
+    const rides = ridesAddMoreInfo(objective, tracker, ["ride"]);
     const coasterTypes = rides
       .filter(
         (ride) => ride.category === "rollercoaster" && ride.meetsRequirements,

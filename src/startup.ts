@@ -2,10 +2,7 @@ import { openWindow } from "./ui/open-window";
 import { TITLE } from "./constants";
 import { guestTracker } from "./data/guest-tracker";
 import { readValue } from "./actions/shared-storage";
-import {
-  updateRidePricesMultiple,
-  updateRidesData,
-} from "./ui/update-rides-data";
+import { ridesAddMoreInfo } from "./utils/rides-add-more-info";
 import { TRideInfo } from "./types";
 import { getAgeCategory } from "./utils/ride-pricing";
 import { setRidePrice } from "./actions/set-ride-price";
@@ -21,12 +18,11 @@ export function startup() {
     // Update ride prices once per day
     const automatePrices = !!readValue("automatePrices") || false;
     if (automatePrices) {
-      const rides: TRideInfo[] = updateRidesData(
+      const rides: TRideInfo[] = ridesAddMoreInfo(
         { description: [""] },
         tracker,
         ["ride"],
       );
-      rides.forEach((ride) => updateRidePricesMultiple(ride, rides));
       rides.forEach((ride) => {
         const price = ride.maxPrices![getAgeCategory(ride.age || 0)];
         setRidePrice(ride.id, price, true);

@@ -1,7 +1,7 @@
 import { TGuestTracker } from "../data/guest-tracker";
 import { TObjectiveTarget, TSortTable } from "../types";
 import { formatCurrency } from "../utils/format-currency";
-import { updateRidesData } from "./update-rides-data";
+import { ridesAddMoreInfo } from "../utils/rides-add-more-info";
 import { renderRideTableRow } from "./render-ride-table-row";
 import { updateTimeData } from "./update-time-data";
 import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
@@ -13,7 +13,7 @@ export const updateParkValue = (
   tracker: TGuestTracker,
   sortBy: TSortTable,
 ): number[] => {
-  const rides = updateRidesData(objective, tracker, ["ride", "guests"]).sort(
+  const rides = ridesAddMoreInfo(objective, tracker, ["ride", "guests"]).sort(
     (a, b) => {
       if (sortBy.key === "Ride")
         return a.name > b.name ? sortBy.direction : -sortBy.direction;
@@ -21,8 +21,8 @@ export const updateParkValue = (
         return (a.bonusValue || 0) > (b.bonusValue || 0)
           ? -sortBy.direction
           : sortBy.direction;
-      if (sortBy.key === "Riders" && a.count !== b.count)
-        return (a.count || 0) > (b.count || 0)
+      if (sortBy.key === "Riders" && a.guestCount !== b.guestCount)
+        return (a.guestCount || 0) > (b.guestCount || 0)
           ? -sortBy.direction
           : sortBy.direction;
       if (sortBy.key === "Value" && a.valueCalculated !== b.valueCalculated)
