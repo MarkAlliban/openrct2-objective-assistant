@@ -9,7 +9,7 @@ import {
   RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN,
   SUCCESS_COLOUR,
 } from "../constants";
-import { ridesAddMoreInfo } from "../utils/rides-add-more-info";
+import { updateRidesData } from "./update-rides-data";
 import { formatCurrency } from "../utils/format-currency";
 import { awardNames, awardsInfo } from "../data/awards-info";
 import { countThoughts } from "../utils/count-thoughts";
@@ -40,14 +40,18 @@ export const updateAwardsValues = (
   tracker: TGuestTracker,
   thoughts: Partial<Record<ThoughtType, number>>,
 ) => {
+  window.height = 355;
+  window.minHeight = 355;
+  window.maxHeight = 355;
+
   // Get ride data
-  const allRides = ridesAddMoreInfo(objective, tracker, [
+  const rides = map.rides.filter((ride) => ride.classification === "ride");
+  const openRides = rides.filter((ride) => ride.status === "open");
+  const allRides = updateRidesData(objective, tracker, [
     "ride",
     "stall",
     "facility",
   ]);
-  const rides = allRides.filter((ride) => ride.classification === "ride");
-  const openRides = rides.filter((ride) => ride.status === "open");
 
   // Update thoughts count once per second to avoid lag
   if (date.ticksElapsed % 40 === 0) {
@@ -90,7 +94,7 @@ export const updateAwardsValues = (
     (ride) =>
       ride.category === "rollercoaster" &&
       ride.status === "open" &&
-      !(ride.flags & RIDE_LIFECYCLE_CRASHED),
+      !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
   ).length;
   const bestRollerCoasters: TAwardQualification = {
     eligible: coasters >= 6,
@@ -151,7 +155,7 @@ export const updateAwardsValues = (
 	// BUG: This detects the current crashed state of the ride, but it doesn't check for recent crashes. The API doesn't currently expose that.
 	const recentCrashes = allRides.filter(
     (ride) =>
-      ride.classification === "ride" && ride.flags & RIDE_LIFECYCLE_CRASHED,
+      ride.classification === "ride" && ride.flags! & RIDE_LIFECYCLE_CRASHED,
   ).length;
   const safest: TAwardQualification = {
     eligible: vandalismThoughts.passed && recentCrashes === 0,
@@ -239,7 +243,7 @@ export const updateAwardsValues = (
     (ride) =>
       ride.category === "water" &&
       ride.status === "open" &&
-      !(ride.flags & RIDE_LIFECYCLE_CRASHED),
+      !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
   ).length;
   const bestWaterRides: TAwardQualification = {
     eligible: waterRides >= 6,
@@ -254,9 +258,9 @@ export const updateAwardsValues = (
   const customRides = allRides.filter(
     (ride) =>
       (ride.excitement || 0) >= 550 &&
-      !(ride.flags & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
+      !(ride.flags! & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
       ride.status === "open" &&
-      !(ride.flags & RIDE_LIFECYCLE_CRASHED),
+      !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
   ).length;
   const bestCustomDesignedRides: TAwardQualification = {
     eligible: customRides >= 6,

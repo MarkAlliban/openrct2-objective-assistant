@@ -21,7 +21,7 @@ export type TObjectiveTarget = {
 };
 
 export type TRideTypeInfo = {
-  type: number;
+  typeId: number;
   typeName: string;
   identifier: string;
   bonusValue: number;
@@ -37,18 +37,41 @@ export type TRideTypeInfo = {
   sameTypeAs?: string;
 };
 
-export type TRideInfo = Ride &
-  TRideTypeInfo & {
-    guestError: number;
-    guestCount: number;
-    valueCalculated: number | null;
-    shopItems: { id: number; price: number }[];
-    meetsLengthRequirement?: boolean;
-    meetsExcitementRequirement?: boolean;
-    meetsRequirements?: boolean;
-    duplicateType?: boolean;
-    maxPrices?: (number | null)[];
-  };
+export type TRideInfo = {
+  name: string;
+  id: number;
+  classification?: string;
+  type: number;
+  status: string;
+  breakdown: string;
+  age?: number;
+  price?: number[];
+  rideLength?: number;
+  excitement?: number;
+  intensity?: number;
+  nausea?: number;
+  value?: number;
+  flags?: number;
+  mode?: number;
+
+  typeName?: string;
+  category?: string;
+  bonusValue?: number;
+  sameTypeAs?: string;
+  ratingsMultipliers?: [number, number, number];
+  shopItems?: { id: number; price: number }[];
+
+  valueCalculated?: number | null;
+  duplicateType?: boolean;
+  meetsExcitementRequirement?: boolean;
+  meetsLengthRequirement?: boolean;
+  meetsRequirements?: boolean;
+  error?: number;
+  count?: number;
+  incomplete?: boolean;
+  agedValues?: number[];
+  maxPrices?: (number | null)[];
+};
 
 export type TRidePrices = {
   id: number;

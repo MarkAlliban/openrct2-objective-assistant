@@ -1,9 +1,8 @@
-import { SUCCESS_COLOUR } from "../constants";
 import { TRideTypeInfo } from "../types";
 
 const rideDataTable: TRideTypeInfo[] = [
   {
-    type: 0,
+    typeId: 0,
     typeName: "Spiral Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -11,7 +10,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "spiral_rc",
   },
   {
-    type: 1,
+    typeId: 1,
     typeName: "Stand-up Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -19,7 +18,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "stand_up_rc",
   },
   {
-    type: 2,
+    typeId: 2,
     typeName: "Suspended Swinging Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -27,7 +26,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "suspended_swinging_rc",
   },
   {
-    type: 3,
+    typeId: 3,
     typeName: "Inverted Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -35,7 +34,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "inverted_rc",
   },
   {
-    type: 4,
+    typeId: 4,
     typeName: "Junior Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -43,7 +42,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "junior_rc",
   },
   {
-    type: 5,
+    typeId: 5,
     typeName: "Miniature Railway",
     category: "transport",
     ratingsMultipliers: [70, 6, -10],
@@ -51,7 +50,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "miniature_railway",
   },
   {
-    type: 6,
+    typeId: 6,
     typeName: "Monorail",
     category: "transport",
     ratingsMultipliers: [70, 6, -10],
@@ -59,7 +58,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "monorail",
   },
   {
-    type: 7,
+    typeId: 7,
     typeName: "Mini Suspended Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -67,7 +66,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "mini_suspended_rc",
   },
   {
-    type: 8,
+    typeId: 8,
     typeName: "Boat Hire",
     category: "water",
     ratingsMultipliers: [70, 6, 0],
@@ -75,7 +74,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "boat_hire",
   },
   {
-    type: 9,
+    typeId: 9,
     typeName: "Wooden Wild Mouse",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 30],
@@ -83,7 +82,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "wooden_wild_mouse",
   },
   {
-    type: 10,
+    typeId: 10,
     typeName: "Steeplechase",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -91,7 +90,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "steeplechase",
   },
   {
-    type: 11,
+    typeId: 11,
     typeName: "Car Ride",
     category: "gentle",
     ratingsMultipliers: [70, 10, 10],
@@ -99,7 +98,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "car_ride",
   },
   {
-    type: 12,
+    typeId: 12,
     typeName: "Launched Freefall",
     category: "thrill",
     ratingsMultipliers: [50, 50, 10],
@@ -107,7 +106,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "launched_freefall",
   },
   {
-    type: 13,
+    typeId: 13,
     typeName: "Bobsleigh Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -115,7 +114,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "bobsleigh_rc",
   },
   {
-    type: 14,
+    typeId: 14,
     typeName: "Observation Tower",
     category: "gentle",
     ratingsMultipliers: [80, 10, 0],
@@ -123,7 +122,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "observation_tower",
   },
   {
-    type: 15,
+    typeId: 15,
     typeName: "Looping Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -131,7 +130,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "looping_rc",
   },
   {
-    type: 16,
+    typeId: 16,
     typeName: "Dinghy Slide",
     category: "water",
     ratingsMultipliers: [50, 30, 10],
@@ -139,7 +138,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "dinghy_slide",
   },
   {
-    type: 17,
+    typeId: 17,
     typeName: "Mine Train Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -147,7 +146,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "mine_train_rc",
   },
   {
-    type: 18,
+    typeId: 18,
     typeName: "Chairlift",
     category: "transport",
     ratingsMultipliers: [70, 10, 0],
@@ -155,7 +154,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "chairlift",
   },
   {
-    type: 19,
+    typeId: 19,
     typeName: "Corkscrew Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -163,7 +162,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "corkscrew_rc",
   },
   {
-    type: 20,
+    typeId: 20,
     typeName: "Maze",
     category: "gentle",
     ratingsMultipliers: [50, 0, 0],
@@ -171,7 +170,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "maze",
   },
   {
-    type: 21,
+    typeId: 21,
     typeName: "Spiral Slide",
     category: "gentle",
     ratingsMultipliers: [50, 10, 0],
@@ -179,7 +178,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "spiral_slide",
   },
   {
-    type: 22,
+    typeId: 22,
     typeName: "Go-Karts",
     category: "thrill",
     ratingsMultipliers: [120, 20, 0],
@@ -187,7 +186,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "go_karts",
   },
   {
-    type: 23,
+    typeId: 23,
     typeName: "Log Flume",
     category: "water",
     ratingsMultipliers: [80, 34, 6],
@@ -195,7 +194,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "log_flume",
   },
   {
-    type: 24,
+    typeId: 24,
     typeName: "River Rapids",
     category: "water",
     ratingsMultipliers: [72, 26, 6],
@@ -203,7 +202,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "river_rapids",
   },
   {
-    type: 25,
+    typeId: 25,
     typeName: "Dodgems",
     category: "gentle",
     ratingsMultipliers: [40, 20, 0],
@@ -211,7 +210,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "dodgems",
   },
   {
-    type: 26,
+    typeId: 26,
     typeName: "Swinging Ship",
     category: "thrill",
     ratingsMultipliers: [50, 30, 10],
@@ -219,7 +218,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "swinging_ship",
   },
   {
-    type: 27,
+    typeId: 27,
     typeName: "Swinging Inverter Ship",
     category: "thrill",
     ratingsMultipliers: [50, 30, 10],
@@ -227,7 +226,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "swinging_inverter_ship",
   },
   {
-    type: 28,
+    typeId: 28,
     typeName: "Food Stall",
     category: "shop",
     ratingsMultipliers: [0, 0, 0],
@@ -235,7 +234,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "food_stall",
   },
   {
-    type: 30,
+    typeId: 30,
     typeName: "Drink Stall",
     category: "shop",
     ratingsMultipliers: [0, 0, 0],
@@ -243,7 +242,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "drink_stall",
   },
   {
-    type: 32,
+    typeId: 32,
     typeName: "Shop",
     category: "shop",
     ratingsMultipliers: [0, 0, 0],
@@ -251,7 +250,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "shop",
   },
   {
-    type: 33,
+    typeId: 33,
     typeName: "Merry-Go-Round",
     category: "gentle",
     ratingsMultipliers: [50, 10, 0],
@@ -259,7 +258,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "merry_go_round",
   },
   {
-    type: 35,
+    typeId: 35,
     typeName: "Information Kiosk",
     category: "shop",
     ratingsMultipliers: [0, 0, 0],
@@ -267,7 +266,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "information_kiosk",
   },
   {
-    type: 36,
+    typeId: 36,
     typeName: "Toilets",
     category: "shop",
     ratingsMultipliers: [0, 0, 0],
@@ -275,7 +274,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "toilets",
   },
   {
-    type: 37,
+    typeId: 37,
     typeName: "Ferris Wheel",
     category: "gentle",
     ratingsMultipliers: [60, 20, 10],
@@ -283,7 +282,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "ferris_wheel",
   },
   {
-    type: 38,
+    typeId: 38,
     typeName: "Motion Simulator",
     category: "thrill",
     ratingsMultipliers: [24, 20, 10],
@@ -291,7 +290,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "motion_simulator",
   },
   {
-    type: 39,
+    typeId: 39,
     typeName: "3D Cinema",
     category: "thrill",
     ratingsMultipliers: [20, 10, 0],
@@ -299,7 +298,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "3d_cinema",
   },
   {
-    type: 40,
+    typeId: 40,
     typeName: "Top Spin",
     category: "thrill",
     ratingsMultipliers: [24, 20, 10],
@@ -307,7 +306,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "top_spin",
   },
   {
-    type: 41,
+    typeId: 41,
     typeName: "Space Rings",
     category: "gentle",
     ratingsMultipliers: [12, 4, 4],
@@ -315,7 +314,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "space_rings",
   },
   {
-    type: 42,
+    typeId: 42,
     typeName: "Reverse Freefall Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [44, 66, 10],
@@ -323,7 +322,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "reverse_freefall_rc",
   },
   {
-    type: 43,
+    typeId: 43,
     typeName: "Lift",
     category: "transport",
     ratingsMultipliers: [80, 10, 0],
@@ -331,7 +330,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "lift",
   },
   {
-    type: 44,
+    typeId: 44,
     typeName: "Vertical Drop Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [52, 38, 10],
@@ -339,7 +338,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "vertical_drop_rc",
   },
   {
-    type: 45,
+    typeId: 45,
     typeName: "Cash Machine",
     category: "shop",
     ratingsMultipliers: [0, 0, 0],
@@ -347,7 +346,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "cash_machine",
   },
   {
-    type: 46,
+    typeId: 46,
     typeName: "Twist",
     category: "thrill",
     ratingsMultipliers: [40, 20, 10],
@@ -355,7 +354,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "twist",
   },
   {
-    type: 47,
+    typeId: 47,
     typeName: "Haunted House",
     category: "gentle",
     ratingsMultipliers: [20, 10, 0],
@@ -363,7 +362,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "haunted_house",
   },
   {
-    type: 48,
+    typeId: 48,
     typeName: "First Aid Room",
     category: "shop",
     ratingsMultipliers: [0, 0, 0],
@@ -371,7 +370,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "first_aid",
   },
   {
-    type: 49,
+    typeId: 49,
     typeName: "Circus",
     category: "gentle",
     ratingsMultipliers: [20, 10, 0],
@@ -379,7 +378,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "circus",
   },
   {
-    type: 50,
+    typeId: 50,
     typeName: "Ghost Train",
     category: "gentle",
     ratingsMultipliers: [70, 10, 10],
@@ -387,7 +386,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "ghost_train",
   },
   {
-    type: 51,
+    typeId: 51,
     typeName: "Twister Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [52, 36, 10],
@@ -395,7 +394,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "twister_rc",
   },
   {
-    type: 52,
+    typeId: 52,
     typeName: "Wooden Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [52, 33, 8],
@@ -403,7 +402,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "wooden_rc",
   },
   {
-    type: 53,
+    typeId: 53,
     typeName: "Side-Friction Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [48, 28, 7],
@@ -411,7 +410,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "side_friction_rc",
   },
   {
-    type: 54,
+    typeId: 54,
     typeName: "Steel Wild Mouse",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 30],
@@ -419,7 +418,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "steel_wild_mouse",
   },
   {
-    type: 55,
+    typeId: 55,
     typeName: "Multi-Dimension Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -427,7 +426,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "multi_dimension_rc",
   },
   {
-    type: 57,
+    typeId: 57,
     typeName: "Flying Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -435,7 +434,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "flying_rc",
   },
   {
-    type: 59,
+    typeId: 59,
     typeName: "Virginia Reel",
     category: "rollercoaster",
     ratingsMultipliers: [30, 15, 25],
@@ -443,7 +442,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "virginia_reel",
   },
   {
-    type: 60,
+    typeId: 60,
     typeName: "Splash Boats",
     category: "water",
     ratingsMultipliers: [80, 34, 6],
@@ -451,7 +450,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "splash_boats",
   },
   {
-    type: 61,
+    typeId: 61,
     typeName: "Mini Helicopters",
     category: "gentle",
     ratingsMultipliers: [70, 10, 10],
@@ -459,7 +458,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "mini_helicopters",
   },
   {
-    type: 62,
+    typeId: 62,
     typeName: "Lay-down Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -467,7 +466,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "lay_down_rc",
   },
   {
-    type: 63,
+    typeId: 63,
     typeName: "Suspended Monorail",
     category: "transport",
     ratingsMultipliers: [70, 6, -10],
@@ -475,7 +474,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "suspended_monorail",
   },
   {
-    type: 65,
+    typeId: 65,
     typeName: "Reverser Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [48, 28, 7],
@@ -483,7 +482,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "reverser_rc",
   },
   {
-    type: 66,
+    typeId: 66,
     typeName: "Heartline Twister Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -491,7 +490,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "heartline_twister_rc",
   },
   {
-    type: 67,
+    typeId: 67,
     typeName: "Mini Golf",
     category: "gentle",
     ratingsMultipliers: [50, 30, 10],
@@ -499,7 +498,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "mini_golf",
   },
   {
-    type: 68,
+    typeId: 68,
     typeName: "Giga Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [51, 32, 10],
@@ -507,7 +506,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "giga_rc",
   },
   {
-    type: 69,
+    typeId: 69,
     typeName: "Roto-Drop",
     category: "thrill",
     ratingsMultipliers: [50, 50, 10],
@@ -515,7 +514,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "roto_drop",
   },
   {
-    type: 70,
+    typeId: 70,
     typeName: "Flying Saucers",
     category: "gentle",
     ratingsMultipliers: [50, 25, 0],
@@ -523,7 +522,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "flying_saucers",
   },
   {
-    type: 71,
+    typeId: 71,
     typeName: "Crooked House",
     category: "gentle",
     ratingsMultipliers: [15, 8, 0],
@@ -531,7 +530,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "crooked_house",
   },
   {
-    type: 72,
+    typeId: 72,
     typeName: "Monorail Cycles",
     category: "gentle",
     ratingsMultipliers: [50, 10, 10],
@@ -539,7 +538,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "monorail_cycles",
   },
   {
-    type: 73,
+    typeId: 73,
     typeName: "Compact Inverted Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -548,7 +547,7 @@ const rideDataTable: TRideTypeInfo[] = [
 		sameTypeAs: "Inverted Roller Coaster",
   },
   {
-    type: 74,
+    typeId: 74,
     typeName: "Water Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -556,7 +555,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "water_coaster",
   },
   {
-    type: 75,
+    typeId: 75,
     typeName: "Air Powered Vertical Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [44, 66, 10],
@@ -564,7 +563,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "air_powered_vertical_rc",
   },
   {
-    type: 76,
+    typeId: 76,
     typeName: "Inverted Hairpin Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 30],
@@ -572,7 +571,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "inverted_hairpin_rc",
   },
   {
-    type: 77,
+    typeId: 77,
     typeName: "Magic Carpet",
     category: "thrill",
     ratingsMultipliers: [50, 30, 10],
@@ -580,7 +579,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "magic_carpet",
   },
   {
-    type: 78,
+    typeId: 78,
     typeName: "Submarine Ride",
     category: "water",
     ratingsMultipliers: [70, 6, 0],
@@ -588,7 +587,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "submarine_ride",
   },
   {
-    type: 79,
+    typeId: 79,
     typeName: "River Rafts",
     category: "water",
     ratingsMultipliers: [80, 34, 6],
@@ -596,7 +595,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "river_rafts",
   },
   {
-    type: 81,
+    typeId: 81,
     typeName: "Enterprise",
     category: "thrill",
     ratingsMultipliers: [50, 10, 0],
@@ -604,7 +603,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "enterprise",
   },
   {
-    type: 86,
+    typeId: 86,
     typeName: "Inverted Impulse Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -612,7 +611,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "inverted_impulse_rc",
   },
   {
-    type: 87,
+    typeId: 87,
     typeName: "Mini Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -620,7 +619,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "mini_rc",
   },
   {
-    type: 88,
+    typeId: 88,
     typeName: "Mine Ride",
     category: "rollercoaster",
     ratingsMultipliers: [60, 20, 10],
@@ -628,7 +627,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "mine_ride",
   },
   {
-    type: 90,
+    typeId: 90,
     typeName: "LIM Launched Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -636,7 +635,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "lim_launched_rc",
   },
   {
-    type: 91,
+    typeId: 91,
     typeName: "Hypercoaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -644,7 +643,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "hypercoaster",
   },
   {
-    type: 92,
+    typeId: 92,
     typeName: "Hyper-Twister",
     category: "rollercoaster",
     ratingsMultipliers: [52, 36, 10],
@@ -652,7 +651,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "hyper_twister",
   },
   {
-    type: 93,
+    typeId: 93,
     typeName: "Monster Trucks",
     category: "gentle",
     ratingsMultipliers: [70, 10, 10],
@@ -660,7 +659,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "monster_trucks",
   },
   {
-    type: 94,
+    typeId: 94,
     typeName: "Spinning Wild Mouse",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 30],
@@ -668,7 +667,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "spinning_wild_mouse",
   },
   {
-    type: 95,
+    typeId: 95,
     typeName: "Classic Mini Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -676,7 +675,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "classic_mini_rc",
   },
   {
-    type: 96,
+    typeId: 96,
     typeName: "Hybrid Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [52, 36, 10],
@@ -684,7 +683,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "hybrid_rc",
   },
   {
-    type: 97,
+    typeId: 97,
     typeName: "Single Rail Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [52, 36, 10],
@@ -692,7 +691,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "single_rail_rc",
   },
   {
-    type: 98,
+    typeId: 98,
     typeName: "Alpine Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -700,7 +699,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "alpine_rc",
   },
   {
-    type: 99,
+    typeId: 99,
     typeName: "Classic Wooden Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [52, 33, 4],
@@ -708,7 +707,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "classic_wooden_rc",
   },
 	{
-		type: 100,
+		typeId: 100,
 		typeName: "Classic Stand-up Roller Coaster",
 		category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
@@ -716,7 +715,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "classic_stand_up_rc",
 	},
   {
-    type: 101,
+    typeId: 101,
     typeName: "LSM Launched Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [51, 32, 10],
@@ -724,7 +723,7 @@ const rideDataTable: TRideTypeInfo[] = [
     identifier: "lsm_rc",
   },
   {
-    type: 102,
+    typeId: 102,
     typeName: "Classic Wooden Twister Roller Coaster",
     category: "rollercoaster",
     ratingsMultipliers: [52, 33, 4],
@@ -755,13 +754,13 @@ const rideDataTable: TRideTypeInfo[] = [
   },
 */
 
-export function getRideType(type: number): TRideTypeInfo {
-  const info = rideDataTable.filter((r) => r.type === type);
+export function getRideInfo(type: number): TRideTypeInfo {
+  const info = rideDataTable.filter((r) => r.typeId === type);
   return info.length
     ? info[0]
     : {
-        type,
-        typeName: `${SUCCESS_COLOUR}Unknown ride type ${type}`,
+        typeId: type,
+        typeName: "{RED}Unknown ride type " + type,
         bonusValue: 0,
         category: "none",
         identifier: "none",

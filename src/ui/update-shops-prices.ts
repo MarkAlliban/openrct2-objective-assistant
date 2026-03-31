@@ -3,7 +3,7 @@ import { getShopItem } from "../data/shop-info";
 import { TItemData, TObjectiveTarget, TSortTable } from "../types";
 import { getRecommendedPrice } from "../utils/price-adjustment";
 import { renderItemTableRow } from "./render-ride-table-row";
-import { ridesAddMoreInfo } from "../utils/rides-add-more-info";
+import { updateRidesData } from "./update-rides-data";
 import { updateWidgetList, getWidgetDropdownValue } from "./update-widget";
 
 export const updateShopsPrices = (
@@ -12,7 +12,7 @@ export const updateShopsPrices = (
   tracker: TGuestTracker,
   sortBy: TSortTable,
 ) => {
-  const rides = ridesAddMoreInfo(objective, tracker, ["stall", "facility"]);
+  const rides = updateRidesData(objective, tracker, ["stall", "facility"]);
 
   const optionTemperature = getWidgetDropdownValue(window, "optionTemperature");
   const optionGuestMood = getWidgetDropdownValue(window, "optionGuestMood");
