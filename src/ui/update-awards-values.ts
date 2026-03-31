@@ -5,7 +5,6 @@ import {
   ERROR_COLOUR,
   ICONS,
   INFO_COLOUR,
-  RIDE_LIFECYCLE_CRASHED,
   RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN,
   SUCCESS_COLOUR,
 } from "../constants";
@@ -89,12 +88,11 @@ export const updateAwardsValues = (
   };
 
   // Best rollercoasters
-	// BUG: This detects the current crashed state of the ride, but it doesn't check for recent crashes. The API doesn't currently expose that.
   const coasters = allRides.filter(
     (ride) =>
       ride.category === "rollercoaster" &&
       ride.status === "open" &&
-      !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
+      park.casualtyPenalty === 0,
   ).length;
   const bestRollerCoasters: TAwardQualification = {
     eligible: coasters >= 6,
@@ -152,16 +150,11 @@ export const updateAwardsValues = (
     null,
     3,
   );
-	// BUG: This detects the current crashed state of the ride, but it doesn't check for recent crashes. The API doesn't currently expose that.
-	const recentCrashes = allRides.filter(
-    (ride) =>
-      ride.classification === "ride" && ride.flags! & RIDE_LIFECYCLE_CRASHED,
-  ).length;
   const safest: TAwardQualification = {
-    eligible: vandalismThoughts.passed && recentCrashes === 0,
+    eligible: vandalismThoughts.passed && park.casualtyPenalty === 0,
     requirements: [
       `${vandalismThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${vandalismThoughts.actual} / ${vandalismThoughts.required - 1}`,
-      `${recentCrashes === 0 ? SUCCESS_COLOUR : ERROR_COLOUR}${recentCrashes}`,
+      park.casualtyPenalty === 0 ? `${SUCCESS_COLOUR}OK` : `${ERROR_COLOUR}No`,
     ],
     exclusions: [],
   };
@@ -238,12 +231,11 @@ export const updateAwardsValues = (
   };
 
   // Best water rides
-	// BUG: This detects the current crashed state of the ride, but it doesn't check for recent crashes. The API doesn't currently expose that.
   const waterRides = allRides.filter(
     (ride) =>
       ride.category === "water" &&
       ride.status === "open" &&
-      !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
+      park.casualtyPenalty === 0,
   ).length;
   const bestWaterRides: TAwardQualification = {
     eligible: waterRides >= 6,
@@ -254,13 +246,12 @@ export const updateAwardsValues = (
   };
 
   // Best custom designed rides
-	// BUG: This detects the current crashed state of the ride, but it doesn't check for recent crashes. The API doesn't currently expose that.
   const customRides = allRides.filter(
     (ride) =>
       (ride.excitement || 0) >= 550 &&
       !(ride.flags! & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
       ride.status === "open" &&
-      !(ride.flags! & RIDE_LIFECYCLE_CRASHED),
+      park.casualtyPenalty === 0,
   ).length;
   const bestCustomDesignedRides: TAwardQualification = {
     eligible: customRides >= 6,
@@ -351,8 +342,8 @@ export const updateAwardsValues = (
   };
 
   // Most disappointing
-	// BUG: https://github.com/OpenRCT2/OpenRCT2/issues/26266
-	// This should be based on popularity, not satisfaction. Popularity is not exposed by the API.
+  // BUG: https://github.com/OpenRCT2/OpenRCT2/issues/26266
+  // This should be based on popularity, not satisfaction. Popularity is not exposed by the API.
   const disappointingRides = rides.filter(
     (ride) => ride.satisfaction < 6,
   ).length;
@@ -415,9 +406,11 @@ export const updateAwardsValues = (
     awards[award.name].requirements.forEach((req, index) => {
       updateWidget(window, `${award.name}Requirement${index}`, req);
     });
-		awards[award.name].exclusions.forEach((exc, index) => {
-			const w:ButtonWidget = window.findWidget(`${award.name}Exclusion${index}`);
-			w.image = exc.has ? ICONS.arrowRedDown : ICONS.certificate;
-		});
+    awards[award.name].exclusions.forEach((exc, index) => {
+      const w: ButtonWidget = window.findWidget(
+        `${award.name}Exclusion${index}`,
+      );
+      w.image = exc.has ? ICONS.arrowRedDown : ICONS.certificate;
+    });
   });
 };

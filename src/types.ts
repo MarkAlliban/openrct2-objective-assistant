@@ -43,6 +43,8 @@ export type TRideInfo = {
   classification?: string;
   type: number;
   status: string;
+  // BUG: https://github.com/OpenRCT2/OpenRCT2/issues/26290
+  // breakdown should be type BreakdownType, but this doesn't allow "none".
   breakdown: string;
   age?: number;
   price?: number[];

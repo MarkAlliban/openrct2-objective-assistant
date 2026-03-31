@@ -48,7 +48,6 @@ export const UI_VALUE_HEIGHT = 12;
 export const UI_LINE_LENGTH = 40;
 export const WARNING_DAYS = 31;
 
-export const RIDE_LIFECYCLE_CRASHED = 1 << 10;
 export const RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN = 1 << 18;
 export const DAZZLING_COLOURS = [5, 14, 20, 30];
 
