@@ -9,7 +9,7 @@ import {
   RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN,
   SUCCESS_COLOUR,
 } from "../constants";
-import { updateRidesData } from "./update-rides-data";
+import { ridesAddMoreInfo } from "../data/rides-add-more-info";
 import { formatCurrency } from "../utils/format-currency";
 import { awardNames, awardsInfo } from "../data/awards-info";
 import { countThoughts } from "../utils/count-thoughts";
@@ -47,7 +47,7 @@ export const updateAwardsValues = (
   // Get ride data
   const rides = map.rides.filter((ride) => ride.classification === "ride");
   const openRides = rides.filter((ride) => ride.status === "open");
-  const allRides = updateRidesData(objective, tracker, [
+  const allRides = ridesAddMoreInfo(objective, tracker, [
     "ride",
     "stall",
     "facility",

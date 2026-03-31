@@ -1,7 +1,7 @@
 import { TGuestTracker } from "../data/guest-tracker";
 import { TObjectiveTarget } from "../types";
 import { renderRideTableRow } from "./render-ride-table-row";
-import { updateRidesData } from "./update-rides-data";
+import { ridesAddMoreInfo } from "../data/rides-add-more-info";
 import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
 import { updateTimeData } from "./update-time-data";
 import { updateWidget, updateWidgetList } from "./update-widget";
@@ -13,7 +13,7 @@ export const updateGuestsValues = (
   sortBy: any,
 ) => {
   // Get ride info and sort
-  const rides = updateRidesData(
+  const rides = ridesAddMoreInfo(
     objective,
     tracker,
     ["ride", "stall", "facility"],

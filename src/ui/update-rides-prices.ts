@@ -1,7 +1,8 @@
 import { TGuestTracker } from "../data/guest-tracker";
 import { TObjectiveTarget, TRideInfo, TRidePrices, TSortTable } from "../types";
 import { renderRideTableRow } from "./render-ride-table-row";
-import { updateRidePricesMultiple, updateRidesData } from "./update-rides-data";
+import { ridesAddMoreInfo } from "../data/rides-add-more-info";
+import { rideGetMaxPrices } from "../data/ride-get-max-prices";
 import { updateWidgetList } from "./update-widget";
 
 export const updateRidesPrices = (
@@ -10,7 +11,7 @@ export const updateRidesPrices = (
   tracker: TGuestTracker,
   sortBy: TSortTable,
 ): TRidePrices[] => {
-  const rides: TRideInfo[] = updateRidesData(objective, tracker, ["ride"])
+  const rides: TRideInfo[] = ridesAddMoreInfo(objective, tracker, ["ride"])
     .sort((a, b) => {
       if (sortBy.key === "Ride")
         return a.name > b.name ? sortBy.direction : -sortBy.direction;
@@ -20,7 +21,7 @@ export const updateRidesPrices = (
           : sortBy.direction;
       return a.id > b.id ? 1 : -1;
     });
-  rides.forEach((ride) => updateRidePricesMultiple(ride, rides));
+  rides.forEach((ride) => rideGetMaxPrices(ride, rides));
 
   // Update ride list widget
   updateWidgetList(

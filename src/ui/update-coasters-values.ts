@@ -2,7 +2,7 @@ import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
 import { TGuestTracker } from "../data/guest-tracker";
 import { TObjectiveTarget, TRideInfo } from "../types";
 import { renderRideTableRow } from "./render-ride-table-row";
-import { updateRidesData } from "./update-rides-data";
+import { ridesAddMoreInfo } from "../data/rides-add-more-info";
 import { updateTimeData } from "./update-time-data";
 import { updateWidget, updateWidgetList } from "./update-widget";
 
@@ -25,7 +25,7 @@ export const updateCoastersValues = (
   tracker: TGuestTracker,
   sortBy: any,
 ) => {
-  const rides = updateRidesData(objective, tracker, ["ride"])
+  const rides = ridesAddMoreInfo(objective, tracker, ["ride"])
     .filter((ride) => ride.category === "rollercoaster")
     .sort((a, b) => {
       if (sortBy.key === "Ride")

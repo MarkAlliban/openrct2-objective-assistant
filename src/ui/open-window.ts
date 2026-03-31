@@ -47,6 +47,7 @@ export const openWindow = (tracker: TGuestTracker) => {
       return;
     }
   }
+
   //Initialise the sorting mechanic
   const sortBy: TSortTable = {
     key: "Ride",
@@ -95,6 +96,8 @@ export const openWindow = (tracker: TGuestTracker) => {
   const goToObjectiveTab = (tab: number) => {
     window.tabIndex = tab;
   };
+
+	// Prevent colour pickers from being changed
   const changeColourBack = (widgetName: string, colour: number) => {
     const w: ColourPickerWidget = window.findWidget(widgetName);
     w.colour = colour;
@@ -106,7 +109,7 @@ export const openWindow = (tracker: TGuestTracker) => {
   // Remember the active tab
   let savedTab = readValue("tab") || 0;
 
-  // Automate prices
+  // Automate prices?
   let automatePrices = !!readValue("automatePrices") || false;
 
   let window: Window;

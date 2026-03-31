@@ -1,3 +1,4 @@
+import { ERROR_COLOUR } from "../constants";
 import { TRideTypeInfo } from "../types";
 
 const rideDataTable: TRideTypeInfo[] = [
@@ -754,13 +755,13 @@ const rideDataTable: TRideTypeInfo[] = [
   },
 */
 
-export function getRideInfo(type: number): TRideTypeInfo {
+export function getRideType(type: number): TRideTypeInfo {
   const info = rideDataTable.filter((r) => r.typeId === type);
   return info.length
     ? info[0]
     : {
         typeId: type,
-        typeName: "{RED}Unknown ride type " + type,
+        typeName: `${ERROR_COLOUR}Unknown ride type ${type}`,
         bonusValue: 0,
         category: "none",
         identifier: "none",

@@ -46,15 +46,15 @@ const getLengthString = (ride: TRideInfo) => {
 };
 
 const getRidersString = (ride: TRideInfo) => {
-  if (ride.error && ride.error > 0)
-    return `${WARNING_COLOUR}In ${(ride.error / 40).toFixed(0)}`;
-  return `${ride.count?.toFixed(0) || 0}`;
+  if (ride.guestError && ride.guestError > 0)
+    return `${WARNING_COLOUR}In ${(ride.guestError / 40).toFixed(0)}`;
+  return `${ride.guestCount?.toFixed(0) || 0}`;
 };
 
 const getValueString = (ride: TRideInfo) => {
   if (ride.valueCalculated === null || ride.valueCalculated === undefined)
     return `${ERROR_COLOUR}???`;
-  return `${ride.incomplete ? ERROR_COLOUR : ""}${formatCurrency(ride.valueCalculated * 10)}`;
+  return `${formatCurrency(ride.valueCalculated * 10)}`;
 };
 
 const getActualPriceString = (ride: TRideInfo) => {

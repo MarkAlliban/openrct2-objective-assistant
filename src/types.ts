@@ -66,10 +66,9 @@ export type TRideInfo = {
   meetsExcitementRequirement?: boolean;
   meetsLengthRequirement?: boolean;
   meetsRequirements?: boolean;
-  error?: number;
-  count?: number;
-  incomplete?: boolean;
-  agedValues?: number[];
+  guestError?: number;
+  guestCount?: number;
+  valuesAged?: number[];
   maxPrices?: (number | null)[];
 };
 
