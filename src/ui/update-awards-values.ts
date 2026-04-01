@@ -89,15 +89,13 @@ export const updateAwardsValues = (
 
   // Best rollercoasters
   const coasters = allRides.filter(
-    (ride) =>
-      ride.category === "rollercoaster" &&
-      ride.status === "open" &&
-      park.casualtyPenalty === 0,
+    (ride) => ride.category === "rollercoaster" && ride.status === "open",
   ).length;
   const bestRollerCoasters: TAwardQualification = {
-    eligible: coasters >= 6,
+    eligible: coasters >= 6 && park.casualtyPenalty === 0,
     requirements: [
       `${coasters >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}${coasters} / 6`,
+      park.casualtyPenalty === 0 ? `${SUCCESS_COLOUR}OK` : `${ERROR_COLOUR}No`,
     ],
     exclusions: [],
   };
@@ -232,15 +230,13 @@ export const updateAwardsValues = (
 
   // Best water rides
   const waterRides = allRides.filter(
-    (ride) =>
-      ride.category === "water" &&
-      ride.status === "open" &&
-      park.casualtyPenalty === 0,
+    (ride) => ride.category === "water" && ride.status === "open",
   ).length;
   const bestWaterRides: TAwardQualification = {
-    eligible: waterRides >= 6,
+    eligible: waterRides >= 6 && park.casualtyPenalty === 0,
     requirements: [
       `${waterRides >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}${waterRides} / 6`,
+      park.casualtyPenalty === 0 ? `${SUCCESS_COLOUR}OK` : `${ERROR_COLOUR}No`,
     ],
     exclusions: [],
   };
@@ -250,13 +246,13 @@ export const updateAwardsValues = (
     (ride) =>
       (ride.excitement || 0) >= 550 &&
       !(ride.flags! & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
-      ride.status === "open" &&
-      park.casualtyPenalty === 0,
+      ride.status === "open",
   ).length;
   const bestCustomDesignedRides: TAwardQualification = {
-    eligible: customRides >= 6,
+    eligible: customRides >= 6 && park.casualtyPenalty === 0,
     requirements: [
       `${customRides >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}${customRides} / 6`,
+      park.casualtyPenalty === 0 ? `${SUCCESS_COLOUR}OK` : `${ERROR_COLOUR}No`,
     ],
     exclusions: [],
   };
