@@ -309,6 +309,7 @@ export const updateAwardsValues = (
   const worstValue: TAwardQualification = {
     eligible:
       !park.getFlag("freeParkEntry") &&
+			park.entranceFee > 0 &&
       park.entranceFee + 0.1 > park.totalRideValueForMoney &&
       !worstValueExclusions.excluded,
     requirements: [
