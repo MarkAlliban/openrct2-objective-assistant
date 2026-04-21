@@ -545,7 +545,7 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 80,
     identifier: "compact_inverted_rc",
-		sameTypeAs: "Inverted Roller Coaster",
+    sameTypeAs: "Inverted Roller Coaster",
   },
   {
     typeId: 74,
@@ -707,14 +707,14 @@ const rideDataTable: TRideTypeInfo[] = [
     bonusValue: 105,
     identifier: "classic_wooden_rc",
   },
-	{
-		typeId: 100,
-		typeName: "Classic Stand-up Roller Coaster",
-		category: "rollercoaster",
+  {
+    typeId: 100,
+    typeName: "Classic Stand-up Roller Coaster",
+    category: "rollercoaster",
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 90,
     identifier: "classic_stand_up_rc",
-	},
+  },
   {
     typeId: 101,
     typeName: "LSM Launched Roller Coaster",
@@ -756,15 +756,15 @@ const rideDataTable: TRideTypeInfo[] = [
 */
 
 export function getRideType(type: number): TRideTypeInfo {
-  const info = rideDataTable.filter((r) => r.typeId === type);
-  return info.length
-    ? info[0]
-    : {
-        typeId: type,
-        typeName: `${ERROR_COLOUR}Unknown ride type ${type}`,
-        bonusValue: 0,
-        category: "none",
-        identifier: "none",
-        ratingsMultipliers: [0, 0, 0],
-      };
+  const info = rideDataTable.find((r) => r.typeId === type);
+  return (
+    info || {
+      typeId: type,
+      typeName: `${ERROR_COLOUR}Unknown ride type ${type}`,
+      bonusValue: 0,
+      category: "none",
+      identifier: "none",
+      ratingsMultipliers: [0, 0, 0],
+    }
+  );
 }

@@ -8,6 +8,7 @@ registerPlugin({
 	authors: [ "Mark Alliban" ],
 	type: "local",
 	licence: "MIT",
-	targetApiVersion: 24,
+	targetApiVersion: 111,
+	minApiVersion: 111,
 	main: startup,
 });
