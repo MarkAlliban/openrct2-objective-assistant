@@ -105,6 +105,7 @@ export const updateAwardsValues = (
   const bestValue: TAwardQualification = {
     eligible:
       !park.getFlag("noMoney") &&
+      park.entranceFee !== 0 &&
       !park.getFlag("freeParkEntry") &&
       park.entranceFee + 0.1 < park.totalRideValueForMoney / 2 &&
       !bestValueExclusions.excluded,
@@ -113,7 +114,7 @@ export const updateAwardsValues = (
         ? `${ERROR_COLOUR}None`
         : `${SUCCESS_COLOUR}Yes`,
       park.getFlag("noMoney") ? `${ERROR_COLOUR}No` : `${SUCCESS_COLOUR}Yes`,
-      `${park.entranceFee + 0.1 < park.totalRideValueForMoney / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney / 2)}`,
+      `${park.entranceFee + 0.1 < park.totalRideValueForMoney / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(Math.max(park.totalRideValueForMoney / 2 - 10, 0))}`,
     ],
     exclusions: bestValueExclusions.list,
   };
@@ -309,7 +310,7 @@ export const updateAwardsValues = (
   const worstValue: TAwardQualification = {
     eligible:
       !park.getFlag("freeParkEntry") &&
-			park.entranceFee > 0 &&
+      park.entranceFee > 0 &&
       park.entranceFee + 0.1 > park.totalRideValueForMoney &&
       !worstValueExclusions.excluded,
     requirements: [

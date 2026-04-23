@@ -40,7 +40,7 @@ export const getRidePricesWidgets = (
     y: 50,
     width: 100,
     height: UI_VALUE_HEIGHT,
-    items: ["Actions...", "Optimise all", "Set long term"],
+    items: ["Actions...", "Optimise all", "Set long term", "Make all cheap", "Make all free"],
     selectedIndex: 0,
   },
   {

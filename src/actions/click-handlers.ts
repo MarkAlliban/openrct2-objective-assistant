@@ -24,6 +24,7 @@ export const handleSetAllRides = (
   dataRidePrices: TRidePrices[],
 ) => {
   const actionWidget: DropdownWidget = window.findWidget("optionAction");
+  // Set all prices to maximum
   if (actionWidget.selectedIndex === 1) {
     dataRidePrices.forEach((ride) => {
       if (ride.currentPrice !== 0) {
@@ -32,12 +33,28 @@ export const handleSetAllRides = (
       }
     });
   }
+  // Set all prices to long-term stable
   if (actionWidget.selectedIndex === 2) {
     dataRidePrices.forEach((ride) => {
       if (ride.currentPrice !== 0) {
         const bestPrice = getLongTermPrice(ride.age, ride.prices);
         setRidePrice(ride.id, bestPrice && bestPrice / 10, true);
       }
+    });
+  }
+  // Set all prices to low
+  if (actionWidget.selectedIndex === 3) {
+    dataRidePrices.forEach((ride) => {
+      if (ride.currentPrice !== 0) {
+        const bestPrice = getLongTermPrice(ride.age, ride.prices);
+        setRidePrice(ride.id, Math.min(bestPrice || 20, 20), true);
+      }
+    });
+  }
+  // Set all prices to free
+  if (actionWidget.selectedIndex === 4) {
+    dataRidePrices.forEach((ride) => {
+      setRidePrice(ride.id, 0, true);
     });
   }
 };
