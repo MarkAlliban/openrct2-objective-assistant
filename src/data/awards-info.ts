@@ -57,8 +57,8 @@ export const awardsInfo: TAward[] = [
     text: "Best value park",
     positive: true,
     requirements: [
-      "Must have an entrance fee",
       "Scenario must be using money",
+      "Must have a park entrance fee",
       "Entrance fee is 0.1 less than half the total ride value for money",
     ],
     exclusion: ["mostDisappointing", "worstValue"],
@@ -78,7 +78,8 @@ export const awardsInfo: TAward[] = [
     text: "Worst value park",
     positive: false,
     requirements: [
-      "Must have an entrance fee",
+      "Scenario must be using money",
+      "Must have a park entrance fee",
       "Entrance fee is more than the total ride value for money",
     ],
     exclusion: ["bestValue"],
@@ -163,7 +164,7 @@ export const awardsInfo: TAward[] = [
       "At least 6 custom built rides with excitement of 5.5 or higher",
       "No recent crashes",
     ],
-    exclusion: [],
+    exclusion: ["mostDisappointing"],
   },
   {
     name: "mostDazzlingRideColours",

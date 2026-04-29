@@ -97,7 +97,7 @@ export const openWindow = (tracker: TGuestTracker) => {
     window.tabIndex = tab;
   };
 
-	// Prevent colour pickers from being changed
+  // Prevent colour pickers from being changed
   const changeColourBack = (widgetName: string, colour: number) => {
     const w: ColourPickerWidget = window.findWidget(widgetName);
     w.colour = colour;

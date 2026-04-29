@@ -11,7 +11,6 @@ import {
 import { ridesAddMoreInfo } from "../data/rides-add-more-info";
 import { formatCurrency } from "../utils/format-currency";
 import { awardNames, awardsInfo } from "../data/awards-info";
-import { countThoughts } from "../utils/count-thoughts";
 import { updateWidget } from "./update-widget";
 
 type TAwardQualification = {
@@ -27,7 +26,7 @@ const getExclusions = (award: AwardType) => {
   const exclusions = awardInfo[0].exclusion.map((exclusion) => {
     return {
       name: awardNames[exclusion],
-      has: awardsCurrent.indexOf(exclusion) !== -1,
+      has: awardsCurrent.includes(exclusion),
     };
   });
   return { excluded: exclusions.some((e) => e.has), list: exclusions };
@@ -42,15 +41,6 @@ export const updateAwardsValues = (
   window.height = 355;
   window.minHeight = 355;
   window.maxHeight = 355;
-
-  // Get ride data
-  const rides = map.rides.filter((ride) => ride.classification === "ride");
-  const openRides = rides.filter((ride) => ride.status === "open");
-  const allRides = ridesAddMoreInfo(objective, tracker, [
-    "ride",
-    "stall",
-    "facility",
-  ]);
 
   // Update thoughts count once per second to avoid lag
   if (date.ticksElapsed % 40 === 0) {
@@ -67,30 +57,78 @@ export const updateAwardsValues = (
     }
   }
 
-  // Most tidy park
-  const tidyThoughts = countThoughts(thoughts.very_clean!, 64);
-  const untidyThoughts = countThoughts(
-    thoughts.bad_litter! + thoughts.path_disgusting! + thoughts.vandalism!,
-    null,
-    null,
-    null,
-    6,
+  // Get ride data
+  const rides = map.rides.filter((ride) => ride.classification === "ride");
+  // BUG: https://github.com/OpenRCT2/OpenRCT2/issues/26266
+  // This should be based on popularity, not satisfaction. Popularity is not exposed by the API.
+  const disappointingRides = rides.filter((r) => r.satisfaction < 6).length;
+  const openRides = rides.filter((ride) => ride.status === "open");
+  const trackedRides = openRides.filter((ride) => ride.rideLength > 0);
+  const dazzlingRides = trackedRides.filter((ride) =>
+    ride.colourSchemes.some((scheme) => DAZZLING_COLOURS.includes(scheme.main)),
   );
+  const ridesExtended = ridesAddMoreInfo(objective, tracker, [
+    "ride",
+    "stall",
+    "facility",
+  ]).filter((r) => r.status === "open");
+  const coasters = ridesExtended.filter(
+    (ride) => ride.category === "rollercoaster",
+  ).length;
+  const waterRides = ridesExtended.filter((r) => r.category === "water").length;
+  const customRides = ridesExtended.filter(
+    (ride) =>
+      (ride.excitement || 0) >= 550 &&
+      !(ride.flags! & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN),
+  ).length;
+  const gentleRides = ridesExtended.filter(
+    (r) => r.category === "gentle",
+  ).length;
+  const foodStalls = map.rides.filter(
+    (ride) => ride.type === 28 && ride.status === "open",
+  );
+  const toilets = map.rides.filter(
+    (ride) => ride.type === 36 && ride.status === "open",
+  );
+
+  // Do some calculations
+  const tidyThoughts = thoughts.very_clean!;
+  const untidyThoughts =
+    thoughts.bad_litter! + thoughts.path_disgusting! + thoughts.vandalism!;
+  const sceneryThoughts = thoughts.scenery!;
+  const vandalismThoughts = thoughts.vandalism!;
+  const hungryThoughts = thoughts.hungry!;
+  const toiletThoughts = thoughts.toilet!;
+  const lostThoughts = thoughts.lost! + thoughts.cant_find!;
+  const foodTypes = new Set(foodStalls.map((r) => r.object.shopItem)).size;
+  const staff = map.getAllEntities("staff");
+  const staffTypes = new Set(staff.map((s) => s.staffType)).size;
+
+  // Most untidy park: more than 1/16 of the total guests must be thinking untidy thoughts
+  const untidyExclusions = getExclusions("mostUntidy");
+  const mostUntidy: TAwardQualification = {
+    eligible: untidyThoughts > park.guests / 16 && !untidyExclusions.excluded,
+    requirements: [
+      `${untidyThoughts > Math.floor(park.guests / 16) ? SUCCESS_COLOUR : ERROR_COLOUR}${untidyThoughts} / ${Math.floor(park.guests / 16) + 1}`,
+    ],
+    exclusions: untidyExclusions.list,
+  };
+
+  // Most tidy park: more than 1/64 of the total guests must be thinking tidy thoughts and fewer than 6 guests thinking untidy thoughts
   const tidyExclusions = getExclusions("mostTidy");
   const mostTidy: TAwardQualification = {
     eligible:
-      tidyThoughts.passed && untidyThoughts.passed && !tidyExclusions.excluded,
+      tidyThoughts > park.guests / 64 &&
+      untidyThoughts < 6 &&
+      !tidyExclusions.excluded,
     requirements: [
-      `${tidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${tidyThoughts.actual} / ${tidyThoughts.required}`,
-      `${untidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${untidyThoughts.actual} / ${untidyThoughts.required - 1}`,
+      `${tidyThoughts > Math.floor(park.guests / 64) ? SUCCESS_COLOUR : ERROR_COLOUR}${tidyThoughts} / ${Math.floor(park.guests / 64) + 1}`,
+      `${untidyThoughts < 6 ? SUCCESS_COLOUR : ERROR_COLOUR}${untidyThoughts} / 5`,
     ],
     exclusions: tidyExclusions.list,
   };
 
-  // Best rollercoasters
-  const coasters = allRides.filter(
-    (ride) => ride.category === "rollercoaster" && ride.status === "open",
-  ).length;
+  // Best rollercoasters: at least 6 open roller coasters and no crashes
   const bestRollerCoasters: TAwardQualification = {
     eligible: coasters >= 6 && park.casualtyPenalty === 0,
     requirements: [
@@ -100,139 +138,149 @@ export const updateAwardsValues = (
     exclusions: [],
   };
 
-  // Best value park
+  // Best value park: entrance fee is 0.10 less than half of the total ride value
   const bestValueExclusions = getExclusions("bestValue");
+  const entranceFeeTarget = Math.max(park.totalRideValueForMoney / 2 - 1, 0);
   const bestValue: TAwardQualification = {
     eligible:
       !park.getFlag("noMoney") &&
-      park.entranceFee !== 0 &&
       !park.getFlag("freeParkEntry") &&
-      park.entranceFee + 0.1 < park.totalRideValueForMoney / 2 &&
+      park.entranceFee > 0 &&
+      park.entranceFee <= entranceFeeTarget &&
       !bestValueExclusions.excluded,
     requirements: [
-      park.getFlag("freeParkEntry") || park.entranceFee === 0
-        ? `${ERROR_COLOUR}None`
-        : `${SUCCESS_COLOUR}Yes`,
       park.getFlag("noMoney") ? `${ERROR_COLOUR}No` : `${SUCCESS_COLOUR}Yes`,
-      `${park.entranceFee + 0.1 < park.totalRideValueForMoney / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(Math.max(park.totalRideValueForMoney / 2 - 10, 0))}`,
+      park.getFlag("freeParkEntry") || park.entranceFee === 0
+        ? `${ERROR_COLOUR}No`
+        : `${SUCCESS_COLOUR}Yes`,
+      `${park.entranceFee <= entranceFeeTarget ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(10 * Math.floor(entranceFeeTarget / 10))}`,
     ],
     exclusions: bestValueExclusions.list,
   };
 
-  // Most beautiful park
-  const beautifultidyThoughts = countThoughts(thoughts.scenery!, 128);
-  const unbeautifulThoughts = countThoughts(
-    thoughts.bad_litter! + thoughts.path_disgusting! + thoughts.vandalism!,
-    null,
-    null,
-    null,
-    16,
-  );
+  // Most beautiful park: more than 1/128 of the total guests must be thinking scenic thoughts and fewer than 16 untidy thoughts
   const mostBeautifulExclusions = getExclusions("mostBeautiful");
   const mostBeautiful: TAwardQualification = {
     eligible:
-      beautifultidyThoughts.passed &&
-      unbeautifulThoughts.passed &&
+      sceneryThoughts > park.guests / 128 &&
+      untidyThoughts < 16 &&
       !mostBeautifulExclusions.excluded,
     requirements: [
-      `${beautifultidyThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${beautifultidyThoughts.actual} / ${beautifultidyThoughts.required}`,
-      `${unbeautifulThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${unbeautifulThoughts.actual} / ${unbeautifulThoughts.required - 1}`,
+      `${sceneryThoughts > park.guests / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${sceneryThoughts} / ${Math.floor(park.guests / 128) + 1}`,
+      `${untidyThoughts < 16 ? SUCCESS_COLOUR : ERROR_COLOUR}${untidyThoughts} / 15`,
     ],
     exclusions: mostBeautifulExclusions.list,
   };
 
-  // Safest park
-  const vandalismThoughts = countThoughts(
-    thoughts.vandalism!,
-    null,
-    null,
-    null,
-    3,
-  );
-  const safest: TAwardQualification = {
-    eligible: vandalismThoughts.passed && park.casualtyPenalty === 0,
+  // Worst value park: entrance fee is more than total ride value
+  const worstValueExclusions = getExclusions("worstValue");
+  const worstValue: TAwardQualification = {
+    eligible:
+      !park.getFlag("noMoney") &&
+      !park.getFlag("freeParkEntry") &&
+      park.entranceFee > 0 &&
+      park.entranceFee > park.totalRideValueForMoney &&
+      !worstValueExclusions.excluded,
     requirements: [
-      `${vandalismThoughts.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${vandalismThoughts.actual} / ${vandalismThoughts.required - 1}`,
+      park.getFlag("noMoney") ? `${ERROR_COLOUR}No` : `${SUCCESS_COLOUR}Yes`,
+      park.getFlag("freeParkEntry") || park.entranceFee === 0
+        ? `${ERROR_COLOUR}No`
+        : `${SUCCESS_COLOUR}Yes`,
+      `${park.entranceFee > park.totalRideValueForMoney ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney)}`,
+    ],
+    exclusions: worstValueExclusions.list,
+  };
+
+  // Safest park: no more than 2 people who think the vandalism is bad and no crashes
+  const safestEligible = vandalismThoughts <= 2 && park.casualtyPenalty === 0;
+  const safest: TAwardQualification = {
+    eligible: safestEligible,
+    requirements: [
+      `${vandalismThoughts <= 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${vandalismThoughts} / 2`,
       park.casualtyPenalty === 0 ? `${SUCCESS_COLOUR}OK` : `${ERROR_COLOUR}No`,
     ],
     exclusions: [],
   };
 
-  // Best staff
-  const staff = map.getAllEntities("staff");
-  const staffBreakdown: Record<StaffType, number> = staff.reduce(
-    (a, p) => {
-      a[p.staffType]++;
-      return a;
-    },
-    { handyman: 0, entertainer: 0, security: 0, mechanic: 0 },
-  );
-  const staffTypes = (
-    Object.keys(staffBreakdown) as (keyof typeof staffBreakdown)[]
-  ).filter((key: StaffType) => staffBreakdown[key] > 0).length;
+  // Best staff: all staff types, at least 20 staff, one staff per 32 peeps
   const bestStaffExclusions = getExclusions("bestStaff");
   const bestStaff: TAwardQualification = {
     eligible:
       staff.length >= 20 &&
       staffTypes === 4 &&
-      staff.length >= Math.floor(park.guests / 32) &&
+      staff.length >= park.guests / 32 &&
       !bestStaffExclusions.excluded,
     requirements: [
       `${staff.length >= 20 ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / 20`,
       `${staffTypes === 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${staffTypes} / 4`,
-      `${staff.length >= Math.floor(park.guests / 32) ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / ${Math.floor(park.guests / 32)}`,
+      `${staff.length >= park.guests / 32 ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / ${Math.ceil(park.guests / 32)}`,
     ],
     exclusions: bestStaffExclusions.list,
   };
 
-  // Best food
-  const foodStalls = map.rides.filter(
-    (ride) => ride.type === 28 && ride.status === "open",
-  );
-  const foodTypes: number[] = foodStalls.reduce((a: number[], r) => {
-    if (a.indexOf(r.object.shopItem) === -1) a.push(r.object.shopItem);
-    return a;
-  }, []);
-  const hungryGuests = countThoughts(thoughts.hungry!, null, null, null, 13);
+  // Best food: at least 7 shops, 4 unique, one shop per 128 guests and no more than 12 hungry guests
   const bestFoodExclusions = getExclusions("bestFood");
   const bestFood: TAwardQualification = {
     eligible:
       foodStalls.length >= 7 &&
-      foodStalls.length >= Math.floor(park.guests / 128) &&
-      foodTypes.length >= 4 &&
-      hungryGuests.passed &&
+      foodTypes >= 4 &&
+      foodStalls.length >= park.guests / 128 &&
+      hungryThoughts <= 12 &&
       !bestFoodExclusions.excluded,
     requirements: [
       `${foodStalls.length >= 7 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / 7`,
-      `${foodTypes.length >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodTypes.length} / 4`,
-      `${foodStalls.length >= Math.floor(park.guests / 128) ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.floor(park.guests / 128)}`,
-      `${hungryGuests.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${hungryGuests.actual} / 12`,
+      `${foodTypes >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodTypes} / 4`,
+      `${foodStalls.length >= park.guests / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.ceil(park.guests / 128)}`,
+      `${hungryThoughts <= 12 ? SUCCESS_COLOUR : ERROR_COLOUR}${hungryThoughts} / 12`,
     ],
     exclusions: bestFoodExclusions.list,
   };
 
-  // Best toilets
-  const toilets = map.rides.filter(
-    (ride) => ride.type === 36 && ride.status === "open",
-  ).length;
-  const needToilet = countThoughts(thoughts.toilet!, null, null, null, 17);
+  // Worst food: no more than 2 unique shops, less than one shop per 256 guests and more than 15 hungry guests
+  const worstFoodExclusions = getExclusions("worstFood");
+  const worstFood: TAwardQualification = {
+    eligible:
+      foodTypes <= 2 &&
+      foodStalls.length <= park.guests / 256 &&
+      hungryThoughts > 15 &&
+      !worstFoodExclusions.excluded,
+    requirements: [
+      `${foodTypes <= 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodTypes} / 2`,
+      `${foodStalls.length <= park.guests / 256 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.floor(park.guests / 256)}`,
+      `${hungryThoughts > 15 ? SUCCESS_COLOUR : ERROR_COLOUR}${hungryThoughts} / 16`,
+    ],
+    exclusions: worstFoodExclusions.list,
+  };
+
+  // Best toilets: at least 4 toilets, 1 toilet per 128 guests and no more than 16 guests who think they need the toilet
   const bestToilets: TAwardQualification = {
     eligible:
-      toilets >= 4 &&
-      toilets >= Math.floor(park.guests / 128) &&
-      needToilet.passed,
+      toilets.length >= 4 &&
+      toilets.length >= park.guests / 128 &&
+      toiletThoughts <= 16,
     requirements: [
-      `${toilets >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets} / 4`,
-      `${toilets >= Math.floor(park.guests / 128) ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets} / ${Math.floor(park.guests / 128)}`,
-      `${needToilet.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${needToilet.actual} / ${needToilet.required - 1}`,
+      `${toilets.length >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets.length} / 4`,
+      `${toilets.length >= park.guests / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets.length} / ${Math.ceil(park.guests / 128)}`,
+      `${toiletThoughts <= 16 ? SUCCESS_COLOUR : ERROR_COLOUR}${toiletThoughts} / 16`,
     ],
     exclusions: [],
   };
 
-  // Best water rides
-  const waterRides = allRides.filter(
-    (ride) => ride.category === "water" && ride.status === "open",
-  ).length;
+  // Most disappointing: more than half of the rides have popularity <= 6 and park rating <= 650
+  const disappointingExclusions = getExclusions("mostDisappointing");
+  const mostDisappointing: TAwardQualification = {
+    eligible:
+      park.rating <= 650 &&
+      disappointingRides >= rides.length / 2 &&
+      !disappointingExclusions.excluded,
+    requirements: [
+      `${park.rating <= 650 ? SUCCESS_COLOUR : ERROR_COLOUR}${park.rating} / 650`,
+      `${disappointingRides >= rides.length / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${disappointingRides} / ${Math.floor(rides.length / 2)}`,
+    ],
+    exclusions: disappointingExclusions.list,
+  };
+
+  // Best water rides: at least 6 open water rides
   const bestWaterRides: TAwardQualification = {
     eligible: waterRides >= 6 && park.casualtyPenalty === 0,
     requirements: [
@@ -242,15 +290,13 @@ export const updateAwardsValues = (
     exclusions: [],
   };
 
-  // Best custom designed rides
-  const customRides = allRides.filter(
-    (ride) =>
-      (ride.excitement || 0) >= 550 &&
-      !(ride.flags! & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN) &&
-      ride.status === "open",
-  ).length;
+  // Best custom designed rides: at least 6 custom designed rides
+  const customExclusions = getExclusions("bestCustomDesignedRides");
   const bestCustomDesignedRides: TAwardQualification = {
-    eligible: customRides >= 6 && park.casualtyPenalty === 0,
+    eligible:
+      customRides >= 6 &&
+      park.casualtyPenalty === 0 &&
+      !customExclusions.excluded,
     requirements: [
       `${customRides >= 6 ? SUCCESS_COLOUR : ERROR_COLOUR}${customRides} / 6`,
       park.casualtyPenalty === 0 ? `${SUCCESS_COLOUR}OK` : `${ERROR_COLOUR}No`,
@@ -258,118 +304,35 @@ export const updateAwardsValues = (
     exclusions: [],
   };
 
-  // Most dazzling colours
-  const dazzlingRides = openRides.filter(
-    (ride) =>
-      ride.status === "open" &&
-      ride.colourSchemes.some(
-        (scheme) => DAZZLING_COLOURS.indexOf(scheme.main) !== -1,
-      ),
-  ).length;
+  // Most dazzling colours: at least 5 colourful rides and more than half of the rides are colourful
   const mostDazzlingExclusions = getExclusions("mostDazzlingRideColours");
   const mostDazzlingRideColours: TAwardQualification = {
     eligible:
-      openRides.length >= 5 &&
-      2 * dazzlingRides >= openRides.length &&
+      dazzlingRides.length >= 5 &&
+      dazzlingRides.length >= trackedRides.length / 2 &&
       !mostDazzlingExclusions.excluded,
     requirements: [
-      `${openRides.length >= 5 ? SUCCESS_COLOUR : ERROR_COLOUR}${openRides.length} / 5`,
-      `${2 * dazzlingRides >= openRides.length ? SUCCESS_COLOUR : ERROR_COLOUR}${dazzlingRides} / ${Math.ceil(openRides.length / 2)}`,
+      `${dazzlingRides.length >= 5 ? SUCCESS_COLOUR : ERROR_COLOUR}${dazzlingRides.length} / 5`,
+      `${dazzlingRides.length >= trackedRides.length / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${dazzlingRides.length} / ${Math.ceil(trackedRides.length / 2)}`,
     ],
     exclusions: mostDazzlingExclusions.list,
   };
 
-  // Best gentle rides
-  const gentleRides = allRides.filter(
-    (ride) => ride.category === "gentle" && ride.status === "open",
-  ).length;
-  const bestGentleRides: TAwardQualification = {
-    eligible: gentleRides >= 10,
+  // Most confusing layout: at least 10 peeps and more than 1/64 of total guests are lost or can't find something
+  const mostConfusingLayout: TAwardQualification = {
+    eligible: lostThoughts >= 10 && lostThoughts >= park.guests / 64,
     requirements: [
-      `${gentleRides >= 10 ? SUCCESS_COLOUR : ERROR_COLOUR}${gentleRides} / 10`,
+      `${lostThoughts >= 10 ? SUCCESS_COLOUR : ERROR_COLOUR}${lostThoughts} / 10`,
+      `${lostThoughts >= park.guests / 64 ? SUCCESS_COLOUR : ERROR_COLOUR}${lostThoughts} / ${Math.floor(park.guests / 64) + 1}`,
     ],
     exclusions: [],
   };
 
-  // Most untidy park
-  const untidyThoughts2 = countThoughts(
-    thoughts.bad_litter! + thoughts.path_disgusting! + thoughts.vandalism!,
-    16,
-  );
-  const untidyExclusions = getExclusions("mostUntidy");
-  const mostUntidy: TAwardQualification = {
-    eligible: untidyThoughts2.passed && !untidyExclusions.excluded,
+  // Best gentle rides: at least 10 open gentle rides
+  const bestGentleRides: TAwardQualification = {
+    eligible: gentleRides >= 10,
     requirements: [
-      `${untidyThoughts2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${untidyThoughts2.actual} / ${untidyThoughts2.required}`,
-    ],
-    exclusions: untidyExclusions.list,
-  };
-
-  // Worst value park
-  const worstValueExclusions = getExclusions("worstValue");
-  const worstValue: TAwardQualification = {
-    eligible:
-      !park.getFlag("freeParkEntry") &&
-      park.entranceFee > 0 &&
-      park.entranceFee + 0.1 > park.totalRideValueForMoney &&
-      !worstValueExclusions.excluded,
-    requirements: [
-      park.getFlag("freeParkEntry") || park.entranceFee === 0
-        ? `${ERROR_COLOUR}None`
-        : `${SUCCESS_COLOUR}Yes`,
-      `${park.entranceFee > park.totalRideValueForMoney ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(park.totalRideValueForMoney)}`,
-    ],
-    exclusions: worstValueExclusions.list,
-  };
-
-  // Worst food
-  const hungryGuests2 = countThoughts(thoughts.hungry!, null, 16);
-  const worstFoodExclusions = getExclusions("worstFood");
-  const worstFood: TAwardQualification = {
-    eligible:
-      foodTypes.length <= 2 &&
-      foodStalls.length < Math.floor(park.guests / 256) &&
-      hungryGuests2.passed &&
-      !worstFoodExclusions.excluded,
-    requirements: [
-      `${foodTypes.length <= 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodTypes.length} / 2`,
-      `${foodStalls.length < Math.floor(park.guests / 256) ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.floor(park.guests / 256)}`,
-      `${hungryGuests2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${hungryGuests2.actual} / 16`,
-    ],
-    exclusions: worstFoodExclusions.list,
-  };
-
-  // Most disappointing
-  // BUG: https://github.com/OpenRCT2/OpenRCT2/issues/26266
-  // This should be based on popularity, not satisfaction. Popularity is not exposed by the API.
-  const disappointingRides = rides.filter(
-    (ride) => ride.satisfaction < 6,
-  ).length;
-  const disappointingExclusions = getExclusions("mostDisappointing");
-  const mostDisappointing: TAwardQualification = {
-    eligible:
-      park.rating <= 650 &&
-      2 * disappointingRides > rides.length &&
-      !disappointingExclusions.excluded,
-    requirements: [
-      `${park.rating <= 650 ? SUCCESS_COLOUR : ERROR_COLOUR}${park.rating} / 650`,
-      `${2 * disappointingRides > rides.length ? SUCCESS_COLOUR : ERROR_COLOUR}${disappointingRides} / ${Math.floor(rides.length / 2)}`,
-    ],
-    exclusions: disappointingExclusions.list,
-  };
-
-  // Most confusing layout
-  const lostGuests = countThoughts(
-    thoughts.lost! + thoughts.cant_find!,
-    null,
-    10,
-  );
-  const lostGuests2 = countThoughts(thoughts.lost! + thoughts.cant_find!, 64);
-  const mostConfusingLayout: TAwardQualification = {
-    eligible: lostGuests.passed && lostGuests2.passed,
-    requirements: [
-      `${lostGuests.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${lostGuests.actual} / ${lostGuests.required}`,
-      `${lostGuests2.passed ? SUCCESS_COLOUR : ERROR_COLOUR}${lostGuests2.actual} / ${lostGuests2.required}`,
+      `${gentleRides >= 10 ? SUCCESS_COLOUR : ERROR_COLOUR}${gentleRides} / 10`,
     ],
     exclusions: [],
   };
