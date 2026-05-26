@@ -308,11 +308,11 @@ export const updateAwardsValues = (
   const mostDazzlingExclusions = getExclusions("mostDazzlingRideColours");
   const mostDazzlingRideColours: TAwardQualification = {
     eligible:
-      dazzlingRides.length >= 5 &&
+      trackedRides.length >= 5 &&
       dazzlingRides.length >= trackedRides.length / 2 &&
       !mostDazzlingExclusions.excluded,
     requirements: [
-      `${dazzlingRides.length >= 5 ? SUCCESS_COLOUR : ERROR_COLOUR}${dazzlingRides.length} / 5`,
+      `${trackedRides.length >= 5 ? SUCCESS_COLOUR : ERROR_COLOUR}${trackedRides.length} / 5`,
       `${dazzlingRides.length >= trackedRides.length / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${dazzlingRides.length} / ${Math.ceil(trackedRides.length / 2)}`,
     ],
     exclusions: mostDazzlingExclusions.list,
