@@ -1,10 +1,10 @@
-import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
-import { TGuestTracker } from "../data/guest-tracker";
-import { TObjectiveTarget, TRideInfo } from "../types";
-import { renderRideTableRow } from "./render-ride-table-row";
-import { ridesAddMoreInfo } from "../data/rides-add-more-info";
-import { updateTimeData } from "./update-time-data";
-import { updateWidget, updateWidgetList } from "./update-widget";
+import { SUCCESS_COLOUR } from "../../constants";
+import { TGuestTracker } from "../../data/guest-tracker";
+import { TObjectiveTarget, TRideInfo } from "../../types";
+import { renderRideTableRow } from "../helpers/render-ride-table-row";
+import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
+import { updateTimeData } from "../helpers/update-time-data";
+import { updateWidget, updateWidgetList } from "../update-widget";
 
 const getCoasterText = (
   objective: TObjectiveTarget,
@@ -13,9 +13,9 @@ const getCoasterText = (
   rides: TRideInfo[],
 ) => {
   if (objective.rollercoastersToComplete)
-    return `${completed.length < objective.rollercoastersToComplete.length ? WARNING_COLOUR : SUCCESS_COLOUR}${completed.length}{WHITE} / ${objective.rollercoasters}`;
+    return `${completed.length >= objective.rollercoastersToComplete.length ? SUCCESS_COLOUR : ""}${completed.length}{WHITE} / ${objective.rollercoasters}`;
   else if (objective.rollercoasters)
-    return `${uniqueTypes.length < objective.rollercoasters ? WARNING_COLOUR : SUCCESS_COLOUR}${uniqueTypes.length}{WHITE} / ${objective.rollercoasters}`;
+    return `${uniqueTypes.length >= objective.rollercoasters ? SUCCESS_COLOUR : ""}${uniqueTypes.length}{WHITE} / ${objective.rollercoasters}`;
   else return `${rides.length}`;
 };
 

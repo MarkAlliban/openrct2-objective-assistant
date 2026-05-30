@@ -32,14 +32,14 @@ export const getTempAdjustedPrice = (
   temperatureMode: number,
   temperature: number,
 ) => {
-  if (temperatureMode < 2) {
-    return temperature < TEMP_COLD
-      ? data.coldPrice
-      : temperature < TEMP_HOT
-        ? data.basePrice
-        : data.hotPrice;
+  if (temperatureMode == 2) {
+    return Math.min(data.coldPrice, data.basePrice, data.hotPrice);
   }
-  return Math.min(data.coldPrice, data.basePrice, data.hotPrice);
+  return temperature < TEMP_COLD
+    ? data.coldPrice
+    : temperature < TEMP_HOT
+      ? data.basePrice
+      : data.hotPrice;
 };
 
 export const getRecommendedPrice = (

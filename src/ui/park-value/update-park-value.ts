@@ -1,11 +1,11 @@
-import { TGuestTracker } from "../data/guest-tracker";
-import { TObjectiveTarget, TSortTable } from "../types";
-import { formatCurrency } from "../utils/format-currency";
-import { ridesAddMoreInfo } from "../data/rides-add-more-info";
-import { renderRideTableRow } from "./render-ride-table-row";
-import { updateTimeData } from "./update-time-data";
-import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
-import { updateWidget, updateWidgetList } from "./update-widget";
+import { TGuestTracker } from "../../data/guest-tracker";
+import { TObjectiveTarget, TSortTable } from "../../types";
+import { formatCurrency } from "../../utils/format-currency";
+import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
+import { renderRideTableRow } from "../helpers/render-ride-table-row";
+import { updateTimeData } from "../helpers/update-time-data";
+import { SUCCESS_COLOUR } from "../../constants";
+import { updateWidget, updateWidgetList } from "../update-widget";
 
 export const updateParkValue = (
   window: Window,
@@ -35,7 +35,7 @@ export const updateParkValue = (
 
   // Update park value widget
   const text = objective.parkValue
-    ? `${park.value < objective.parkValue ? WARNING_COLOUR : SUCCESS_COLOUR}${formatCurrency(park.value)}{WHITE} / ${formatCurrency(objective.parkValue)}`
+    ? `${park.value >= objective.parkValue ? SUCCESS_COLOUR : ""}${formatCurrency(park.value)}{WHITE} / ${formatCurrency(objective.parkValue)}`
     : `${formatCurrency(park.value)}`;
   updateWidget(window, "textParkValue", text);
 
@@ -43,9 +43,13 @@ export const updateParkValue = (
   updateTimeData(window, objective, !!objective.parkValue);
 
   // Update ride list widget
-  updateWidgetList(window, "listRides", rides.map((ride) =>
-    renderRideTableRow(ride, ["name", "riders", "bonus", "value"]),
-  ));
+  updateWidgetList(
+    window,
+    "listRides",
+    rides.map((ride) =>
+      renderRideTableRow(ride, ["name", "riders", "bonus", "value"]),
+    ),
+  );
 
   // Return the ride IDs
   return rides.map((ride) => ride.id);

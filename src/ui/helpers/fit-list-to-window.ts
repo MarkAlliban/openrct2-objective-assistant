@@ -1,4 +1,4 @@
-import { UI_VALUE_HEIGHT } from "../constants";
+import { UI_VALUE_HEIGHT } from "../../constants";
 
 export const fitListToWindow = (
   window: Window,

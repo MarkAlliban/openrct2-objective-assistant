@@ -1,6 +1,6 @@
 export const TITLE = "Objective Progress";
 export const WINDOW_WIDTH = 410;
-export const WINDOW_HEIGHT = 200;
+export const WINDOW_HEIGHT = 355;
 export const WINDOW_HEIGHT_MIN = 150;
 export const BACKGROUND_COLOUR = 3;
 export const FOREGROUND_COLOUR = 4;

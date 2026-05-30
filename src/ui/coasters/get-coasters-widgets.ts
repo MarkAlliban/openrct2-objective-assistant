@@ -1,6 +1,6 @@
-import { UI_VALUE_HEIGHT, UI_VALUE_WIDTH, WINDOW_WIDTH } from "../constants";
-import { TSortTable, TObjectiveTarget } from "../types";
-import { renderRideTable } from "./render-ride-table";
+import { UI_VALUE_HEIGHT, UI_VALUE_WIDTH, WINDOW_WIDTH } from "../../constants";
+import { TSortTable, TObjectiveTarget } from "../../types";
+import { renderRideTable } from "../helpers/render-ride-table";
 
 export const getCoastersWidgets = (
   clickRow: Function,

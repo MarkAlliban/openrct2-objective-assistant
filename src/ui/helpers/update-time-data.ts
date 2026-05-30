@@ -3,10 +3,10 @@ import {
   TICKS_PER_YEAR,
   WARNING_COLOUR,
   WARNING_DAYS,
-} from "../constants";
-import { convertTicksToDays } from "../utils/convert-ticks-to-days";
-import { TObjectiveTarget } from "../types";
-import { updateWidget } from "./update-widget";
+} from "../../constants";
+import { convertTicksToDays } from "../../utils/convert-ticks-to-days";
+import { TObjectiveTarget } from "../../types";
+import { updateWidget } from "../update-widget";
 
 export const updateTimeData = (
   window: Window,

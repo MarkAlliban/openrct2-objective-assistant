@@ -1,6 +1,6 @@
-import { convertTicksToDays } from "../utils/convert-ticks-to-days";
-import { TObjectiveTarget } from "../types";
-import { formatCurrency } from "../utils/format-currency";
+import { convertTicksToDays } from "../../utils/convert-ticks-to-days";
+import { TObjectiveTarget } from "../../types";
+import { formatCurrency } from "../../utils/format-currency";
 import {
   SUCCESS_COLOUR,
   TICKS_PER_MONTH,
@@ -8,10 +8,10 @@ import {
   ERROR_COLOUR,
   WARNING_COLOUR,
   WARNING_DAYS,
-} from "../constants";
-import { ridesAddMoreInfo } from "../data/rides-add-more-info";
-import { TGuestTracker } from "../data/guest-tracker";
-import { updateWidget } from "./update-widget";
+} from "../../constants";
+import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
+import { TGuestTracker } from "../../data/guest-tracker";
+import { updateWidget } from "../update-widget";
 
 export const updateObjectiveValues = (
   window: Window,

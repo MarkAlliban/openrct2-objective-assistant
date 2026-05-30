@@ -1,5 +1,5 @@
-import { TObjectiveTarget } from "../types";
-import { TGuestTracker } from "../data/guest-tracker";
+import { TObjectiveTarget } from "../../types";
+import { TGuestTracker } from "../../data/guest-tracker";
 import {
   DAZZLING_COLOURS,
   ERROR_COLOUR,
@@ -7,11 +7,11 @@ import {
   INFO_COLOUR,
   RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN,
   SUCCESS_COLOUR,
-} from "../constants";
-import { ridesAddMoreInfo } from "../data/rides-add-more-info";
-import { formatCurrency } from "../utils/format-currency";
-import { awardNames, awardsInfo } from "../data/awards-info";
-import { updateWidget } from "./update-widget";
+} from "../../constants";
+import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
+import { formatCurrency } from "../../utils/format-currency";
+import { awardNames, awardsInfo } from "../../data/awards-info";
+import { updateWidget } from "../update-widget";
 
 type TAwardQualification = {
   eligible: boolean;
@@ -38,10 +38,6 @@ export const updateAwardsValues = (
   tracker: TGuestTracker,
   thoughts: Partial<Record<ThoughtType, number>>,
 ) => {
-  window.height = 355;
-  window.minHeight = 355;
-  window.maxHeight = 355;
-
   // Update thoughts count once per second to avoid lag
   if (date.ticksElapsed % 40 === 0) {
     (Object.keys(thoughts) as Array<keyof typeof thoughts>).forEach(

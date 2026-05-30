@@ -3,9 +3,9 @@ import {
   ICONS,
   UI_VALUE_HEIGHT,
   WINDOW_WIDTH,
-} from "../constants";
-import { awardsInfo } from "../data/awards-info";
-import { TAward } from "../types";
+} from "../../constants";
+import { awardsInfo } from "../../data/awards-info";
+import { TAward } from "../../types";
 
 const addRequirementLabel = (
   name: string,

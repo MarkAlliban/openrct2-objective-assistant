@@ -1,10 +1,10 @@
-import { TGuestTracker } from "../data/guest-tracker";
-import { TObjectiveTarget } from "../types";
-import { renderRideTableRow } from "./render-ride-table-row";
-import { ridesAddMoreInfo } from "../data/rides-add-more-info";
-import { SUCCESS_COLOUR, WARNING_COLOUR } from "../constants";
-import { updateTimeData } from "./update-time-data";
-import { updateWidget, updateWidgetList } from "./update-widget";
+import { TGuestTracker } from "../../data/guest-tracker";
+import { TObjectiveTarget } from "../../types";
+import { renderRideTableRow } from "../helpers/render-ride-table-row";
+import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
+import { SUCCESS_COLOUR } from "../../constants";
+import { updateTimeData } from "../helpers/update-time-data";
+import { updateWidget, updateWidgetList } from "../update-widget";
 
 export const updateGuestsValues = (
   window: Window,
@@ -54,8 +54,8 @@ export const updateGuestsValues = (
       softGuestCapRealtime = 1000;
     }
     rides.forEach((ride) => {
-			// BUG: ride is not counted towards soft guest cap for Mobius coasters unless first segment is longer than 600m.
-			if ((ride.rideLength || 0) >= 600 && (ride.excitement || 0) >= 600) {
+      // BUG: ride is not counted towards soft guest cap for Mobius coasters unless first segment is longer than 600m.
+      if ((ride.rideLength || 0) >= 600 && (ride.excitement || 0) >= 600) {
         softGuestCapPotential += (ride.bonusValue || 0) * 2;
         if (ride.status === "open" && ride.breakdown === "none")
           softGuestCapRealtime += (ride.bonusValue || 0) * 2;
@@ -65,23 +65,18 @@ export const updateGuestsValues = (
 
   // Update current guests
   const colour =
-    objective.guests &&
-    (park.guests >= objective.guests
-      ? SUCCESS_COLOUR
-      : park.guests >= objective.guests * 0.9
-        ? WARNING_COLOUR
-        : "");
+    objective.guests && park.guests >= objective.guests ? SUCCESS_COLOUR : "";
   updateWidget(
     window,
     "textGuests",
-    `${colour || ""}${park.guests}${objective.guests ? ` / ${objective.guests}` : ""}`,
+    `${colour}${park.guests}${objective.guests ? ` / ${objective.guests}` : ""}`,
   );
 
   // Update the soft guest caps
   updateWidget(
     window,
     "textSoftGuestCap",
-    `${park.suggestedGuestMaximum} / ${softGuestCapPotential}${softGuestCapRealtime === park.suggestedGuestMaximum ? "" : ` ${WARNING_COLOUR}(${softGuestCapRealtime})`}`,
+    `${park.suggestedGuestMaximum} / ${softGuestCapPotential}${softGuestCapRealtime === park.suggestedGuestMaximum ? "" : ` => ${softGuestCapRealtime}`}`,
   );
 
   // Update time limit indicator

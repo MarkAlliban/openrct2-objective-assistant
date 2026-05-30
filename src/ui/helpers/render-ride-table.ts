@@ -1,4 +1,4 @@
-import { UI_VALUE_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH } from "../constants";
+import { UI_VALUE_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH } from "../../constants";
 
 export const renderRideTable = (
   y: number,
@@ -138,6 +138,7 @@ export const renderRideTable = (
         };
   });
   // Add the rides list
+	// TODO: Stop the weird highlighting
   widgets.push({
     name: "listRides",
     type: "listview",

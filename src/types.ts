@@ -20,19 +20,21 @@ export type TObjectiveTarget = {
   tab?: number;
 };
 
+export type TRideCategory =
+  | "rollercoaster"
+  | "gentle"
+  | "water"
+  | "thrill"
+  | "transport"
+  | "shop"
+  | "none";
+
 export type TRideTypeInfo = {
   typeId: number;
   typeName: string;
   identifier: string;
   bonusValue: number;
-  category:
-    | "rollercoaster"
-    | "gentle"
-    | "water"
-    | "thrill"
-    | "transport"
-    | "shop"
-    | "none";
+  category: TRideCategory | undefined;
   ratingsMultipliers: [number, number, number];
   sameTypeAs?: string;
 };
@@ -57,7 +59,7 @@ export type TRideInfo = {
   mode?: number;
 
   typeName?: string;
-  category?: string;
+  category?: TRideCategory | undefined;
   bonusValue?: number;
   sameTypeAs?: string;
   ratingsMultipliers?: [number, number, number];
@@ -77,6 +79,7 @@ export type TRideInfo = {
 export type TRidePrices = {
   id: number;
   age: number;
+  category: TRideCategory | undefined;
   currentPrice: number;
   prices: (number | null)[];
 };

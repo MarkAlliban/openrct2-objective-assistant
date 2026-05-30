@@ -1,10 +1,10 @@
 import { TGuestTracker } from "../data/guest-tracker";
 import { getObjective } from "../utils/get-objective";
-import { getObjectiveWidgets } from "./get-objective-widgets";
-import { updateObjectiveValues } from "./update-objective-values";
-import { getParkValueWidgets } from "./get-park-value-widgets";
-import { updateParkValue } from "./update-park-value";
-import { getGuestsWidgets } from "./get-guests-widgets";
+import { getObjectiveWidgets } from "./objective/get-objective-widgets";
+import { updateObjectiveValues } from "./objective/update-objective-values";
+import { getParkValueWidgets } from "./park-value/get-park-value-widgets";
+import { updateParkValue } from "./park-value/update-park-value";
+import { getGuestsWidgets } from "./guests/get-guests-widgets";
 import {
   TITLE,
   WINDOW_WIDTH,
@@ -20,12 +20,12 @@ import {
   ICON_MONEY,
   ICON_BURGER,
 } from "../constants";
-import { updateGuestsValues } from "./update-guests-values";
+import { updateGuestsValues } from "./guests/update-guests-values";
 import { TRidePrices, TSortTable } from "../types";
-import { getCoastersWidgets } from "./get-coasters-widgets";
-import { updateCoastersValues } from "./update-coasters-values";
-import { getRidePricesWidgets } from "./get-ride-prices-widgets";
-import { updateRidesPrices } from "./update-rides-prices";
+import { getCoastersWidgets } from "./coasters/get-coasters-widgets";
+import { updateCoastersValues } from "./coasters/update-coasters-values";
+import { getRidePricesWidgets } from "./ride-prices/get-ride-prices-widgets";
+import { updateRidesPrices } from "./ride-prices/update-rides-prices";
 import { openRideWindow } from "../actions/open-ride-window";
 import {
   handleRidePrice,
@@ -33,10 +33,10 @@ import {
   handleSetAllShops,
   handleShopPrice,
 } from "../actions/click-handlers";
-import { getShopPricesWidgets } from "./get-shop-prices-widgets";
-import { updateShopsPrices } from "./update-shops-prices";
-import { getAwardsWidgets } from "./get-awards-widgets";
-import { updateAwardsValues } from "./update-awards-values";
+import { getShopPricesWidgets } from "./shop-prices/get-shop-prices-widgets";
+import { updateShopsPrices } from "./shop-prices/update-shops-prices";
+import { getAwardsWidgets } from "./awards/get-awards-widgets";
+import { updateAwardsValues } from "./awards/update-awards-values";
 import { readValue, saveValue } from "../actions/shared-storage";
 
 export const openWindow = (tracker: TGuestTracker) => {
@@ -111,6 +111,7 @@ export const openWindow = (tracker: TGuestTracker) => {
 
   // Automate prices?
   let automatePrices = !!readValue("automatePrices") || false;
+  let automateShopPrices = !!readValue("automateShopPrices") || false;
 
   let window: Window;
   window = ui.openWindow({
@@ -150,7 +151,7 @@ export const openWindow = (tracker: TGuestTracker) => {
       },
       {
         image: ICON_BURGER,
-        widgets: getShopPricesWidgets(clickShopPrice, sortBy, setAllShops),
+        widgets: getShopPricesWidgets(clickShopPrice, sortBy, setAllShops, automateShopPrices),
       },
       {
         image: "awards",
@@ -162,14 +163,6 @@ export const openWindow = (tracker: TGuestTracker) => {
       if (window.tabIndex !== savedTab) {
         savedTab = window.tabIndex;
         saveValue("tab", savedTab);
-        if (window.tabIndex === 6) {
-          window.height = 355;
-          window.minHeight = 355;
-          window.maxHeight = 355;
-        } else {
-          window.minHeight = WINDOW_HEIGHT_MIN;
-          window.maxHeight = 1000;
-        }
       }
     },
     onUpdate: () => {

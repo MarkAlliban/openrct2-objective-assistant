@@ -1,6 +1,6 @@
-import { TObjectiveTarget } from "../types";
-import { formatCurrency } from "../utils/format-currency";
-import { UI_VALUE_HEIGHT, UI_VALUE_WIDTH, WINDOW_WIDTH } from "../constants";
+import { TObjectiveTarget } from "../../types";
+import { formatCurrency } from "../../utils/format-currency";
+import { UI_VALUE_HEIGHT, UI_VALUE_WIDTH, WINDOW_WIDTH } from "../../constants";
 
 const addRequirementLabel = (
   name: string,

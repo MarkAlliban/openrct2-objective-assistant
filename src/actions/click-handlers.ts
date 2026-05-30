@@ -3,12 +3,19 @@ import { getBestPrice, getLongTermPrice } from "../utils/ride-pricing";
 import { openRideWindow } from "./open-ride-window";
 import { setRidePrice } from "./set-ride-price";
 
+const noMoney = park.getFlag("noMoney");
+const unlockAllPrices = park.getFlag("unlockAllPrices"); // Can set ride and entrance prices
+const freeParkEntry = park.getFlag("freeParkEntry"); // Can set only ride prices
+const canSetRidePrices = !noMoney && (unlockAllPrices || freeParkEntry);
+const canSetShopPrices = !noMoney;
+
 export const handleRidePrice = (
   window: Window,
   dataRidePrices: TRidePrices[],
   row: number,
   col: number,
 ) => {
+  if (!canSetRidePrices) return;
   const modifyWidget: CheckboxWidget = window.findWidget("optionClickModify");
   if (col < 3 || !modifyWidget.isChecked)
     return openRideWindow(dataRidePrices[row].id);
@@ -23,11 +30,12 @@ export const handleSetAllRides = (
   window: Window,
   dataRidePrices: TRidePrices[],
 ) => {
+  if (!canSetRidePrices) return;
   const actionWidget: DropdownWidget = window.findWidget("optionAction");
   // Set all prices to maximum
   if (actionWidget.selectedIndex === 1) {
     dataRidePrices.forEach((ride) => {
-      if (ride.currentPrice !== 0) {
+			if (ride.category !== 'transport' || ride.currentPrice !== 0) {
         const bestPrice = getBestPrice(ride.age, ride.prices);
         setRidePrice(ride.id, bestPrice && bestPrice / 10, true);
       }
@@ -36,7 +44,7 @@ export const handleSetAllRides = (
   // Set all prices to long-term stable
   if (actionWidget.selectedIndex === 2) {
     dataRidePrices.forEach((ride) => {
-      if (ride.currentPrice !== 0) {
+			if (ride.category !== 'transport' || ride.currentPrice !== 0) {
         const bestPrice = getLongTermPrice(ride.age, ride.prices);
         setRidePrice(ride.id, bestPrice && bestPrice / 10, true);
       }
@@ -45,7 +53,7 @@ export const handleSetAllRides = (
   // Set all prices to low
   if (actionWidget.selectedIndex === 3) {
     dataRidePrices.forEach((ride) => {
-      if (ride.currentPrice !== 0) {
+			if (ride.category !== 'transport' || ride.currentPrice !== 0) {
         const bestPrice = getLongTermPrice(ride.age, ride.prices);
         setRidePrice(ride.id, Math.min(bestPrice || 20, 20), true);
       }
@@ -66,6 +74,7 @@ export const handleShopPrice = (
   col: number,
   modifyOverride: boolean = false,
 ) => {
+  if (!canSetShopPrices) return;
   const itemId = dataShopPrices[row].id;
   const modifyWidget: CheckboxWidget = window.findWidget("optionClickModify");
   if (col < 2 || (!modifyWidget.isChecked && !modifyOverride)) return;
@@ -91,6 +100,7 @@ export const handleSetAllShops = (
   window: Window,
   dataRidePrices: { id: number; price: number; basePrice: number }[],
 ) => {
+  if (!canSetShopPrices) return;
   dataRidePrices.forEach((_, i) =>
     handleShopPrice(window, dataRidePrices, i, 3, true),
   );
