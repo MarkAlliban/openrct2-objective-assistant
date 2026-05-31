@@ -55,7 +55,6 @@ export const shopGetItems = (
   rides.forEach((ride) => {
     ride.shopItems?.forEach((item) => {
       const i = items.find((i) => i.id === item.id);
-      if (item.id === 13) console.log(ride);
       if (i) {
         if (i.minPrice > item.price) i.minPrice = item.price;
         if (i.maxPrice < item.price) i.maxPrice = item.price;

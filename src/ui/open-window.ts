@@ -115,7 +115,7 @@ export const openWindow = (tracker: TGuestTracker) => {
 
   let window: Window;
   window = ui.openWindow({
-    classification: "objective.progress",
+    classification: "objective.assistant",
     title: TITLE,
     width: WINDOW_WIDTH,
     minWidth: WINDOW_WIDTH,
@@ -151,7 +151,12 @@ export const openWindow = (tracker: TGuestTracker) => {
       },
       {
         image: ICON_BURGER,
-        widgets: getShopPricesWidgets(clickShopPrice, sortBy, setAllShops, automateShopPrices),
+        widgets: getShopPricesWidgets(
+          clickShopPrice,
+          sortBy,
+          setAllShops,
+          automateShopPrices,
+        ),
       },
       {
         image: "awards",

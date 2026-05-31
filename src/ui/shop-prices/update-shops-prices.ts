@@ -4,6 +4,7 @@ import { renderItemTableRow } from "../helpers/render-ride-table-row";
 import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
 import { updateWidgetList } from "../helpers/update-widget";
 import { getShopStrategy, shopGetItems } from "../../data/shop-get-items";
+import { readValue } from "../../actions/shared-storage";
 
 export const updateShopsPrices = (
   window: Window,
@@ -27,6 +28,10 @@ export const updateShopsPrices = (
     return a.id > b.id ? 1 : -1;
   });
 
+		const automateShopPrices = !!readValue("automateShopPrices");
+		const widget: CheckboxWidget = window.findWidget("optionAutoPrices");
+		if (widget.isChecked !== automateShopPrices) widget.isChecked = automateShopPrices;
+	
   updateWidgetList(
     window,
     "listRides",

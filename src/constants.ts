@@ -1,4 +1,4 @@
-export const TITLE = "Objective Progress";
+export const TITLE = "Objective Assistant";
 export const WINDOW_WIDTH = 410;
 export const WINDOW_HEIGHT = 355;
 export const WINDOW_HEIGHT_MIN = 150;
