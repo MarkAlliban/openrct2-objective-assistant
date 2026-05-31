@@ -97,6 +97,11 @@ export const renderRideTable = (
         width: 70,
         canSort: false,
       },
+      {
+        header: "Sales",
+        width: 60,
+        canSort: false,
+      },
     );
   }
   // Add auto-width to any that don't have width specified
@@ -138,7 +143,6 @@ export const renderRideTable = (
         };
   });
   // Add the rides list
-	// TODO: Stop the weird highlighting
   widgets.push({
     name: "listRides",
     type: "listview",

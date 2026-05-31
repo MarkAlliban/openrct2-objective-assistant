@@ -16,7 +16,7 @@ export const getShopPricesWidgets = (
     y: 50,
     width: 115,
     height: UI_VALUE_HEIGHT,
-    text: "Click prices to set?",
+    text: "Click prices to set",
     isChecked: false,
   },
   {
@@ -26,7 +26,7 @@ export const getShopPricesWidgets = (
     y: 50,
     width: 100,
     height: UI_VALUE_HEIGHT,
-    text: "Auto prices?",
+    text: "Auto prices",
     isChecked: automateShopPrices,
     onChange: (e: boolean) => {
       automateShopPrices = e;

@@ -11,7 +11,7 @@ import {
 } from "../../constants";
 import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
 import { TGuestTracker } from "../../data/guest-tracker";
-import { updateWidget } from "../update-widget";
+import { updateWidget } from "../helpers/update-widget";
 
 export const updateObjectiveValues = (
   window: Window,

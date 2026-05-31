@@ -3,7 +3,7 @@ import { TObjectiveTarget, TRideInfo, TRidePrices, TSortTable } from "../../type
 import { renderRideTableRow } from "../helpers/render-ride-table-row";
 import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
 import { rideGetMaxPrices } from "../../data/ride-get-max-prices";
-import { updateWidgetList } from "../update-widget";
+import { updateWidgetList } from "../helpers/update-widget";
 
 export const updateRidesPrices = (
   window: Window,

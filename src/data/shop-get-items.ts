@@ -10,36 +10,36 @@ export const getShopStrategy = () => {
   // Merch buy rate: "100%", "75%", "50%", "25%", "12.5%"
   const strategies = [
     {
-			// Dynamic
+      // Dynamic
       temperature: 3,
       mood: 2,
       foodBuy: 0,
       merchBuy: 3,
     },
     {
-			// Recommended
+      // Recommended
       temperature: 0,
       mood: 2,
       foodBuy: 0,
       merchBuy: 3,
     },
     {
-			// Sell more items
-      temperature: 0,
+      // Sell more items
+      temperature: 2,
       mood: 2,
       foodBuy: 0,
       merchBuy: 0,
     },
     {
-			// Maximise prices paid
-      temperature: 0,
+      // Maximise prices paid
+      temperature: 3,
       mood: 0,
       foodBuy: 2,
       merchBuy: 4,
     },
   ];
 
-	const strategyIndex = readValue("shops.strategy") || 0;
+  const strategyIndex = readValue("shops.strategy") || 0;
   return strategies[strategyIndex];
 };
 
@@ -55,9 +55,11 @@ export const shopGetItems = (
   rides.forEach((ride) => {
     ride.shopItems?.forEach((item) => {
       const i = items.find((i) => i.id === item.id);
+      if (item.id === 13) console.log(ride);
       if (i) {
         if (i.minPrice > item.price) i.minPrice = item.price;
         if (i.maxPrice < item.price) i.maxPrice = item.price;
+        i.guestCount += ride.guestCount || 0;
       } else {
         const data = getShopItem(item.id);
         const recommendedPrice = getRecommendedPrice(
@@ -72,6 +74,8 @@ export const shopGetItems = (
           id: item.id,
           minPrice: item.price,
           maxPrice: item.price,
+          guestCount: ride.guestCount || 0,
+					guestError: ride.guestError || 0,
           data,
         });
       }

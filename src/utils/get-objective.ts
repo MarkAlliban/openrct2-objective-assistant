@@ -78,7 +78,6 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
         tab: 3,
       };
     case "finish5Rollercoasters":
-      // BUG: scenario.objective.excitement is 65536 too much on custom scenarios
       const excitementTarget = scenario.objective.excitement % 65536;
       return {
         description: wrapWords(
@@ -119,7 +118,7 @@ export const getObjective = (lineLength: number): TObjectiveTarget => {
     case "haveFun":
       return { description: ["Have fun!"] };
     case "buildTheBest":
-      return { description: ["buildTheBest"] }; // TODO: What is this?
+      return { description: ["buildTheBest"] };
     case "none":
       return { description: ["None"] };
     default:

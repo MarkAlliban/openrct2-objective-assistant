@@ -6,7 +6,7 @@ import {
 } from "../../constants";
 import { convertTicksToDays } from "../../utils/convert-ticks-to-days";
 import { TObjectiveTarget } from "../../types";
-import { updateWidget } from "../update-widget";
+import { updateWidget } from "./update-widget";
 
 export const updateTimeData = (
   window: Window,

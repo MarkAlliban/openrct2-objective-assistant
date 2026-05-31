@@ -50,7 +50,7 @@ const getLengthString = (ride: TRideInfo) => {
   return `${ride.meetsLengthRequirement ? (ride.duplicateType ? WARNING_COLOUR : SUCCESS_COLOUR) : ""}${context.formatString("{LENGTH}", ride.rideLength)}`;
 };
 
-const getRidersString = (ride: TRideInfo) => {
+const getRidersString = (ride: TRideInfo | TItemData) => {
   if (ride.guestError && ride.guestError > 0)
     return `${WARNING_COLOUR}In ${(ride.guestError / 40).toFixed(0)}`;
   return `${ride.guestCount?.toFixed(0) || 0}`;
@@ -127,4 +127,5 @@ export const renderItemTableRow = (item: TItemData) => [
   getCurrentPrice(item),
   formatCurrency2dp((item.data.basePrice || 0) * 10),
   formatCurrency2dp((item.data.recommendedPrice || 0) * 10),
+	getRidersString(item),
 ];

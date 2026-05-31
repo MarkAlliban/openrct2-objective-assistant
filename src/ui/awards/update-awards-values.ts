@@ -10,8 +10,8 @@ import {
 } from "../../constants";
 import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
 import { formatCurrency } from "../../utils/format-currency";
-import { awardNames, awardsInfo } from "../../data/awards-info";
-import { updateWidget } from "../update-widget";
+import { awardNames, awardsInfo } from "./awards-info";
+import { updateWidget } from "../helpers/update-widget";
 
 type TAwardQualification = {
   eligible: boolean;

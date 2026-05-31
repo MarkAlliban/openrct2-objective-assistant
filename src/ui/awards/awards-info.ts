@@ -1,5 +1,5 @@
-import { TAward } from "../types";
-import { arrayToObject } from "../utils/array-to-object";
+import { TAward } from "../../types";
+import { arrayToObject } from "../../utils/array-to-object";
 
 /*
 AWARDS:

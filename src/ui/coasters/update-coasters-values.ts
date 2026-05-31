@@ -4,7 +4,7 @@ import { TObjectiveTarget, TRideInfo } from "../../types";
 import { renderRideTableRow } from "../helpers/render-ride-table-row";
 import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
 import { updateTimeData } from "../helpers/update-time-data";
-import { updateWidget, updateWidgetList } from "../update-widget";
+import { updateWidget, updateWidgetList } from "../helpers/update-widget";
 
 const getCoasterText = (
   objective: TObjectiveTarget,

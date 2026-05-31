@@ -2,7 +2,7 @@ import { TGuestTracker } from "../../data/guest-tracker";
 import { TObjectiveTarget, TSortTable } from "../../types";
 import { renderItemTableRow } from "../helpers/render-ride-table-row";
 import { ridesAddMoreInfo } from "../../data/rides-add-more-info";
-import { updateWidgetList } from "../update-widget";
+import { updateWidgetList } from "../helpers/update-widget";
 import { getShopStrategy, shopGetItems } from "../../data/shop-get-items";
 
 export const updateShopsPrices = (

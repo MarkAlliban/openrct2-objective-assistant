@@ -1,4 +1,4 @@
-import { fitListToWindow } from "./helpers/fit-list-to-window";
+import { fitListToWindow } from "./fit-list-to-window";
 
 const deepEquals = (a: any, b: any): boolean => {
   if (a === b) return true;

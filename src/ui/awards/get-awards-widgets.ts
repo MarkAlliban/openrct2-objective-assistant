@@ -4,7 +4,7 @@ import {
   UI_VALUE_HEIGHT,
   WINDOW_WIDTH,
 } from "../../constants";
-import { awardsInfo } from "../../data/awards-info";
+import { awardsInfo } from "./awards-info";
 import { TAward } from "../../types";
 
 const addRequirementLabel = (

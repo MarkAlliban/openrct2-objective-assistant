@@ -88,6 +88,8 @@ export type TItemData = {
   id: number;
   minPrice: number;
   maxPrice: number;
+	guestCount: number;
+	guestError: number;
   data: TShopItem;
 };
 
