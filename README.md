@@ -32,11 +32,10 @@ Although it doesn't display more than 63 months the auto prices does keep workin
 
 **Tab 6: Food and merch prices**
 Maximise your monthly food, drink and merchandise income.
-Maximise your monthly food, drink and merch prices.
 Similar to ride prices, this lets you automate stall prices.
-Higher prices will mean fewer sales, and people being hungry / thirsty.
+Higher prices means more profit, but too high prices will mean fewer sales, and people being hungry / thirsty.
 Various modes:
-* "Dymanic" ajusts prices to the current weather and is a good compromise between making sales and making profit.
+* "Dymanic" adjusts prices to the current weather and is a good compromise between making sales and making profit.
 * "Recommended" takes the average annual weather, encourages food/drink sales, and profitises on merch.
 * "Sell more" encourages maximum sales volume but doesn't have as high profit margins.
 * "Price gouge" maximises profit but guests may be less likely to buy.
@@ -45,9 +44,9 @@ Umbrellas are always set to £20 and maps to £0.70.
 
 **Tab 7: Awards**
 Maximise your guest generation by tracking your awards progress.
-Show all available awards, and which ones you're eligible for.
-Mouse-over each setting to show more info.
-Awards turn green when you're eligible, gold when you're awarded them.
+Show all available awards, their requirements, and which ones you're eligible for.
+Mouse-over each requirement to show more info.
+Awards turn green when you're eligible, and gold when you're awarded them.
 
 
 ## How to use
