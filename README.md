@@ -30,7 +30,8 @@ Buttons to set all rides to max price, long-term unchanging price, low price or 
 The table goes up to 63 months because if you haven't achieved your objective in 8 years then you probably don't need more columns on this table anyway.
 Although it doesn't display more than 63 months the auto prices does keep working past then.
 
-**Tab 6: Food and merch prices** Maximise your monthly food, drink and merchandise income.
+**Tab 6: Food and merch prices**
+Maximise your monthly food, drink and merchandise income.
 Maximise your monthly food, drink and merch prices.
 Similar to ride prices, this lets you automate stall prices.
 Higher prices will mean fewer sales, and people being hungry / thirsty.
@@ -39,6 +40,7 @@ Various modes:
 * "Recommended" takes the average annual weather, encourages food/drink sales, and profitises on merch.
 * "Sell more" encourages maximum sales volume but doesn't have as high profit margins.
 * "Price gouge" maximises profit but guests may be less likely to buy.
+
 Umbrellas are always set to £20 and maps to £0.70.
 
 **Tab 7: Awards**
