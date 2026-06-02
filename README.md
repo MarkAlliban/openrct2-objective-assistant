@@ -2,7 +2,7 @@
 
 A multi-tab plugin that helps monitor your objective progress and various other park statistics that aren't normally visible in-game.
 
-<img src="screenshots/tab3.png" width="400"> <img src="screenshots/tab5.png" width="400"> <img src="screenshots/tab6.png" width="400"> <img src="screenshots/tab7.png" width="400">
+<img src="https://raw.githubusercontent.com/MarkAlliban/openrct2-objective-assistant/main/screenshots/tab3.png" width="400"> <img src="https://raw.githubusercontent.com/MarkAlliban/openrct2-objective-assistant/main/screenshots/tab5.png" width="400"> <img src="https://raw.githubusercontent.com/MarkAlliban/openrct2-objective-assistant/main/screenshots/tab6.png" width="400"> <img src="https://raw.githubusercontent.com/MarkAlliban/openrct2-objective-assistant/main/screenshots/tab7.png" width="400">
 
 **Tab 1: Objective progress summary**
 * Shows current objective and how far you've progressed towards it.
