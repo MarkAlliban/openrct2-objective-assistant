@@ -3,10 +3,10 @@
 A multi-tab plugin that helps monitor your objective progress and various other park statistics that aren't normally visible in-game.
 
 
+<img src="screenshots/tab1.png" width="200" float="right">
 **Tab 1: Objective progress summary**
 Shows current objective and how far you've progressed towards it.
 Button to proceed to the most relevant analysis tab.
-<img src="screenshots/tab1.png" width="200">
 
 **Tab 2: Guest number objectives**
 Shows current guest count, guest target, and soft guest cap (current / potential including closed/broken down rides).
