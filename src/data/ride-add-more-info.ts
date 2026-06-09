@@ -4,7 +4,7 @@ import { getRideType } from "./get-ride-type";
 import { TGuestTracker } from "./guest-tracker";
 
 export const rideAddMoreInfo = (
-	objective: TObjectiveTarget,
+	objective: TObjectiveTarget | null,
 	tracker: TGuestTracker | null,
 	ride: Ride,
 ) => {
@@ -63,9 +63,9 @@ export const rideAddMoreInfo = (
 	if (rideUpdated.category !== "rollercoaster") return rideUpdated;
 	// If the objective isn't building coasters, we're finished here
 	if (
-		!objective.rollercoasters &&
-		!objective.excitementTarget &&
-		!objective.lengthTarget
+		!objective?.rollercoasters &&
+		!objective?.excitementTarget &&
+		!objective?.lengthTarget
 	)
 		return rideUpdated;
 

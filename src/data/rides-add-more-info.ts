@@ -3,7 +3,7 @@ import { TObjectiveTarget, TRideInfo } from "../types";
 import { rideAddMoreInfo } from "./ride-add-more-info";
 
 export const ridesAddMoreInfo = (
-  objective: TObjectiveTarget,
+  objective: TObjectiveTarget | null,
   tracker: TGuestTracker | null,
   types: string[],
   combineStalls = false,

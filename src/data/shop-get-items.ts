@@ -86,7 +86,7 @@ export const shopGetItems = (
 };
 
 export const shopsSetAllPrices = () => {
-  const shops: TRideInfo[] = ridesAddMoreInfo({ description: [""] }, null, [
+  const shops: TRideInfo[] = ridesAddMoreInfo(null, null, [
     "stall",
     "facility",
   ]);

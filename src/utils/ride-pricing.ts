@@ -35,9 +35,7 @@ export const getLongTermPrice = (age: number, maxPrices: (number | null)[]) => {
 };
 
 export const ridesSetAllPrices = () => {
-  const rides: TRideInfo[] = ridesAddMoreInfo({ description: [""] }, null, [
-    "ride",
-  ]);
+  const rides: TRideInfo[] = ridesAddMoreInfo(null, null, ["ride"]);
   rides.forEach((ride) => rideGetMaxPrices(ride, rides));
   rides.forEach((ride) => {
     const price = ride.maxPrices![getAgeCategory(ride.age || 0)];
