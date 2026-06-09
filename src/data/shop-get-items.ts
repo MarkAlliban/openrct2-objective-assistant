@@ -1,6 +1,8 @@
+import { setRidePrice } from "../actions/set-ride-price";
 import { readValue } from "../actions/shared-storage";
 import { TItemData, TRideInfo } from "../types";
 import { getRecommendedPrice } from "../utils/price-adjustment";
+import { ridesAddMoreInfo } from "./rides-add-more-info";
 import { getShopItem } from "./shop-info";
 
 export const getShopStrategy = () => {
@@ -74,11 +76,42 @@ export const shopGetItems = (
           minPrice: item.price,
           maxPrice: item.price,
           guestCount: ride.guestCount || 0,
-					guestError: ride.guestError || 0,
+          guestError: ride.guestError || 0,
           data,
         });
       }
     });
   });
   return items;
+};
+
+export const shopsSetAllPrices = () => {
+  const shops: TRideInfo[] = ridesAddMoreInfo({ description: [""] }, null, [
+    "stall",
+    "facility",
+  ]);
+  const strategy = getShopStrategy();
+  const items = shopGetItems(
+    shops,
+    strategy.temperature,
+    strategy.mood,
+    strategy.foodBuy,
+    strategy.merchBuy,
+  );
+  items.forEach((item) => {
+    const itemId = item.id;
+    const price = item.data.recommendedPrice || 0;
+    if (!price) return;
+    map.rides
+      .filter(
+        (ride: Ride) =>
+          ride.classification === "stall" || ride.classification === "facility",
+      )
+      .forEach((shop: Ride) => {
+        if (shop.object.shopItem === itemId)
+          setRidePrice(shop.id, Math.round(price * 10), true);
+        if (shop.object.shopItemSecondary === itemId)
+          setRidePrice(shop.id, Math.round(price * 10), false);
+      });
+  });
 };

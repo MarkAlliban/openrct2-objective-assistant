@@ -4,7 +4,7 @@ import { rideAddMoreInfo } from "./ride-add-more-info";
 
 export const ridesAddMoreInfo = (
   objective: TObjectiveTarget,
-  tracker: TGuestTracker,
+  tracker: TGuestTracker | null,
   types: string[],
   combineStalls = false,
   combineFacilities = false,

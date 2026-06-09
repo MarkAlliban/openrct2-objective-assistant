@@ -1,5 +1,4 @@
 import { TGuestTracker } from "../data/guest-tracker";
-import { getObjective } from "../utils/get-objective";
 import { getObjectiveWidgets } from "./objective/get-objective-widgets";
 import { updateObjectiveValues } from "./objective/update-objective-values";
 import { getParkValueWidgets } from "./park-value/get-park-value-widgets";
@@ -10,7 +9,6 @@ import {
   WINDOW_WIDTH,
   WINDOW_HEIGHT,
   WINDOW_HEIGHT_MIN,
-  UI_LINE_LENGTH,
   BACKGROUND_COLOUR,
   FOREGROUND_COLOUR,
   ICON_OBJECTIVE,
@@ -21,7 +19,7 @@ import {
   ICON_BURGER,
 } from "../constants";
 import { updateGuestsValues } from "./guests/update-guests-values";
-import { TRidePrices, TSortTable } from "../types";
+import { TObjectiveTarget, TRidePrices, TSortTable } from "../types";
 import { getCoastersWidgets } from "./coasters/get-coasters-widgets";
 import { updateCoastersValues } from "./coasters/update-coasters-values";
 import { getRidePricesWidgets } from "./ride-prices/get-ride-prices-widgets";
@@ -39,7 +37,10 @@ import { getAwardsWidgets } from "./awards/get-awards-widgets";
 import { updateAwardsValues } from "./awards/update-awards-values";
 import { readValue, saveValue } from "../actions/shared-storage";
 
-export const openWindow = (tracker: TGuestTracker) => {
+export const openWindow = (
+  objective: TObjectiveTarget,
+  tracker: TGuestTracker,
+) => {
   // Only allow one window to be open at a time
   for (let i = 0; i < ui.windows; i++) {
     if (ui.getWindow(i).title === TITLE) {
@@ -102,9 +103,6 @@ export const openWindow = (tracker: TGuestTracker) => {
     const w: ColourPickerWidget = window.findWidget(widgetName);
     w.colour = colour;
   };
-
-  // Get and parse the objective
-  const objective = getObjective(UI_LINE_LENGTH);
 
   // Remember the active tab
   let savedTab = readValue("tab") || 0;

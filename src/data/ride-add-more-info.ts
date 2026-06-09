@@ -5,7 +5,7 @@ import { TGuestTracker } from "./guest-tracker";
 
 export const rideAddMoreInfo = (
 	objective: TObjectiveTarget,
-	tracker: TGuestTracker,
+	tracker: TGuestTracker | null,
 	ride: Ride,
 ) => {
 	// Add ride type info
@@ -36,9 +36,9 @@ export const rideAddMoreInfo = (
 	rideUpdated.ratingsMultipliers = rideInfo.ratingsMultipliers;
 
 	// Add guest tracker numbers
-	const trackerInfo = tracker.getGuestCount(rideUpdated.id);
-	rideUpdated.guestCount = trackerInfo.count;
-	rideUpdated.guestError = trackerInfo.error;
+	const trackerInfo = tracker?.getGuestCount(rideUpdated.id);
+	rideUpdated.guestCount = trackerInfo?.count;
+	rideUpdated.guestError = trackerInfo?.error;
 
 	// Calculate ride value (park value contribution)
 	rideUpdated.valueCalculated = getRideValue(rideUpdated);
