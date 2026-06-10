@@ -9,6 +9,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 85,
     identifier: "spiral_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversionOverrides: ["numberOfDrops", "maxNegativeG"],
+    },
   },
   {
     typeId: 1,
@@ -17,6 +24,11 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 90,
     identifier: "stand_up_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      maxSpeed: 22,
+      maxNegativeG: 0.5,
+    },
   },
   {
     typeId: 2,
@@ -25,6 +37,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 90,
     identifier: "suspended_swinging_rc",
+    statRequirements: {
+      highestDropHeight: 6,
+      maxSpeed: 26,
+      rideLength: 370,
+      maxNegativeG: 0.6,
+      maxLateralG: 1.5,
+    },
   },
   {
     typeId: 3,
@@ -33,6 +52,12 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 100,
     identifier: "inverted_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      maxSpeed: 22,
+      maxNegativeG: 0.3,
+      inversionOverrides: ["highestDropHeight", "maxNegativeG"],
+    },
   },
   {
     typeId: 4,
@@ -41,6 +66,11 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 60,
     identifier: "junior_rc",
+    statRequirements: {
+      highestDropHeight: 4,
+      numberOfDrops: 1,
+      maxSpeed: 16,
+    },
   },
   {
     typeId: 5,
@@ -49,6 +79,10 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [70, 6, -10],
     bonusValue: 50,
     identifier: "miniature_railway",
+    statRequirements: {
+      rideLength: 200,
+      maxUnderground: 50,
+    },
   },
   {
     typeId: 6,
@@ -57,6 +91,10 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [70, 6, -10],
     bonusValue: 60,
     identifier: "monorail",
+    statRequirements: {
+      rideLength: 170,
+      maxUnderground: 50,
+    },
   },
   {
     typeId: 7,
@@ -65,6 +103,12 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 50,
     identifier: "mini_suspended_rc",
+    statRequirements: {
+      highestDropHeight: 4,
+      maxSpeed: 17,
+      rideLength: 200,
+      maxLateralG: 1.3,
+    },
   },
   {
     typeId: 8,
@@ -81,6 +125,14 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 30],
     bonusValue: 55,
     identifier: "wooden_wild_mouse",
+    statRequirements: {
+      highestDropHeight: 6,
+      numberOfDrops: 3,
+      maxSpeed: 16,
+      rideLength: 170,
+      maxNegativeG: 0.1,
+      maxLateralG: 1.5,
+    },
   },
   {
     typeId: 10,
@@ -89,6 +141,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 60,
     identifier: "steeplechase",
+    statRequirements: {
+      highestDropHeight: 3,
+      numberOfDrops: 2,
+      maxSpeed: 17,
+      rideLength: 240,
+      maxNegativeG: 0.5,
+    },
   },
   {
     typeId: 11,
@@ -97,6 +156,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [70, 10, 10],
     bonusValue: 50,
     identifier: "car_ride",
+    statRequirements: {
+      rideLength: 200,
+    },
   },
   {
     typeId: 12,
@@ -113,6 +175,11 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 75,
     identifier: "bobsleigh_rc",
+    statRequirements: {
+      maxSpeed: 26,
+      rideLength: 370,
+      maxLateralG: 1.2,
+    },
   },
   {
     typeId: 14,
@@ -129,6 +196,17 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 95,
     identifier: "looping_rc",
+    statRequirements: {
+      highestDropHeight: 10,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.1,
+      inversionOverrides: [
+        "highestDropHeight",
+        "numberOfDrops",
+        "maxNegativeG",
+      ],
+    },
   },
   {
     typeId: 16,
@@ -137,6 +215,11 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 55,
     identifier: "dinghy_slide",
+    statRequirements: {
+      highestDropHeight: 9,
+      maxSpeed: 16,
+      rideLength: 140,
+    },
   },
   {
     typeId: 17,
@@ -145,6 +228,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 85,
     identifier: "mine_train_rc",
+    statRequirements: {
+      highestDropHeight: 6,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      rideLength: 370,
+      maxNegativeG: 0.1,
+    },
   },
   {
     typeId: 18,
@@ -153,6 +243,10 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [70, 10, 0],
     bonusValue: 55,
     identifier: "chairlift",
+    statRequirements: {
+      rideLength: 150,
+      maxUnderground: 50,
+    },
   },
   {
     typeId: 19,
@@ -161,6 +255,17 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 100,
     identifier: "corkscrew_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversionOverrides: [
+        "highestDropHeight",
+        "numberOfDrops",
+        "maxNegativeG",
+      ],
+    },
   },
   {
     typeId: 20,
@@ -185,6 +290,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [120, 20, 0],
     bonusValue: 55,
     identifier: "go_karts",
+    statRequirements: {
+      maxUnderground: 25,
+    },
   },
   {
     typeId: 23,
@@ -193,6 +301,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [80, 34, 6],
     bonusValue: 65,
     identifier: "log_flume",
+    statRequirements: {
+      highestDropHeight: 4,
+    },
   },
   {
     typeId: 24,
@@ -201,6 +312,10 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [72, 26, 6],
     bonusValue: 70,
     identifier: "river_rapids",
+    statRequirements: {
+      highestDropHeight: 1,
+      rideLength: 200,
+    },
   },
   {
     typeId: 25,
@@ -321,6 +436,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [44, 66, 10],
     bonusValue: 70,
     identifier: "reverse_freefall_rc",
+    statRequirements: {
+      highestDropHeight: 25,
+    },
   },
   {
     typeId: 43,
@@ -337,6 +455,12 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [52, 38, 10],
     bonusValue: 95,
     identifier: "vertical_drop_rc",
+    statRequirements: {
+      highestDropHeight: 15,
+      numberOfDrops: 1,
+      maxSpeed: 22,
+      maxNegativeG: 0.1,
+    },
   },
   {
     typeId: 45,
@@ -385,6 +509,7 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [70, 10, 10],
     bonusValue: 50,
     identifier: "ghost_train",
+    statRequirements: { rideLength: 180 },
   },
   {
     typeId: 51,
@@ -393,6 +518,17 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [52, 36, 10],
     bonusValue: 120,
     identifier: "twister_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversionOverrides: [
+        "highestDropHeight",
+        "numberOfDrops",
+        "maxNegativeG",
+      ],
+    },
   },
   {
     typeId: 52,
@@ -401,6 +537,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [52, 33, 8],
     bonusValue: 105,
     identifier: "wooden_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      rideLength: 370,
+      maxNegativeG: 0.1,
+    },
   },
   {
     typeId: 53,
@@ -409,6 +552,12 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [48, 28, 7],
     bonusValue: 65,
     identifier: "side_friction_rc",
+    statRequirements: {
+      highestDropHeight: 4,
+      numberOfDrops: 2,
+      maxSpeed: 11,
+      rideLength: 250,
+    },
   },
   {
     typeId: 54,
@@ -417,6 +566,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 30],
     bonusValue: 55,
     identifier: "steel_wild_mouse",
+    statRequirements: {
+      highestDropHeight: 4,
+      numberOfDrops: 2,
+      maxSpeed: 16,
+      rideLength: 170,
+      maxLateralG: 1.5,
+    },
   },
   {
     typeId: 55,
@@ -425,6 +581,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 100,
     identifier: "multi_dimension_rc",
+    statRequirements: {
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversions: 1,
+      inversionOverrides: ["numberOfDrops", "maxNegativeG"],
+    },
   },
   {
     typeId: 57,
@@ -433,6 +596,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 100,
     identifier: "flying_rc",
+    statRequirements: {
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversions: 1,
+      inversionOverrides: ["maxNegativeG"],
+    },
   },
   {
     typeId: 59,
@@ -441,6 +611,10 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [30, 15, 25],
     bonusValue: 50,
     identifier: "virginia_reel",
+    statRequirements: {
+      numberOfDrops: 2,
+      rideLength: 210,
+    },
   },
   {
     typeId: 60,
@@ -449,6 +623,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [80, 34, 6],
     bonusValue: 65,
     identifier: "splash_boats",
+    statRequirements: {
+      highestDropHeight: 4,
+    },
   },
   {
     typeId: 61,
@@ -457,6 +634,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [70, 10, 10],
     bonusValue: 45,
     identifier: "mini_helicopters",
+    statRequirements: {
+      rideLength: 160,
+    },
   },
   {
     typeId: 62,
@@ -465,6 +645,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 100,
     identifier: "lay_down_rc",
+    statRequirements: {
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversions: 1,
+      inversionOverrides: ["numberOfDrops", "maxNegativeG"],
+    },
   },
   {
     typeId: 63,
@@ -473,6 +660,10 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [70, 6, -10],
     bonusValue: 60,
     identifier: "suspended_monorail",
+    statRequirements: {
+      rideLength: 170,
+      maxUnderground: 50,
+    },
   },
   {
     typeId: 65,
@@ -481,6 +672,11 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [48, 28, 7],
     bonusValue: 65,
     identifier: "reverser_rc",
+    statRequirements: {
+      numberOfDrops: 2,
+      rideLength: 200,
+      specialTrackPieces: 1,
+    },
   },
   {
     typeId: 66,
@@ -489,6 +685,10 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 70,
     identifier: "heartline_twister_rc",
+    statRequirements: {
+      numberOfDrops: 1,
+      inversions: 1,
+    },
   },
   {
     typeId: 67,
@@ -497,6 +697,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 23,
     identifier: "mini_golf",
+    statRequirements: {
+      specialTrackPieces: 1,
+    },
   },
   {
     typeId: 68,
@@ -505,6 +708,17 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [51, 32, 10],
     bonusValue: 120,
     identifier: "giga_rc",
+    statRequirements: {
+      highestDropHeight: 12,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversionOverrides: [
+        "highestDropHeight",
+        "numberOfDrops",
+        "maxNegativeG",
+      ],
+    },
   },
   {
     typeId: 69,
@@ -537,6 +751,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 10, 10],
     bonusValue: 45,
     identifier: "monorail_cycles",
+    statRequirements: {
+      rideLength: 140,
+    },
   },
   {
     typeId: 73,
@@ -546,6 +763,12 @@ const rideDataTable: TRideTypeInfo[] = [
     bonusValue: 80,
     identifier: "compact_inverted_rc",
     sameTypeAs: "Inverted Roller Coaster",
+    statRequirements: {
+      highestDropHeight: 9,
+      maxSpeed: 22,
+      maxNegativeG: 0.3,
+      inversionOverrides: ["highestDropHeight", "maxNegativeG"],
+    },
   },
   {
     typeId: 74,
@@ -554,6 +777,12 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 60,
     identifier: "water_coaster",
+    statRequirements: {
+      highestDropHeight: 6,
+      numberOfDrops: 1,
+      maxSpeed: 16,
+      specialTrackPieces: 1,
+    },
   },
   {
     typeId: 75,
@@ -562,6 +791,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [44, 66, 10],
     bonusValue: 70,
     identifier: "air_powered_vertical_rc",
+    statRequirements: {
+      highestDropHeight: 25,
+    },
   },
   {
     typeId: 76,
@@ -570,6 +802,14 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 30],
     bonusValue: 55,
     identifier: "inverted_hairpin_rc",
+    statRequirements: {
+      highestDropHeight: 6,
+      numberOfDrops: 3,
+      maxSpeed: 16,
+      rideLength: 170,
+      maxNegativeG: 0.1,
+      maxLateralG: 1.5,
+    },
   },
   {
     typeId: 77,
@@ -610,6 +850,10 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 75,
     identifier: "inverted_impulse_rc",
+    statRequirements: {
+      highestDropHeight: 15,
+      maxSpeed: 22,
+    },
   },
   {
     typeId: 87,
@@ -618,6 +862,12 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 60,
     identifier: "mini_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      numberOfDrops: 2,
+      maxSpeed: 16,
+      maxNegativeG: 0.5,
+    },
   },
   {
     typeId: 88,
@@ -626,6 +876,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [60, 20, 10],
     bonusValue: 70,
     identifier: "mine_ride",
+    statRequirements: {
+      rideLength: 270,
+    },
   },
   {
     typeId: 90,
@@ -634,6 +887,17 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 55,
     identifier: "lim_launched_rc",
+    statRequirements: {
+      highestDropHeight: 7,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.1,
+      inversionOverrides: [
+        "highestDropHeight",
+        "numberOfDrops",
+        "maxNegativeG",
+      ],
+    },
   },
   {
     typeId: 91,
@@ -642,6 +906,17 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 100,
     identifier: "hypercoaster",
+    statRequirements: {
+      highestDropHeight: 9,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversionOverrides: [
+        "highestDropHeight",
+        "numberOfDrops",
+        "maxNegativeG",
+      ],
+    },
   },
   {
     typeId: 92,
@@ -650,6 +925,17 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [52, 36, 10],
     bonusValue: 120,
     identifier: "hyper_twister",
+    statRequirements: {
+      highestDropHeight: 9,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversionOverrides: [
+        "highestDropHeight",
+        "numberOfDrops",
+        "maxNegativeG",
+      ],
+    },
   },
   {
     typeId: 93,
@@ -658,6 +944,9 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [70, 10, 10],
     bonusValue: 50,
     identifier: "monster_trucks",
+    statRequirements: {
+      rideLength: 200,
+    },
   },
   {
     typeId: 94,
@@ -666,6 +955,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 30],
     bonusValue: 55,
     identifier: "spinning_wild_mouse",
+    statRequirements: {
+      highestDropHeight: 4,
+      numberOfDrops: 2,
+      maxSpeed: 16,
+      rideLength: 170,
+      maxLateralG: 1.5,
+    },
   },
   {
     typeId: 95,
@@ -674,6 +970,11 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 60,
     identifier: "classic_mini_rc",
+    statRequirements: {
+      highestDropHeight: 4,
+      maxSpeed: 16,
+      numberOfDrops: 2,
+    },
   },
   {
     typeId: 96,
@@ -682,6 +983,17 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [52, 36, 10],
     bonusValue: 120,
     identifier: "hybrid_rc",
+    statRequirements: {
+      highestDropHeight: 10,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversionOverrides: [
+        "highestDropHeight",
+        "numberOfDrops",
+        "maxNegativeG",
+      ],
+    },
   },
   {
     typeId: 97,
@@ -690,6 +1002,17 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [52, 36, 10],
     bonusValue: 80,
     identifier: "single_rail_rc",
+    statRequirements: {
+      highestDropHeight: 10,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.4,
+      inversionOverrides: [
+        "highestDropHeight",
+        "numberOfDrops",
+        "maxNegativeG",
+      ],
+    },
   },
   {
     typeId: 98,
@@ -698,6 +1021,11 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 65,
     identifier: "alpine_rc",
+    statRequirements: {
+      maxSpeed: 11,
+      rideLength: 370,
+      maxNegativeG: 0.4,
+    },
   },
   {
     typeId: 99,
@@ -706,6 +1034,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [52, 33, 4],
     bonusValue: 105,
     identifier: "classic_wooden_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      rideLength: 370,
+      maxNegativeG: 0.1,
+    },
   },
   {
     typeId: 100,
@@ -714,6 +1049,11 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [50, 30, 10],
     bonusValue: 90,
     identifier: "classic_stand_up_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      maxSpeed: 22,
+      maxNegativeG: 0.5,
+    },
   },
   {
     typeId: 101,
@@ -722,6 +1062,12 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [51, 32, 10],
     bonusValue: 120,
     identifier: "lsm_rc",
+    statRequirements: {
+      highestDropHeight: 7,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      maxNegativeG: 0.1,
+    },
   },
   {
     typeId: 102,
@@ -730,6 +1076,13 @@ const rideDataTable: TRideTypeInfo[] = [
     ratingsMultipliers: [52, 33, 4],
     bonusValue: 105,
     identifier: "classic_wooden_twister_rc",
+    statRequirements: {
+      highestDropHeight: 9,
+      numberOfDrops: 2,
+      maxSpeed: 22,
+      rideLength: 370,
+      maxNegativeG: 0.1,
+    },
   },
 ];
 

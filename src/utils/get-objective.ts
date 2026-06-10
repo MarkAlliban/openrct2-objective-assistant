@@ -1,16 +1,7 @@
 import { getLengthRequirement } from "./get-length-requirement";
 import { formatCurrency } from "./format-currency";
 import { TObjectiveTarget } from "../types";
-
-const wrapWords = (text: string, lineLength: number): string[] => {
-  const words: string[] = text.split(" ");
-  return words.reduce((a: string[], word: string) => {
-    if (!a.length) return [word];
-    if (a[a.length - 1].length + word.length > lineLength) return [...a, word];
-    a[a.length - 1] += ` ${word}`;
-    return a;
-  }, []);
-};
+import { wrapWords } from "./wrap-words";
 
 export const getObjective = (lineLength: number): TObjectiveTarget => {
   const type = scenario.objective.type;

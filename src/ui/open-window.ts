@@ -17,9 +17,16 @@ import {
   ICON_CROWD,
   ICON_MONEY,
   ICON_BURGER,
+  ICON_AWARDS,
+  ICON_STATS,
 } from "../constants";
 import { updateGuestsValues } from "./guests/update-guests-values";
-import { TObjectiveTarget, TRidePrices, TSortTable } from "../types";
+import {
+  TObjectiveTarget,
+  TRidePrices,
+  TSortTable,
+  TStatTracker,
+} from "../types";
 import { getCoastersWidgets } from "./coasters/get-coasters-widgets";
 import { updateCoastersValues } from "./coasters/update-coasters-values";
 import { getRidePricesWidgets } from "./ride-prices/get-ride-prices-widgets";
@@ -36,10 +43,14 @@ import { updateShopsPrices } from "./shop-prices/update-shops-prices";
 import { getAwardsWidgets } from "./awards/get-awards-widgets";
 import { updateAwardsValues } from "./awards/update-awards-values";
 import { readValue, saveValue } from "../actions/shared-storage";
+import { getStatRequirementWidgets } from "./stat-requirements/get-stat-requirement-widgets";
+import { updateStatRequirementValues } from "./stat-requirements/update-stat-requirements";
+import { updateWidget } from "./helpers/update-widget";
 
 export const openWindow = (
   objective: TObjectiveTarget,
   tracker: TGuestTracker,
+  statTracker: TStatTracker,
 ) => {
   // Only allow one window to be open at a time
   for (let i = 0; i < ui.windows; i++) {
@@ -82,7 +93,9 @@ export const openWindow = (
 
   // Closure of the ride ID's to make the ride lists clickable
   let dataRideIDs: number[] = [];
+  let selectedRide: number = -1;
   const clickRideList = (row: number) => openRideWindow(dataRideIDs[row]);
+  const clickStatList = (row: number) => (selectedRide = dataRideIDs[row]);
   // Closure of the ride ID's and prices to make the price list clickable
   let dataRidePrices: TRidePrices[] = [];
   const clickRidePrice = (row: number, col: number) =>
@@ -157,8 +170,12 @@ export const openWindow = (
         ),
       },
       {
-        image: "awards",
+        image: ICON_AWARDS,
         widgets: getAwardsWidgets(changeColourBack),
+      },
+      {
+        image: ICON_STATS,
+        widgets: getStatRequirementWidgets(clickStatList, sortBy),
       },
     ],
     tabIndex: savedTab,
@@ -166,6 +183,10 @@ export const openWindow = (
       if (window.tabIndex !== savedTab) {
         savedTab = window.tabIndex;
         saveValue("tab", savedTab);
+        if (savedTab === 7) {
+          selectedRide = -1;
+          updateWidget(window, "labelRideName", "Select a ride");
+        }
       }
     },
     onUpdate: () => {
@@ -183,6 +204,13 @@ export const openWindow = (
         dataShopPrices = updateShopsPrices(window, objective, tracker, sortBy);
       if (window.tabIndex === 6)
         updateAwardsValues(window, objective, tracker, thoughts);
+      if (window.tabIndex === 7)
+        dataRideIDs = updateStatRequirementValues(
+          window,
+          sortBy,
+          statTracker,
+          selectedRide,
+        );
     },
   });
 };
