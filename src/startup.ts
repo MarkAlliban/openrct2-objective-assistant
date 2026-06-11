@@ -5,6 +5,7 @@ import { readValue } from "./actions/shared-storage";
 import { ridesSetAllPrices } from "./utils/ride-pricing";
 import { shopsSetAllPrices } from "./data/shop-get-items";
 import { getObjective } from "./utils/get-objective";
+import { statRequirementTracker } from "./data/stat-requirement-tracker";
 
 export function startup() {
   // Get and parse the objective
@@ -13,17 +14,17 @@ export function startup() {
   // Initialise guest tracker
   const tracker = guestTracker();
 
+  // Initialise ride stat calculator
+  const statTracker = statRequirementTracker();
+
   // Set scenario variables
-    const noMoney = park.getFlag("noMoney");
-    const unlockAllPrices = park.getFlag("unlockAllPrices"); // Can set ride and entrance prices
-    const freeParkEntry = park.getFlag("freeParkEntry"); // Can set only ride prices
-    const canSetRidePrices = !noMoney && (unlockAllPrices || freeParkEntry);
-    const canSetShopPrices = !noMoney;
+  const noMoney = park.getFlag("noMoney");
+  const unlockAllPrices = park.getFlag("unlockAllPrices"); // Can set ride and entrance prices
+  const freeParkEntry = park.getFlag("freeParkEntry"); // Can set only ride prices
+  const canSetRidePrices = !noMoney && (unlockAllPrices || freeParkEntry);
+  const canSetShopPrices = !noMoney;
 
   context.subscribe("interval.day", function () {
-    // Track guests once per day
-    tracker.updateGuestCount();
-
     // Update ride prices once per day
     const automatePrices = !!readValue("automatePrices") || false;
     if (automatePrices && canSetRidePrices) {
@@ -38,6 +39,8 @@ export function startup() {
   });
 
   if (typeof ui !== "undefined") {
-    ui.registerMenuItem(TITLE, () => openWindow(objective, tracker));
+    ui.registerMenuItem(TITLE, () =>
+      openWindow(objective, tracker, statTracker),
+    );
   }
 }

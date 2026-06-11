@@ -5,7 +5,12 @@ import {
   WARNING_COLOUR,
   INFO_COLOUR,
 } from "../../constants";
-import { TItemData, TRideInfo, TShopItem } from "../../types";
+import {
+  TItemData,
+  TRideInfo,
+  TShopItem,
+  TStatRequirementResult,
+} from "../../types";
 import {
   getAgeCategory,
   getBestPrice,
@@ -92,6 +97,18 @@ const getMaxPriceString = (ride: TRideInfo) => {
   return [""];
 };
 
+const getRideRequirements = (
+  rideRequirements: TStatRequirementResult[],
+  statsCalculated: boolean,
+) => {
+  if (!rideRequirements.length) return "-";
+  if (!statsCalculated) return `${INFO_COLOUR}???`;
+  const requirementsMet = rideRequirements.filter(
+    (r) => r.met || r.overridden,
+  ).length;
+  return `${requirementsMet === rideRequirements.length ? SUCCESS_COLOUR : ERROR_COLOUR}${requirementsMet} / ${rideRequirements.length}`;
+};
+
 export const renderRideTableRow = (ride: TRideInfo, columns: string[]) => {
   const cols: string[] = [];
   if (columns.indexOf("name") !== -1) cols.push(getRideName(ride));
@@ -105,6 +122,13 @@ export const renderRideTableRow = (ride: TRideInfo, columns: string[]) => {
   if (columns.indexOf("value") !== -1) cols.push(getValueString(ride));
   if (columns.indexOf("prices") !== -1)
     cols.push(getActualPriceString(ride), ...getMaxPriceString(ride));
+  if (columns.indexOf("reqs") !== -1)
+    cols.push(
+      getRideRequirements(
+        ride.statRequirementResults || [],
+        !!ride.statsCalculated,
+      ),
+    );
   return cols;
 };
 
@@ -127,5 +151,5 @@ export const renderItemTableRow = (item: TItemData) => [
   getCurrentPrice(item),
   formatCurrency2dp((item.data.basePrice || 0) * 10),
   formatCurrency2dp((item.data.recommendedPrice || 0) * 10),
-	getRidersString(item),
+  getRidersString(item),
 ];

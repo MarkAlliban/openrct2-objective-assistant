@@ -54,7 +54,7 @@ export const updateGuestsValues = (
       softGuestCapRealtime = 1000;
     }
     rides.forEach((ride) => {
-      // BUG: ride is not counted towards soft guest cap for Mobius coasters unless first segment is longer than 600m.
+      // BUG: For Mobius coasters we should use the length of the first segment, but this isn't exposed by the plugin API.
       if ((ride.rideLength || 0) >= 600 && (ride.excitement || 0) >= 600) {
         softGuestCapPotential += (ride.bonusValue || 0) * 2;
         if (ride.status === "open" && ride.breakdown === "none")

@@ -1,6 +1,6 @@
 export type TGuestTracker = {
-	updateGuestCount: Function,
-	getGuestCount: Function
+  updateGuestCount: Function;
+  getGuestCount: Function;
 };
 type TGuestMoment = {
   customers: number;
@@ -59,9 +59,16 @@ export const guestTracker = () => {
     });
   };
 
-  const getGuestCount = (rideId: number):{count: number | null, error: number} => ({
+  const getGuestCount = (
+    rideId: number,
+  ): { count: number | null; error: number } => ({
     count: guestCount[rideId]?.tracker || 0,
     error: Math.max(startTicks + TICKS_TO_TRACK / 2 - date.ticksElapsed, 0),
+  });
+
+  context.subscribe("interval.day", function () {
+    // Track guests once per day
+    updateGuestCount();
   });
 
   return { updateGuestCount, getGuestCount };

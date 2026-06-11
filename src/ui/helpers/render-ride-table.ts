@@ -5,6 +5,7 @@ export const renderRideTable = (
   columns: string[],
   clickRow: Function,
   sortBy: { key: string; direction: number; set: Function },
+  tableWidth = WINDOW_WIDTH,
 ) => {
   // Get the columns to display
   const cols = [
@@ -30,6 +31,11 @@ export const renderRideTable = (
       header: "Length",
       width: 60,
       canSort: true,
+    },
+    {
+      header: "Reqs",
+      width: 40,
+      canSort: false,
     },
     {
       header: "Riders",
@@ -109,7 +115,7 @@ export const renderRideTable = (
   const colsToShare = cols.reduce((a, c) => a + (c.width ? 0 : 1), 0);
   if (colsToShare)
     cols.forEach((c) => {
-      if (!c.width) c.width = (WINDOW_WIDTH - 10 - usedWidth) / colsToShare;
+      if (!c.width) c.width = (tableWidth - 10 - usedWidth) / colsToShare;
     });
 
   // Make sorting buttons
@@ -148,7 +154,7 @@ export const renderRideTable = (
     type: "listview",
     x: 5,
     y: y + UI_VALUE_HEIGHT,
-    width: WINDOW_WIDTH - 10,
+    width: tableWidth - 10,
     height: WINDOW_HEIGHT - y - UI_VALUE_HEIGHT - 5,
     isStriped: true,
     canSelect: false,

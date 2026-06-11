@@ -20,6 +20,28 @@ export type TObjectiveTarget = {
   tab?: number;
 };
 
+type TStatRequirements = {
+  highestDropHeight?: number;
+  numberOfDrops?: number;
+  maxSpeed?: number;
+  maxNegativeG?: number;
+  maxLateralG?: number;
+  rideLength?: number;
+  maxUnderground?: number;
+  inversions?: number;
+  inversionOverrides?: string[];
+  specialTrackPieces?: number;
+};
+
+export type TStatRequirementResult = {
+  type: string;
+  name: string;
+  required: number;
+  actual: number;
+  met: boolean;
+  overridden?: boolean;
+};
+
 export type TRideCategory =
   | "rollercoaster"
   | "gentle"
@@ -37,6 +59,7 @@ export type TRideTypeInfo = {
   category: TRideCategory | undefined;
   ratingsMultipliers: [number, number, number];
   sameTypeAs?: string;
+  statRequirements?: TStatRequirements;
 };
 
 export type TRideInfo = {
@@ -63,6 +86,9 @@ export type TRideInfo = {
   bonusValue?: number;
   sameTypeAs?: string;
   ratingsMultipliers?: [number, number, number];
+  statRequirements?: TStatRequirements;
+  statsCalculated?: boolean;
+  statRequirementResults?: TStatRequirementResult[];
   shopItems?: { id: number; price: number }[];
 
   valueCalculated?: number | null;
@@ -88,8 +114,8 @@ export type TItemData = {
   id: number;
   minPrice: number;
   maxPrice: number;
-	guestCount: number;
-	guestError: number;
+  guestCount: number;
+  guestError: number;
   data: TShopItem;
 };
 

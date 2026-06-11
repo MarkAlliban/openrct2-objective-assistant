@@ -43,12 +43,14 @@ export const ERROR_COLOUR = "{RED}";
 export const WARNING_COLOUR = "{TOPAZ}";
 export const BUTTON_TEXT_COLOUR = "{BLACK}";
 export const INFO_COLOUR = "{PALEGOLD}";
+export const READABLE_ERROR_COLOUR = "{LIGHTPINK}";
 export const UI_VALUE_WIDTH = 100;
 export const UI_VALUE_HEIGHT = 12;
 export const UI_LINE_LENGTH = 40;
 export const WARNING_DAYS = 31;
 
 export const RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN = 1 << 18;
+export const TRACK_DESIGN_FLAG = 0b00100000;
 export const DAZZLING_COLOURS = [5, 14, 20, 30];
 
 export const ICON_OBJECTIVE: ImageAnimation = {
@@ -81,6 +83,12 @@ export const ICON_BURGER: ImageAnimation = {
   frameCount: 16,
   frameDuration: 2,
 };
+export const ICON_AWARDS: IconName = "awards";
+export const ICON_STATS: ImageAnimation = {
+  frameBase: 5407,
+  frameCount: 16,
+  frameDuration: 2,
+};
 
 export const ICONS = {
   info: 5129,
@@ -91,4 +99,7 @@ export const ICONS = {
   rosetteBlue: 5481,
   arrowGreenUp: 5130,
   arrowRedDown: 5131,
+  greenLight: 29384,
+  redLight: 29376,
+  yellowLight: 29380,
 };
