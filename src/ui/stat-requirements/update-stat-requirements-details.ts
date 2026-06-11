@@ -5,7 +5,7 @@ import {
   UI_VALUE_HEIGHT,
   WINDOW_WIDTH,
 } from "../../constants";
-import { TRideInfo, TRideRequirement } from "../../types";
+import { TRideInfo, TStatRequirementResult } from "../../types";
 import { wrapWords } from "../../utils/wrap-words";
 import { updateWidget } from "../helpers/update-widget";
 import {
@@ -108,7 +108,7 @@ export const updateStatRequirementsDetails = (
     window,
     "overrideNote",
     null,
-    statRequirementResults?.some((r: TRideRequirement) => r.overridden),
+    statRequirementResults?.some((r: TStatRequirementResult) => r.overridden),
     { y: window.height - 30 },
   );
 

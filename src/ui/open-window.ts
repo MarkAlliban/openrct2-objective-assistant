@@ -21,12 +21,7 @@ import {
   ICON_STATS,
 } from "../constants";
 import { updateGuestsValues } from "./guests/update-guests-values";
-import {
-  TObjectiveTarget,
-  TRidePrices,
-  TSortTable,
-  TStatTracker,
-} from "../types";
+import { TObjectiveTarget, TRidePrices, TSortTable } from "../types";
 import { getCoastersWidgets } from "./coasters/get-coasters-widgets";
 import { updateCoastersValues } from "./coasters/update-coasters-values";
 import { getRidePricesWidgets } from "./ride-prices/get-ride-prices-widgets";
@@ -50,7 +45,7 @@ import { updateWidget } from "./helpers/update-widget";
 export const openWindow = (
   objective: TObjectiveTarget,
   tracker: TGuestTracker,
-  statTracker: TStatTracker,
+  getStatRequirements: Function,
 ) => {
   // Only allow one window to be open at a time
   for (let i = 0; i < ui.windows; i++) {
@@ -60,7 +55,7 @@ export const openWindow = (
     }
   }
 
-  //Initialise the sorting mechanic
+  // Initialise the sorting mechanic
   const sortBy: TSortTable = {
     key: "Ride",
     direction: 1,
@@ -208,7 +203,7 @@ export const openWindow = (
         dataRideIDs = updateStatRequirementValues(
           window,
           sortBy,
-          statTracker,
+          getStatRequirements,
           selectedRide,
         );
     },

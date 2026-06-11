@@ -20,20 +20,6 @@ export type TObjectiveTarget = {
   tab?: number;
 };
 
-export type TStatTracker = {
-  getStatRequirements: Function;
-  updateStatRequirements: Function;
-};
-
-export type TMapData = {
-  inversionsComplete: number;
-  inversionsIn: number;
-  inversionsOut: number;
-  underground: number;
-  overground: number;
-  specialTrackPieces: number;
-};
-
 type TStatRequirements = {
   highestDropHeight?: number;
   numberOfDrops?: number;
@@ -47,7 +33,7 @@ type TStatRequirements = {
   specialTrackPieces?: number;
 };
 
-export type TRideRequirement = {
+export type TStatRequirementResult = {
   type: string;
   name: string;
   required: number;
@@ -102,7 +88,7 @@ export type TRideInfo = {
   ratingsMultipliers?: [number, number, number];
   statRequirements?: TStatRequirements;
   statsCalculated?: boolean;
-  statRequirementResults?: TRideRequirement[];
+  statRequirementResults?: TStatRequirementResult[];
   shopItems?: { id: number; price: number }[];
 
   valueCalculated?: number | null;

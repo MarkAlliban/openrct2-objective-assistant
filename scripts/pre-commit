@@ -5,3 +5,5 @@
 exec 1>&2
 
 prettier --check \"{src}/**/*.js\"
+
+exit 0

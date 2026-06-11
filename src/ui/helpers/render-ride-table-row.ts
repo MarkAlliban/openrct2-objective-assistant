@@ -5,7 +5,12 @@ import {
   WARNING_COLOUR,
   INFO_COLOUR,
 } from "../../constants";
-import { TItemData, TRideInfo, TRideRequirement, TShopItem } from "../../types";
+import {
+  TItemData,
+  TRideInfo,
+  TShopItem,
+  TStatRequirementResult,
+} from "../../types";
 import {
   getAgeCategory,
   getBestPrice,
@@ -93,7 +98,7 @@ const getMaxPriceString = (ride: TRideInfo) => {
 };
 
 const getRideRequirements = (
-  rideRequirements: TRideRequirement[],
+  rideRequirements: TStatRequirementResult[],
   statsCalculated: boolean,
 ) => {
   if (!rideRequirements.length) return "-";

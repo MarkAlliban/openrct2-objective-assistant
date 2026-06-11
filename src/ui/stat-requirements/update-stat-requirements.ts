@@ -1,15 +1,15 @@
 import { renderRideTableRow } from "../helpers/render-ride-table-row";
 import { updateWidgetList } from "../helpers/update-widget";
-import { TRideInfo, TStatTracker } from "../../types";
+import { TRideInfo } from "../../types";
 import { updateStatRequirementsDetails } from "./update-stat-requirements-details";
 
 export const updateStatRequirementValues = (
   window: Window,
   sortBy: any,
-  statTracker: TStatTracker,
+  getStatRequirements: Function,
   selectedRide: number,
 ) => {
-  const statRequirementsData: TRideInfo[] = statTracker.getStatRequirements();
+  const statRequirementsData: TRideInfo[] = getStatRequirements();
   const rides = statRequirementsData.sort((a, b) => {
     if (sortBy.key === "Ride")
       return a.name > b.name ? sortBy.direction : -sortBy.direction;
