@@ -19,8 +19,7 @@ export const rideGetSpecialData = (
         // Count inversions
         if (
           element.sequence === 0 &&
-          (SPECIAL_PIECES.complete.has(element.trackType) ||
-            SPECIAL_PIECES.in.has(element.trackType))
+          SPECIAL_PIECES.inversions.has(element.trackType)
         ) {
           inversions++;
         }
