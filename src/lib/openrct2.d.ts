@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2014-2025 OpenRCT2 developers
+ * Copyright (c) 2014-2026 OpenRCT2 developers
  *
  * For a complete list of all authors, please refer to contributors.md
  * Interested in contributing? Visit https://github.com/OpenRCT2/OpenRCT2
@@ -514,6 +514,7 @@ declare global {
         subscribe(hook: "network.join", callback: (e: NetworkEventArgs) => void): IDisposable;
         subscribe(hook: "network.leave", callback: (e: NetworkEventArgs) => void): IDisposable;
         subscribe(hook: "park.guest.softcap.calculate", callback: (e: ParkCalculateGuestCapArgs) => void): IDisposable;
+        subscribe(hook: "ride.breakdown", callback: (e: RideBreakdownArgs) => void): IDisposable;
         subscribe(hook: "ride.ratings.calculate", callback: (e: RideRatingsCalculateArgs) => void): IDisposable;
         subscribe(hook: "vehicle.crash", callback: (e: VehicleCrashArgs) => void): IDisposable;
 
@@ -1436,7 +1437,10 @@ declare global {
 
     interface StaffSetCostumeArgs extends GameActionArgs {
         id: number;
-        /** @see `EntertainerCostume` in {@link https://github.com/OpenRCT2/OpenRCT2/blob/develop/src/openrct2/entity/Staff.h} */
+
+        /**
+         * The costume (peep animation) object index.
+         */
         costume: number;
     }
 
@@ -1487,7 +1491,7 @@ declare global {
     }
 
     /**
-     * @todo Does not support `TileModifyType::AnyPaste`
+     * @todo Does not support `TileModifyType::anyPaste`
      */
     interface TileModifyArgs extends GameActionArgs {
         x: number;
@@ -1641,6 +1645,11 @@ declare global {
         cancel: boolean;
     }
 
+	interface RideBreakdownArgs {
+		readonly rideId: number;
+		breakdownReason: string;
+	}
+ 
     interface RideRatingsCalculateArgs {
         readonly rideId: number;
         excitement: number;
@@ -2252,6 +2261,10 @@ declare global {
 
     interface WallObject extends SceneryObject {
 
+    }
+
+    interface FootpathSurfaceObject extends LoadedImageObject {
+        readonly flags: number;
     }
 
     interface FootpathAdditionObject extends SceneryObject {
@@ -4758,6 +4771,17 @@ declare global {
         registerToolboxMenuItem(text: string, callback: () => void): void;
 
         registerShortcut(desc: ShortcutDesc): void;
+
+        /**
+         * Show gridlines on the landscape for this plugin.
+         */
+        showGridlines(): void;
+
+        /**
+         * Hide gridlines on the landscape for this plugin. Gridlines may stay shown if the
+         * game or other plugins have also requested gridlines.
+         */
+        hideGridlines(): void;
     }
 
     /**
@@ -5755,6 +5779,7 @@ declare global {
         getObject(type: "small_scenery", index: number): SmallSceneryObject;
         getObject(type: "large_scenery", index: number): LargeSceneryObject;
         getObject(type: "wall", index: number): WallObject;
+        getObject(type: "footpath_surface", index: number): FootpathSurfaceObject;
         getObject(type: "footpath_addition", index: number): FootpathAdditionObject;
         getObject(type: "banner", index: number): BannerObject;
         getObject(type: "scenery_group", index: number): SceneryGroupObject;
@@ -5768,6 +5793,7 @@ declare global {
         getAllObjects(type: "small_scenery"): SmallSceneryObject[];
         getAllObjects(type: "large_scenery"): LargeSceneryObject[];
         getAllObjects(type: "wall"): WallObject[];
+        getAllObjects(type: "footpath_surface"): FootpathSurfaceObject[];
         getAllObjects(type: "footpath_addition"): FootpathAdditionObject[];
         getAllObjects(type: "banner"): BannerObject[];
         getAllObjects(type: "scenery_group"): SceneryGroupObject[];
