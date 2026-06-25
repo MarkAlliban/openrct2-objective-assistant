@@ -11,7 +11,7 @@ import {
   getLengthString,
   getRideName,
   getTypeName,
-} from "../list-elements";
+} from "../../helpers/list-elements";
 
 const renderCoastersTableRow = (ride: TRideExtended) => {
   const cols: string[] = [

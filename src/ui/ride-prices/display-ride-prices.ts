@@ -5,7 +5,7 @@ import {
   getAgeName,
   getMaxPriceString,
   getRideName,
-} from "../list-elements";
+} from "../../helpers/list-elements";
 import { TSortTable } from "../open-window";
 import { updateWidgetList } from "../../helpers/update-widgets";
 import { readValue } from "../../helpers/storage";

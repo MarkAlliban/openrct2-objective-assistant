@@ -4,7 +4,7 @@ import {
   getItemName,
   getRideName,
   getRidersString,
-} from "../list-elements";
+} from "../../helpers/list-elements";
 import { TSortTable } from "../open-window";
 import { updateWidgetList } from "../../helpers/update-widgets";
 import { getShopItem } from "../../data/get-shop-item";

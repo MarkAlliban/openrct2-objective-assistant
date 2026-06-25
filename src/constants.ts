@@ -1,3 +1,40 @@
+/*
+COLOUR IDs:
+0: Black							1: Gray							2: White							3: Dark purple
+4: Light purple				5: Bright purple		6: Dark blue					7: Light blue
+8: Icy blue						9: Dark water				10: Light water				11: Saturated green
+12: Dark green				13: Moss green			14: Bright green			15: Olive green
+16: Dark olive green	17: Bright yellow		18: Yellow						19: Dark yellow
+20: Light orange			21: Dark orange			22: Light brown				23: Saturated brown
+24: Dark brown				25: Salmon pink			26: Bordeaux red			27: Saturated red
+28: Bright red				29: Dark pink				30: Bright pink				31: Light pink
+
+COLOURS THAT CAN BE USED FOR TEXT eg. {RED}:
+BLACK					Black							#000
+GREY					Grey							#888
+WHITE					White							#fff
+RED						Red								#f00
+GREEN					Green							#0f0
+YELLOW				Yellow						#ff0
+TOPAZ					Orange						#FFB76B
+CELADON				Light green				#AFDBC3
+BABYBLUE			Light blue				#8FD3F3
+PALELAVENDER	Light purple			#D7C3F3
+PALEGOLD			Dirty yellow			#DBC787
+LIGHTPINK			Pink							#FFBFBF
+PEARLAQUA			Light bluish			#83CFCF
+PALESILVER		Grey-yellow				#CFC3AB
+
+TEXT STYLES:
+NEWLINE
+NEWLINE_SMALLER
+TINYFONT
+MEDIUMFONT
+SMALLFONT
+OUTLINE
+OUTLINE_OFF
+*/
+
 export const TITLE = "Objective Assistant";
 export const WINDOW_WIDTH = 410;
 export const WINDOW_HEIGHT = 355;
@@ -20,67 +57,9 @@ export const SAVED_DATA = {
   shopPricingStrategy: "shop-pricing-strategy",
 };
 
-/*
-0: Black							1: Gray							2: White							3: Dark purple
-4: Light purple				5: Bright purple		6: Dark blue					7: Light blue
-8: Icy blue						9: Dark water				10: Light water				11: Saturated green
-12: Dark green				13: Moss green			14: Bright green			15: Olive green
-16: Dark olive green	17: Bright yellow		18: Yellow						19: Dark yellow
-20: Light orange			21: Dark orange			22: Light brown				23: Saturated brown
-24: Dark brown				25: Salmon pink			26: Bordeaux red			27: Saturated red
-28: Bright red				29: Dark pink				30: Bright pink				31: Light pink
-
-BLACK
-GREY
-WHITE
-RED
-GREEN
-YELLOW
-TOPAZ					Orange						#FFB76B
-CELADON				Light green				#AFDBC3
-BABYBLUE			Light blue				#8FD3F3
-PALELAVENDER	Light purple			#D7C3F3
-PALEGOLD			Dirty yellow			#DBC787
-LIGHTPINK			Pink							#FFBFBF
-PEARLAQUA			Light bluish			#83CFCF
-PALESILVER		Grey-yellow				#CFC3AB
-*/
-
-/*
-        { "NEWLINE",              FormatToken::newline,             },
-        { "NEWLINE_SMALLER",      FormatToken::newlineSmall,        },
-        { "TINYFONT",             FormatToken::fontTiny,            },
-        { "MEDIUMFONT",           FormatToken::fontMedium,          },
-        { "SMALLFONT",            FormatToken::fontSmall,           },
-        { "OUTLINE",              FormatToken::outlineEnable,       },
-        { "OUTLINE_OFF",          FormatToken::outlineDisable,      },
-
-				{ "COMMA32",              FormatToken::comma32,             },
-        { "INT32",                FormatToken::int32,               },
-        { "COMMA1DP16",           FormatToken::comma1dp16,          },
-        { "COMMA2DP32",           FormatToken::comma2dp32,          },
-        { "COMMA16",              FormatToken::comma16,             },
-        { "UINT16",               FormatToken::uint16,              },
-        { "CURRENCY2DP",          FormatToken::currency2dp,         },
-        { "CURRENCY",             FormatToken::currency,            },
-        { "STRINGID",             FormatToken::stringById,          },
-        { "STRING",               FormatToken::string,              },
-        { "MONTHYEAR",            FormatToken::monthYear,           },
-        { "MONTHYEAR_SENTENCE",   FormatToken::monthYearSentence,   },
-        { "MONTH",                FormatToken::month,               },
-        { "VELOCITY",             FormatToken::velocity,            },
-        { "POP16",                FormatToken::pop16,               },
-        { "PUSH16",               FormatToken::push16,              },
-        { "DURATION",             FormatToken::durationShort,       },
-        { "REALTIME",             FormatToken::durationLong,        },
-        { "LENGTH",               FormatToken::length,              },
-        { "HEIGHT",               FormatToken::height,              },
-*/
-
 export const SUCCESS_COLOUR = "{GREEN}";
 export const ERROR_COLOUR = "{RED}";
 export const WARNING_COLOUR = "{TOPAZ}";
-export const BUTTON_TEXT_COLOUR = "{BLACK}";
 export const INFO_COLOUR = "{PALEGOLD}";
 export const READABLE_ERROR_COLOUR = "{LIGHTPINK}";
 export const UI_VALUE_WIDTH = 100;
@@ -89,7 +68,7 @@ export const UI_LINE_LENGTH = 40;
 export const WARNING_DAYS = 31;
 
 export const RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN = 1 << 18;
-export const TRACK_DESIGN_FLAG = 0b00100000;
+export const TRACK_DESIGN_FLAG = 1 << 5;
 export const DAZZLING_COLOURS = [5, 14, 20, 30];
 
 export const ICON_OBJECTIVE: ImageAnimation = {

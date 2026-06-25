@@ -1,7 +1,7 @@
 import { SUCCESS_COLOUR } from "../../constants";
 import { TObjectiveTarget } from "../../data-model/objective";
 import { TRideExtended, TRideTracker } from "../../data-model/ride-tracker";
-import { getRideName, getTypeName } from "../list-elements";
+import { getRideName, getTypeName } from "../../helpers/list-elements";
 import { TSortTable } from "../open-window";
 import {
   updateTimeData,

@@ -5,7 +5,7 @@ import {
   SUCCESS_COLOUR,
   WARNING_COLOUR,
 } from "../constants";
-import { formatCurrency, formatCurrency2dp } from "../helpers/format-currency";
+import { formatCurrency, formatCurrency2dp } from "./format-currency";
 import { TRideExtended } from "../data-model/ride-tracker";
 
 export const getRideName = (ride: TRideExtended) => {

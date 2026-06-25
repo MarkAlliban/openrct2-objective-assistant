@@ -2,7 +2,7 @@ import { SUCCESS_COLOUR } from "../../constants";
 import { TObjectiveTarget } from "../../data-model/objective";
 import { formatCurrency } from "../../helpers/format-currency";
 import { TRideExtended, TRideTracker } from "../../data-model/ride-tracker";
-import { getRideName, getRidersString, getValueString } from "../list-elements";
+import { getRideName, getRidersString, getValueString } from "../../helpers/list-elements";
 import { TSortTable } from "../open-window";
 import {
   updateTimeData,

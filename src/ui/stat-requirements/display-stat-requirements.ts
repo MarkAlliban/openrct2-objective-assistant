@@ -5,7 +5,7 @@ import {
   TStatRequirementResult,
 } from "../../data-model/ride-tracker";
 import { updateWidgetList } from "../../helpers/update-widgets";
-import { getRideName, getTypeName } from "../list-elements";
+import { getRideName, getTypeName } from "../../helpers/list-elements";
 import { showStatRequirementDetails } from "./show-stat-requirement-details";
 
 const getRideRequirements = (
