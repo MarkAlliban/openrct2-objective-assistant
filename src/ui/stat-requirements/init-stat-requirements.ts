@@ -10,12 +10,13 @@ import { renderStatRequirementsTable } from "./render-stat-requirements-table";
 
 export const REQUIREMENT_DETAILS_WIDTH = 150;
 export const ICON_SIZE = 16;
+export const MAX_STAT_REQUIREMENTS = 6;
 
 export const initStatRequirements = (
   clickRow: Function,
   sortBy: TSortTable,
 ) => {
-  const newArray: number[] = [...Array(6).keys()];
+  const newArray: number[] = [...Array(MAX_STAT_REQUIREMENTS).keys()];
   const requirementWidgets: any = [];
   newArray.forEach((index) => {
     requirementWidgets.push({
@@ -77,6 +78,16 @@ export const initStatRequirements = (
       width: REQUIREMENT_DETAILS_WIDTH - 10,
       height: UI_VALUE_HEIGHT * 2,
       text: `${INFO_COLOUR}* Not required when ride\nhas at least one inversion`,
+      isVisible: false,
+    },
+    {
+      name: "lengthNote",
+      type: "label",
+      x: WINDOW_WIDTH - REQUIREMENT_DETAILS_WIDTH + 5,
+      y: WINDOW_HEIGHT - 30,
+      width: REQUIREMENT_DETAILS_WIDTH - 10,
+      height: UI_VALUE_HEIGHT * 2,
+      text: `${INFO_COLOUR}* Multi-station rides may\ncalculate length wrong!`,
       isVisible: false,
     },
 

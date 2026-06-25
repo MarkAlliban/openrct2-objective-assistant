@@ -1,8 +1,21 @@
-import { ICONS, INFO_COLOUR, READABLE_ERROR_COLOUR, UI_VALUE_HEIGHT, WINDOW_WIDTH } from "../../constants";
-import { TRideExtended, TStatRequirementResult } from "../../data-model/ride-tracker";
+import {
+  ICONS,
+  INFO_COLOUR,
+  READABLE_ERROR_COLOUR,
+  UI_VALUE_HEIGHT,
+  WINDOW_WIDTH,
+} from "../../constants";
+import {
+  TRideExtended,
+  TStatRequirementResult,
+} from "../../data-model/ride-tracker";
 import { updateWidget } from "../../helpers/update-widgets";
 import { wrapWords } from "../../helpers/wrap-words";
-import { ICON_SIZE, REQUIREMENT_DETAILS_WIDTH } from "./init-stat-requirements";
+import {
+  ICON_SIZE,
+  MAX_STAT_REQUIREMENTS,
+  REQUIREMENT_DETAILS_WIDTH,
+} from "./init-stat-requirements";
 
 const TEXT_LENGTH = 20;
 const TEXT_SEPARATION = UI_VALUE_HEIGHT * 2.5;
@@ -11,14 +24,15 @@ export const showStatRequirementDetails = (
   ride: TRideExtended,
   window: Window,
 ) => {
-  const { statRequirementResults, ride: {name}, tested } = ride;
+  const {
+    statRequirementResults,
+    ride: { name },
+    tested,
+  } = ride;
   const numStatRequirements = statRequirementResults?.length || 0;
 
   // Update the ride name
-  const nameWrapped = wrapWords(
-    tested ? name : `${name} (untested)`,
-    24,
-  );
+  const nameWrapped = wrapWords(tested ? name : `${name} (untested)`, 24);
   updateWidget(window, "labelRideName", nameWrapped.join("\n"), true, {
     x: WINDOW_WIDTH - REQUIREMENT_DETAILS_WIDTH,
     y: 88 - ((nameWrapped.length - 1) * UI_VALUE_HEIGHT) / 2,
@@ -26,7 +40,12 @@ export const showStatRequirementDetails = (
     height: UI_VALUE_HEIGHT * nameWrapped.length,
   });
 
-  for (let requirementIndex = 0; requirementIndex < 6; requirementIndex++) {
+  // List the requirements
+  for (
+    let requirementIndex = 0;
+    requirementIndex < MAX_STAT_REQUIREMENTS;
+    requirementIndex++
+  ) {
     const {
       type = "",
       name = "",
@@ -93,6 +112,17 @@ export const showStatRequirementDetails = (
     const imageY = 115 + TEXT_SEPARATION * requirementIndex;
     if (buttonWidget.y !== imageY) buttonWidget.y = imageY;
   }
+
+  // Show length bug note
+  updateWidget(
+    window,
+    "lengthNote",
+    null,
+    !!(
+      ride.trackData?.length &&
+      ride.statRequirementResults.find((req) => req.type === "rideLength")
+    ),
+  );
 
   // Show inversion note
   updateWidget(

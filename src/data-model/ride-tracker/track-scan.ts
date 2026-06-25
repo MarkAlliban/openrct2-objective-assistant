@@ -67,7 +67,7 @@ export const trackScan = (
         break;
       }
       positionsChecked.push(position);
-			// BUG: The length here is in 32nds of a tile. Not sure how to convert this to a proper unit as used in the ride window.
+			// BUG: The length here is in 32nds of a tile, whereas rideLength is calculated in real-time as the ride is tested
       newSegment.length += segment?.length || 0;
       newSegment.inversions += segment?.countsAsInversion ? 1 : 0;
       const tile = map.getTile(
