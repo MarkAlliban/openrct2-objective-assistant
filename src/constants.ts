@@ -71,44 +71,43 @@ export const RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN = 1 << 18;
 export const TRACK_DESIGN_FLAG = 1 << 5;
 export const DAZZLING_COLOURS = [5, 14, 20, 30];
 
-export const ICON_OBJECTIVE: ImageAnimation = {
-  frameBase: 5511,
-  frameCount: 16,
-  frameDuration: 2,
-};
-export const ICON_CROWD: ImageAnimation = {
-  frameBase: 5568,
-  frameCount: 8,
-  frameDuration: 2,
-};
-export const ICON_CHART: ImageAnimation = {
-  frameBase: 5375,
-  frameCount: 16,
-  frameDuration: 2,
-};
-export const ICON_COASTERS: ImageAnimation = {
-  frameBase: 5546,
-  frameCount: 5,
-  frameDuration: 2,
-};
-export const ICON_MONEY: ImageAnimation = {
-  frameBase: 5253,
-  frameCount: 8,
-  frameDuration: 2,
-};
-export const ICON_BURGER: ImageAnimation = {
-  frameBase: 5351,
-  frameCount: 16,
-  frameDuration: 2,
-};
-export const ICON_AWARDS: IconName = "awards";
-export const ICON_STATS: ImageAnimation = {
-  frameBase: 5407,
-  frameCount: 16,
-  frameDuration: 2,
-};
-
 export const ICONS = {
+  objective: {
+    frameBase: 5511,
+    frameCount: 16,
+    frameDuration: 2,
+  },
+  crowd: {
+    frameBase: 5568,
+    frameCount: 8,
+    frameDuration: 2,
+  },
+  chart: {
+    frameBase: 5375,
+    frameCount: 16,
+    frameDuration: 2,
+  },
+  coasters: {
+    frameBase: 5546,
+    frameCount: 5,
+    frameDuration: 2,
+  },
+  money: {
+    frameBase: 5253,
+    frameCount: 8,
+    frameDuration: 2,
+  },
+  burger: {
+    frameBase: 5351,
+    frameCount: 16,
+    frameDuration: 2,
+  },
+  awards: "awards" as IconName,
+  stats: {
+    frameBase: 5407,
+    frameCount: 16,
+    frameDuration: 2,
+  },
   info: 5129,
   certificate: 5115,
   rosetteRed: 5470,

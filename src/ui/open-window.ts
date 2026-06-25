@@ -1,17 +1,9 @@
 import { openRideWindow } from "../actions/open-ride-window";
 import { setRidePrice } from "../actions/rides-set-all-prices";
-import { readValue, saveValue } from "../helpers/storage";
+import { readValue } from "../helpers/storage";
 import {
   BACKGROUND_COLOUR,
   FOREGROUND_COLOUR,
-  ICON_AWARDS,
-  ICON_BURGER,
-  ICON_CHART,
-  ICON_COASTERS,
-  ICON_CROWD,
-  ICON_MONEY,
-  ICON_OBJECTIVE,
-  ICON_STATS,
   TITLE,
   WINDOW_HEIGHT,
   WINDOW_HEIGHT_MIN,
@@ -20,23 +12,16 @@ import {
 import { TGuestTracker } from "../data-model/guest-tracker";
 import { TObjectiveTarget } from "../data-model/objective";
 import { TRideTracker } from "../data-model/ride-tracker";
-import { initRidePrices } from "./ride-prices/init-ride-prices";
 import { displayRidePrices } from "./ride-prices/display-ride-prices";
-import { initShopPrices } from "./shop-prices/init-shop-prices";
 import { displayShopPrices } from "./shop-prices/display-shop-prices";
-import { initGuests } from "./guests/init-guests";
 import { displayGuests } from "./guests/display-guests";
-import { initParkValue } from "./park-value/init-park-value";
 import { displayParkValue } from "./park-value/display-park-value";
-import { initObjectiveWindow } from "./objective/init-objective-window";
 import { displayObjective } from "./objective/display-objective";
-import { initCoasters } from "./coasters/init-coasters";
 import { displayCoasters } from "./coasters/display-coasters";
-import { initAwards } from "./awards/init-awards";
 import { displayAwards } from "./awards/display-awards";
-import { initStatRequirements } from "./stat-requirements/init-stat-requirements";
-import { updateWidget } from "../helpers/update-widgets";
 import { displayStatRequirements } from "./stat-requirements/display-stat-requirements";
+import { initTabs } from "./init-tabs";
+import { tabChange } from "./tab-change";
 
 export type TSortTable = {
   key: string;
@@ -70,8 +55,8 @@ export const openWindow = (
 
   // Closure of the ride ID's to make the ride lists clickable
   let dataRideIDs: number[] = [];
-  let selectedRide: number = -1;
   const clickRideList = (row: number) => openRideWindow(dataRideIDs[row]);
+  let selectedRide: number = -1;
   const clickStatList = (row: number) => (selectedRide = dataRideIDs[row]);
   // Closure of the ride ID's and prices to make the price list clickable
   let dataRidePrices: { id: number; price: number }[] = [];
@@ -116,63 +101,22 @@ export const openWindow = (
     height: WINDOW_HEIGHT,
     minHeight: WINDOW_HEIGHT_MIN,
     colours: [BACKGROUND_COLOUR, FOREGROUND_COLOUR],
-    tabs: [
-      {
-        image: ICON_OBJECTIVE,
-        widgets: initObjectiveWindow(objective, goToObjectiveTab),
-      },
-      {
-        image: ICON_CROWD,
-        widgets: initGuests(clickRideList, sortBy),
-      },
-      {
-        image: ICON_CHART,
-        widgets: initParkValue(clickRideList, sortBy, objective),
-      },
-      {
-        image: ICON_COASTERS,
-        widgets: initCoasters(clickRideList, sortBy, objective),
-      },
-      {
-        image: ICON_MONEY,
-        widgets: initRidePrices(
-          rideTracker,
-          ridePriceClick,
-          sortBy,
-          parkProperties,
-        ),
-      },
-      {
-        image: ICON_BURGER,
-        widgets: initShopPrices(
-          rideTracker,
-          shopPriceClick,
-          sortBy,
-          parkProperties,
-        ),
-      },
-      {
-        image: ICON_AWARDS,
-        widgets: initAwards(changeColourBack),
-      },
-      {
-        image: ICON_STATS,
-        widgets: initStatRequirements(clickStatList, sortBy),
-      },
-    ],
+    tabs: initTabs(
+      parkProperties,
+      objective,
+      rideTracker,
+      sortBy,
+      goToObjectiveTab,
+      clickRideList,
+      ridePriceClick,
+      shopPriceClick,
+      changeColourBack,
+      clickStatList,
+    ),
     tabIndex: savedTab,
     onTabChange: () => {
-      if (window.tabIndex !== savedTab) {
-        savedTab = window.tabIndex;
-        saveValue("tab", savedTab.toString());
-        if (savedTab === 6) {
-          window.height = WINDOW_HEIGHT;
-        }
-        if (savedTab === 7) {
-          selectedRide = -1;
-          updateWidget(window, "labelRideName", "Select a ride");
-        }
-      }
+      savedTab = tabChange(window, savedTab);
+      selectedRide = -1;
     },
     onUpdate: () => {
       if (window.tabIndex === 0)

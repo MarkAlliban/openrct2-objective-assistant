@@ -1,6 +1,10 @@
 import { TEMP_COLD, TEMP_HOT } from "../constants";
 import { TShopItem } from "./get-shop-item";
-import { getAverageMonthlyTemperatures, getAverageTemperature } from "./weather";
+import { MOOD_SETTINGS, TEMPERATURE_SETTINGS } from "./get-shop-strategy";
+import {
+  getAverageMonthlyTemperatures,
+  getAverageTemperature,
+} from "./weather";
 
 // How much extra you can charge for 100%, 75%, 50%, 25% and 12.5% chance to buy repectively
 export const overspend = {
@@ -29,7 +33,7 @@ export const getTempAdjustedPrice = (
   temperatureMode: number,
   temperature: number,
 ) => {
-  if (temperatureMode == 2) {
+  if (temperatureMode == TEMPERATURE_SETTINGS.anyTemp) {
     return Math.min(data.coldPrice, data.basePrice, data.hotPrice);
   }
   return temperature < TEMP_COLD
@@ -50,9 +54,9 @@ export const getRecommendedPrice = (
   const tempAdjustedPrice = getTempAdjustedPrice(
     shopItem,
     optionTemperature,
-    optionTemperature === 0
+    optionTemperature === TEMPERATURE_SETTINGS.annualAverage
       ? getAverageTemperature()
-      : optionTemperature === 1
+      : optionTemperature === TEMPERATURE_SETTINGS.thisMonth
         ? getAverageMonthlyTemperatures()[date.month]
         : climate.current.temperature,
   );
@@ -60,9 +64,9 @@ export const getRecommendedPrice = (
   // Get the overcharge array for the guests mood
   const priceAdjustments =
     overspend[
-      optionGuestMood === 0
+      optionGuestMood === MOOD_SETTINGS.happy
         ? "happy"
-        : optionGuestMood === 1
+        : optionGuestMood === MOOD_SETTINGS.most
           ? "normal"
           : "unhappy"
     ];

@@ -33,7 +33,7 @@ const addRequirementValue = (
 export const initObjectiveWindow = (
   objective: TObjectiveTarget,
   goToObjectiveTab: Function,
-) => {
+):WidgetDesc[] => {
   const widgets = [];
   let y: number = 65;
 
@@ -187,5 +187,5 @@ export const initObjectiveWindow = (
     },
   );
 
-  return widgets;
+  return widgets as WidgetDesc[];
 };
