@@ -1,22 +1,20 @@
 {
-	"compilerOptions": {
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"module": "ES2020",
-		"moduleResolution": "node",
-		"noFallthroughCasesInSwitch": true,
-		"noImplicitAny": true,
-		"noImplicitOverride": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"target": "es2016",
-		"lib": [ "es2016" ]
-	},
-	"include": [
-		"./lib/**/*.ts",
-		"./src/**/*.ts",
-	],
-	"noEmit": true
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "es2020",
+    "moduleResolution": "bundler",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "target": "es2022",
+    "lib": ["es2022"],
+    "types": ["@openrct2/types"]
+  },
+  "include": ["./lib/**/*.ts", "./src/**/*.ts"],
+  "noEmit": true
 }

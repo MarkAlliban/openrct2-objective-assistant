@@ -5,12 +5,20 @@ export const WINDOW_HEIGHT_MIN = 150;
 export const BACKGROUND_COLOUR = 3;
 export const FOREGROUND_COLOUR = 4;
 
+export const TICKS_PER_SECOND = 40;
 export const TICKS_PER_MONTH = 65536;
 export const TICKS_PER_YEAR = TICKS_PER_MONTH * 8;
 export const MONTH_DAYS = [31, 30, 31, 30, 31, 31, 30, 31];
 export const DAYS_PER_YEAR = MONTH_DAYS.reduce((a, m) => a + m, 0);
 export const TEMP_COLD = 12;
 export const TEMP_HOT = 21;
+
+export const SAVED_DATA = {
+  automatePrices: "automate-prices",
+  pricingStrategy: "pricing-strategy",
+  automateShopPrices: "automate-shop-prices",
+  shopPricingStrategy: "shop-pricing-strategy",
+};
 
 /*
 0: Black							1: Gray							2: White							3: Dark purple
@@ -36,6 +44,37 @@ PALEGOLD			Dirty yellow			#DBC787
 LIGHTPINK			Pink							#FFBFBF
 PEARLAQUA			Light bluish			#83CFCF
 PALESILVER		Grey-yellow				#CFC3AB
+*/
+
+/*
+        { "NEWLINE",              FormatToken::newline,             },
+        { "NEWLINE_SMALLER",      FormatToken::newlineSmall,        },
+        { "TINYFONT",             FormatToken::fontTiny,            },
+        { "MEDIUMFONT",           FormatToken::fontMedium,          },
+        { "SMALLFONT",            FormatToken::fontSmall,           },
+        { "OUTLINE",              FormatToken::outlineEnable,       },
+        { "OUTLINE_OFF",          FormatToken::outlineDisable,      },
+
+				{ "COMMA32",              FormatToken::comma32,             },
+        { "INT32",                FormatToken::int32,               },
+        { "COMMA1DP16",           FormatToken::comma1dp16,          },
+        { "COMMA2DP32",           FormatToken::comma2dp32,          },
+        { "COMMA16",              FormatToken::comma16,             },
+        { "UINT16",               FormatToken::uint16,              },
+        { "CURRENCY2DP",          FormatToken::currency2dp,         },
+        { "CURRENCY",             FormatToken::currency,            },
+        { "STRINGID",             FormatToken::stringById,          },
+        { "STRING",               FormatToken::string,              },
+        { "MONTHYEAR",            FormatToken::monthYear,           },
+        { "MONTHYEAR_SENTENCE",   FormatToken::monthYearSentence,   },
+        { "MONTH",                FormatToken::month,               },
+        { "VELOCITY",             FormatToken::velocity,            },
+        { "POP16",                FormatToken::pop16,               },
+        { "PUSH16",               FormatToken::push16,              },
+        { "DURATION",             FormatToken::durationShort,       },
+        { "REALTIME",             FormatToken::durationLong,        },
+        { "LENGTH",               FormatToken::length,              },
+        { "HEIGHT",               FormatToken::height,              },
 */
 
 export const SUCCESS_COLOUR = "{GREEN}";

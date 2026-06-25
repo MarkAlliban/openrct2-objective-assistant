@@ -10,6 +10,7 @@
     "prestart": "copy scripts\\pre-commit .git\\hooks\\"
   },
   "devDependencies": {
+    "@openrct2/types": "^0.5.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.0.0",

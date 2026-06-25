@@ -1,51 +1,54 @@
-import { TGuestTracker } from "../data/guest-tracker";
-import { getObjectiveWidgets } from "./objective/get-objective-widgets";
-import { updateObjectiveValues } from "./objective/update-objective-values";
-import { getParkValueWidgets } from "./park-value/get-park-value-widgets";
-import { updateParkValue } from "./park-value/update-park-value";
-import { getGuestsWidgets } from "./guests/get-guests-widgets";
+import { openRideWindow } from "../actions/open-ride-window";
+import { setRidePrice } from "../actions/rides-set-all-prices";
+import { readValue, saveValue } from "../helpers/storage";
 import {
-  TITLE,
-  WINDOW_WIDTH,
-  WINDOW_HEIGHT,
-  WINDOW_HEIGHT_MIN,
   BACKGROUND_COLOUR,
   FOREGROUND_COLOUR,
-  ICON_OBJECTIVE,
+  ICON_AWARDS,
+  ICON_BURGER,
   ICON_CHART,
   ICON_COASTERS,
   ICON_CROWD,
   ICON_MONEY,
-  ICON_BURGER,
-  ICON_AWARDS,
+  ICON_OBJECTIVE,
   ICON_STATS,
+  TITLE,
+  WINDOW_HEIGHT,
+  WINDOW_HEIGHT_MIN,
+  WINDOW_WIDTH,
 } from "../constants";
-import { updateGuestsValues } from "./guests/update-guests-values";
-import { TObjectiveTarget, TRidePrices, TSortTable } from "../types";
-import { getCoastersWidgets } from "./coasters/get-coasters-widgets";
-import { updateCoastersValues } from "./coasters/update-coasters-values";
-import { getRidePricesWidgets } from "./ride-prices/get-ride-prices-widgets";
-import { updateRidesPrices } from "./ride-prices/update-rides-prices";
-import { openRideWindow } from "../actions/open-ride-window";
-import {
-  handleRidePrice,
-  handleSetAllRides,
-  handleSetAllShops,
-  handleShopPrice,
-} from "../actions/click-handlers";
-import { getShopPricesWidgets } from "./shop-prices/get-shop-prices-widgets";
-import { updateShopsPrices } from "./shop-prices/update-shops-prices";
-import { getAwardsWidgets } from "./awards/get-awards-widgets";
-import { updateAwardsValues } from "./awards/update-awards-values";
-import { readValue, saveValue } from "../actions/shared-storage";
-import { getStatRequirementWidgets } from "./stat-requirements/get-stat-requirement-widgets";
-import { updateStatRequirementValues } from "./stat-requirements/update-stat-requirements";
-import { updateWidget } from "./helpers/update-widget";
+import { TGuestTracker } from "../data-model/guest-tracker";
+import { TObjectiveTarget } from "../data-model/objective";
+import { TRideTracker } from "../data-model/ride-tracker";
+import { initRidePrices } from "./ride-prices/init-ride-prices";
+import { displayRidePrices } from "./ride-prices/display-ride-prices";
+import { initShopPrices } from "./shop-prices/init-shop-prices";
+import { displayShopPrices } from "./shop-prices/display-shop-prices";
+import { initGuests } from "./guests/init-guests";
+import { displayGuests } from "./guests/display-guests";
+import { initParkValue } from "./park-value/init-park-value";
+import { displayParkValue } from "./park-value/display-park-value";
+import { initObjectiveWindow } from "./objective/init-objective-window";
+import { displayObjective } from "./objective/display-objective";
+import { initCoasters } from "./coasters/init-coasters";
+import { displayCoasters } from "./coasters/display-coasters";
+import { initAwards } from "./awards/init-awards";
+import { displayAwards } from "./awards/display-awards";
+import { initStatRequirements } from "./stat-requirements/init-stat-requirements";
+import { updateWidget } from "../helpers/update-widgets";
+import { displayStatRequirements } from "./stat-requirements/display-stat-requirements";
+
+export type TSortTable = {
+  key: string;
+  direction: number;
+  set: Function;
+};
 
 export const openWindow = (
+  parkProperties: { canSetRidePrices: boolean; canSetShopPrices: boolean },
   objective: TObjectiveTarget,
-  tracker: TGuestTracker,
-  getStatRequirements: Function,
+  guestTracker: TGuestTracker,
+  rideTracker: TRideTracker,
 ) => {
   // Only allow one window to be open at a time
   for (let i = 0; i < ui.windows; i++) {
@@ -65,42 +68,30 @@ export const openWindow = (
     },
   };
 
-  // Initialise guest thoughts
-  const thoughts: Partial<Record<ThoughtType, number>> = {
-    toilet: 0,
-    bad_litter: 0,
-    path_disgusting: 0,
-    vandalism: 0,
-    very_clean: 0,
-    scenery: 0,
-    hungry: 0,
-    lost: 0,
-    cant_find: 0,
-  };
-  const guests = map.getAllEntities("guest");
-  for (const guest of guests) {
-    for (const thought of guest.thoughts) {
-      if (thought.freshness <= 5 && thoughts[thought.type] !== undefined) {
-        thoughts[thought.type]!++;
-      }
-    }
-  }
-
   // Closure of the ride ID's to make the ride lists clickable
   let dataRideIDs: number[] = [];
   let selectedRide: number = -1;
   const clickRideList = (row: number) => openRideWindow(dataRideIDs[row]);
   const clickStatList = (row: number) => (selectedRide = dataRideIDs[row]);
   // Closure of the ride ID's and prices to make the price list clickable
-  let dataRidePrices: TRidePrices[] = [];
-  const clickRidePrice = (row: number, col: number) =>
-    handleRidePrice(window, dataRidePrices, row, col);
-  const setAllRides = () => handleSetAllRides(window, dataRidePrices);
+  let dataRidePrices: { id: number; price: number }[] = [];
+  const ridePriceClick = (row: number, col: number) => {
+    if (!parkProperties.canSetRidePrices) return;
+    if (col < 3) return openRideWindow(dataRidePrices[row].id);
+    setRidePrice(dataRidePrices[row].id, dataRidePrices[row].price, true);
+  };
   // Closure of the shop ID's and prices to make the price list clickable
-  let dataShopPrices: { id: number; price: number; basePrice: number }[] = [];
-  const clickShopPrice = (row: number, col: number) =>
-    handleShopPrice(window, dataShopPrices, row, col);
-  const setAllShops = () => handleSetAllShops(window, dataShopPrices);
+  let dataShopPrices: { id: number; price: number; isPrimary: boolean }[] = [];
+  const shopPriceClick = (row: number, col: number) => {
+    if (!parkProperties.canSetShopPrices) return;
+    if (col !== 3) return openRideWindow(dataShopPrices[row].id);
+    setRidePrice(
+      dataShopPrices[row].id,
+      dataShopPrices[row].price * 10,
+      dataShopPrices[row].isPrimary,
+    );
+  };
+
   // Change tab button
   const goToObjectiveTab = (tab: number) => {
     window.tabIndex = tab;
@@ -113,11 +104,7 @@ export const openWindow = (
   };
 
   // Remember the active tab
-  let savedTab = readValue("tab") || 0;
-
-  // Automate prices?
-  let automatePrices = !!readValue("automatePrices") || false;
-  let automateShopPrices = !!readValue("automateShopPrices") || false;
+  let savedTab = parseInt(readValue("tab") || "0");
 
   let window: Window;
   window = ui.openWindow({
@@ -132,52 +119,55 @@ export const openWindow = (
     tabs: [
       {
         image: ICON_OBJECTIVE,
-        widgets: getObjectiveWidgets(objective, goToObjectiveTab),
+        widgets: initObjectiveWindow(objective, goToObjectiveTab),
       },
       {
         image: ICON_CROWD,
-        widgets: getGuestsWidgets(clickRideList, sortBy),
+        widgets: initGuests(clickRideList, sortBy),
       },
       {
         image: ICON_CHART,
-        widgets: getParkValueWidgets(clickRideList, sortBy, objective),
+        widgets: initParkValue(clickRideList, sortBy, objective),
       },
       {
         image: ICON_COASTERS,
-        widgets: getCoastersWidgets(clickRideList, sortBy, objective),
+        widgets: initCoasters(clickRideList, sortBy, objective),
       },
       {
         image: ICON_MONEY,
-        widgets: getRidePricesWidgets(
-          clickRidePrice,
+        widgets: initRidePrices(
+          rideTracker,
+          ridePriceClick,
           sortBy,
-          setAllRides,
-          automatePrices,
+          parkProperties,
         ),
       },
       {
         image: ICON_BURGER,
-        widgets: getShopPricesWidgets(
-          clickShopPrice,
+        widgets: initShopPrices(
+          rideTracker,
+          shopPriceClick,
           sortBy,
-          setAllShops,
-          automateShopPrices,
+          parkProperties,
         ),
       },
       {
         image: ICON_AWARDS,
-        widgets: getAwardsWidgets(changeColourBack),
+        widgets: initAwards(changeColourBack),
       },
       {
         image: ICON_STATS,
-        widgets: getStatRequirementWidgets(clickStatList, sortBy),
+        widgets: initStatRequirements(clickStatList, sortBy),
       },
     ],
     tabIndex: savedTab,
     onTabChange: () => {
       if (window.tabIndex !== savedTab) {
         savedTab = window.tabIndex;
-        saveValue("tab", savedTab);
+        saveValue("tab", savedTab.toString());
+        if (savedTab === 6) {
+          window.height = WINDOW_HEIGHT;
+        }
         if (savedTab === 7) {
           selectedRide = -1;
           updateWidget(window, "labelRideName", "Select a ride");
@@ -186,24 +176,24 @@ export const openWindow = (
     },
     onUpdate: () => {
       if (window.tabIndex === 0)
-        updateObjectiveValues(window, objective, tracker);
+        displayObjective(window, objective, rideTracker);
       if (window.tabIndex === 1)
-        dataRideIDs = updateGuestsValues(window, objective, tracker, sortBy);
+        dataRideIDs = displayGuests(window, objective, rideTracker, sortBy);
       if (window.tabIndex === 2)
-        dataRideIDs = updateParkValue(window, objective, tracker, sortBy);
+        dataRideIDs = displayParkValue(window, objective, rideTracker, sortBy);
       if (window.tabIndex === 3)
-        dataRideIDs = updateCoastersValues(window, objective, tracker, sortBy);
+        dataRideIDs = displayCoasters(window, objective, rideTracker, sortBy);
       if (window.tabIndex === 4)
-        dataRidePrices = updateRidesPrices(window, objective, tracker, sortBy);
+        dataRidePrices = displayRidePrices(window, rideTracker, sortBy);
       if (window.tabIndex === 5)
-        dataShopPrices = updateShopsPrices(window, objective, tracker, sortBy);
+        dataShopPrices = displayShopPrices(window, rideTracker, sortBy);
       if (window.tabIndex === 6)
-        updateAwardsValues(window, objective, tracker, thoughts);
+        displayAwards(window, rideTracker, guestTracker);
       if (window.tabIndex === 7)
-        dataRideIDs = updateStatRequirementValues(
+        dataRideIDs = displayStatRequirements(
           window,
           sortBy,
-          getStatRequirements,
+          rideTracker,
           selectedRide,
         );
     },
