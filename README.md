@@ -48,6 +48,11 @@ A multi-tab plugin that helps monitor your objective progress and various other 
 * Mouse-over each requirement to show more info.
 * Awards turn green when you're eligible, and gold when you're awarded them.
 
+**Tab 8: Stat requirements**
+* Show rides stat requirements
+* Identify which rides are currently failing stat requirements
+* Improve your rides' ratings by making sure they meet all requirements
+
 
 ## How to use
 
