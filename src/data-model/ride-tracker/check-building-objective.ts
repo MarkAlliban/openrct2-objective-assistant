@@ -6,12 +6,20 @@ export const checkBuildingObjective = (
   ride: Ride,
 ): TBuildingObjective | undefined => {
   if (!objective.lengthTarget && !objective.excitementTarget) return undefined;
-  const meetsExcitementRequirement =
+
+	let meetsExcitementRequirement =
     !!objective.excitementTarget &&
     (ride.excitement || -1) >= objective.excitementTarget;
-  const meetsLengthRequirement =
+  let meetsLengthRequirement =
     !!objective.lengthTarget &&
     (ride.rideLength || 0) >= objective.lengthTarget;
+  if (
+    objective.rollercoastersToComplete &&
+    !objective.rollercoastersToComplete.includes(ride.id)
+  ) {
+    meetsExcitementRequirement = false;
+    meetsLengthRequirement = false;
+  }
 
   return {
     meetsExcitementRequirement,

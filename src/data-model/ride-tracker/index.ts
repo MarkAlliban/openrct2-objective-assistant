@@ -27,7 +27,7 @@ export type TRideFinances = {
   value: number | null;
   agedValues: (number | null)[];
   maxPrices: (number | null)[];
-	valueCalculated: number;
+  valueCalculated: number;
 };
 
 export interface TRideExtended {
