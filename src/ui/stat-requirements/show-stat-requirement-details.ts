@@ -58,7 +58,7 @@ export const showStatRequirementDetails = (
     const visible =
       requirementIndex === 0 || requirementIndex < numStatRequirements;
     const image =
-      met || overridden
+      tested && (met || overridden)
         ? ICONS.greenLight
         : !tested
           ? ICONS.yellowLight
