@@ -8,7 +8,10 @@ import {
 import { TSortTable } from "../open-window";
 import { updateWidgetList } from "../../helpers/update-widgets";
 import { getShopItem } from "../../data/get-shop-item";
-import { getRecommendedPrice } from "../../data/recommended-price";
+import {
+  getPhotoPrice,
+  getRecommendedPrice,
+} from "../../data/recommended-price";
 import { formatCurrency2dp } from "../../helpers/format-currency";
 import {
   getShopStrategy,
@@ -72,7 +75,7 @@ export const displayShopPrices = (
     widget.isChecked = automateShopPrices;
 
   // Get shop list
-  const rides = rideTracker
+  const shops = rideTracker
     .getRides()
     .filter((ride: TRideExtended) =>
       ["stall", "facility"].includes(ride.ride.classification),
@@ -83,7 +86,7 @@ export const displayShopPrices = (
 
   // Build shop and item list
   const rows: TShopItemData[] = [];
-  rides.forEach((ride: TRideExtended) => {
+  shops.forEach((ride: TRideExtended) => {
     if (ride.ride.object.shopItem !== 255) {
       rows.push(addShopItem(ride, ride.ride.object.shopItem, true, strategy));
     }
@@ -93,6 +96,27 @@ export const displayShopPrices = (
       );
     }
   });
+
+  // Add on-ride photos
+  const ridesWithPhotos = rideTracker
+    .getRides()
+    .filter(
+      (ride: TRideExtended) =>
+        ride.ride.classification === "ride" && ride.ride.price.length > 1,
+    );
+  if (ridesWithPhotos.length) {
+    ridesWithPhotos.forEach((ride: TRideExtended) => {
+      rows.push({
+        ride,
+        itemName: "On-ride Photo",
+        price: ride.ride.price[1],
+        recommendedPrice: getPhotoPrice(strategy),
+        isPrimary: false,
+        oneOff: true,
+        sales: 0,
+      });
+    });
+  }
 
   // Sort the list
   const rowsSorted = rows.sort((a: TShopItemData, b: TShopItemData) => {

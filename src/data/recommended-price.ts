@@ -1,6 +1,11 @@
 import { TEMP_COLD, TEMP_HOT } from "../constants";
 import { TShopItem } from "./get-shop-item";
-import { MOOD_SETTINGS, TEMPERATURE_SETTINGS } from "./get-shop-strategy";
+import {
+  BUY_SETTINGS,
+  MOOD_SETTINGS,
+  TEMPERATURE_SETTINGS,
+  TShopPricingStrategy,
+} from "./get-shop-strategy";
 import {
   getAverageMonthlyTemperatures,
   getAverageTemperature,
@@ -83,4 +88,13 @@ export const getRecommendedPrice = (
 
   // Maximum price is £20
   return Math.min(recommendedPrice, 20);
+};
+
+export const getPhotoPrice = (strategy: TShopPricingStrategy): number => {
+  if (strategy.merchBuy === BUY_SETTINGS.p100) return 3;
+  if (strategy.merchBuy === BUY_SETTINGS.p75) return 4.1;
+  if (strategy.merchBuy === BUY_SETTINGS.p50) return 4.9;
+  if (strategy.merchBuy === BUY_SETTINGS.p25) return 5.7;
+  if (strategy.merchBuy === BUY_SETTINGS.p12) return 6.1;
+  return 3;
 };

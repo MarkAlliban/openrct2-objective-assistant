@@ -1,12 +1,12 @@
 import { TRideExtended } from "../data-model/ride-tracker";
 import { getShopItem } from "../data/get-shop-item";
 import { getShopStrategy } from "../data/get-shop-strategy";
-import { getRecommendedPrice } from "../data/recommended-price";
+import { getPhotoPrice, getRecommendedPrice } from "../data/recommended-price";
 import { setRidePrice } from "./rides-set-all-prices";
 
 export const shopsSetAllPrices = (rides: TRideExtended[]) => {
   const strategy = getShopStrategy();
-	rides
+  rides
     .filter((ride) => ["stall", "facility"].includes(ride.ride.classification))
     .forEach((ride) => {
       if (ride.ride.object.shopItem === 255) return;
@@ -37,5 +37,15 @@ export const shopsSetAllPrices = (rides: TRideExtended[]) => {
       ) {
         setRidePrice(ride.ride.id, recommendedPriceSecondary * 10, false);
       }
+    });
+
+  rides
+    .filter(
+      (ride: TRideExtended) =>
+        ride.ride.classification === "ride" && ride.ride.price.length > 1,
+    )
+    .forEach((ride: TRideExtended) => {
+      console.log("Setting");
+      setRidePrice(ride.ride.id, getPhotoPrice(strategy) * 10, false);
     });
 };

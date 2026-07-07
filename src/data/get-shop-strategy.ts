@@ -19,7 +19,7 @@ export const MOOD_SETTINGS = {
   most: 1,
   all: 2,
 };
-const BUY_SETTINGS = {
+export const BUY_SETTINGS = {
   p100: 0,
   p75: 1,
   p50: 2,
