@@ -204,14 +204,15 @@ export const displayAwards = (
     eligible:
       staff.length >= 20 &&
       (context.apiVersion < API_VERSION_STAFF_FIX || staffTypes === 4) &&
+      staff.length > 0 &&
       staff.length >= park.guests / 32 &&
       !bestStaffExclusions.excluded,
     requirements: [
       `${staff.length >= 20 ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / 20`,
+      `${staff.length > 0 && staff.length >= park.guests / 32 ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / ${Math.ceil(park.guests / 32)}`,
       context.apiVersion >= API_VERSION_STAFF_FIX
         ? `${staffTypes === 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${staffTypes} / 4`
         : "",
-      `${staff.length >= park.guests / 32 ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / ${Math.ceil(park.guests / 32)}`,
     ].filter(Boolean),
     exclusions: bestStaffExclusions.list,
   };
@@ -228,7 +229,7 @@ export const displayAwards = (
     requirements: [
       `${foodStalls.length >= 7 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / 7`,
       `${foodTypes >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodTypes} / 4`,
-      `${foodStalls.length >= park.guests / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.ceil(park.guests / 128)}`,
+      `${foodStalls.length > 0 && foodStalls.length >= park.guests / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${foodStalls.length} / ${Math.ceil(park.guests / 128)}`,
       `${hungryThoughts <= 12 ? SUCCESS_COLOUR : ERROR_COLOUR}${hungryThoughts} / 12`,
     ],
     exclusions: bestFoodExclusions.list,
@@ -258,7 +259,7 @@ export const displayAwards = (
       toiletThoughts <= 16,
     requirements: [
       `${toilets.length >= 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets.length} / 4`,
-      `${toilets.length >= park.guests / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets.length} / ${Math.ceil(park.guests / 128)}`,
+      `${toilets.length > 0 && toilets.length >= park.guests / 128 ? SUCCESS_COLOUR : ERROR_COLOUR}${toilets.length} / ${Math.ceil(park.guests / 128)}`,
       `${toiletThoughts <= 16 ? SUCCESS_COLOUR : ERROR_COLOUR}${toiletThoughts} / 16`,
     ],
     exclusions: [],
@@ -269,11 +270,12 @@ export const displayAwards = (
   const mostDisappointing: TAwardQualification = {
     eligible:
       park.rating <= 650 &&
+      disappointingRides > 0 &&
       disappointingRides >= rides.length / 2 &&
       !disappointingExclusions.excluded,
     requirements: [
       `${park.rating <= 650 ? SUCCESS_COLOUR : ERROR_COLOUR}${park.rating} / 650`,
-      `${disappointingRides >= rides.length / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${disappointingRides} / ${Math.floor(rides.length / 2)}`,
+      `${disappointingRides > 0 && disappointingRides >= rides.length / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${disappointingRides} / ${Math.floor(rides.length / 2)}`,
     ],
     exclusions: disappointingExclusions.list,
   };
@@ -311,7 +313,7 @@ export const displayAwards = (
       !mostDazzlingExclusions.excluded,
     requirements: [
       `${trackedRides.length >= 5 ? SUCCESS_COLOUR : ERROR_COLOUR}${trackedRides.length} / 5`,
-      `${dazzlingRides.length >= trackedRides.length / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${dazzlingRides.length} / ${Math.ceil(trackedRides.length / 2)}`,
+      `${dazzlingRides.length > 0 && dazzlingRides.length >= trackedRides.length / 2 ? SUCCESS_COLOUR : ERROR_COLOUR}${dazzlingRides.length} / ${Math.ceil(trackedRides.length / 2)}`,
     ],
     exclusions: mostDazzlingExclusions.list,
   };

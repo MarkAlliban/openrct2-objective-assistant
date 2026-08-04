@@ -1,4 +1,4 @@
-import { ERROR_COLOUR } from "../constants";
+import { API_VERSION_FLYING_RC_FIX, ERROR_COLOUR } from "../constants";
 
 type TStatRequirements = {
   highestDropHeight?: number;
@@ -730,7 +730,10 @@ const rideDataTable: { type: number; data: TRideTypeData }[] = [
         maxSpeed: 22,
         maxNegativeG: 0.4,
         inversions: 1,
-        inversionOverrides: ["maxNegativeG"],
+        inversionOverrides: [
+          context.apiVersion >= API_VERSION_FLYING_RC_FIX ? "numberOfDrops" : "",
+          "maxNegativeG",
+        ].filter(Boolean),
       },
     },
   },

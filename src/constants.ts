@@ -71,6 +71,17 @@ export const RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN = 1 << 18;
 export const TRACK_DESIGN_FLAG = 1 << 5;
 export const DAZZLING_COLOURS = [5, 14, 20, 30];
 export const API_VERSION_STAFF_FIX = 116;
+export const API_VERSION_FLYING_RC_FIX = 113;
+// API VERSIONS:
+//	0.5.4		116
+//	0.5.3		115
+//	0.5.2		114
+//	0.5.1		113
+//	0.5.0		111
+//	0.4.32	110
+//	0.4.31	110
+//	0.4.30	110
+//	0.4.29	110
 
 export const ICONS = {
   objective: {
