@@ -23,6 +23,7 @@ AWARDS:
 	Best gentle rides						At least 10 open gentle rides
 */
 
+import { API_VERSION_STAFF_FIX } from "../constants";
 import { arrayToObject } from "../helpers/array-to-object";
 
 export type TAward = {
@@ -36,7 +37,7 @@ export type TAward = {
 export const awardsInfo: TAward[] = [
   {
     name: "mostTidy",
-    text: "Most tidy park",
+    text: "Tidiest park",
     positive: true,
     requirements: [
       "More than 1/64 of guests think how tidy the park is",
@@ -108,9 +109,9 @@ export const awardsInfo: TAward[] = [
     positive: true,
     requirements: [
       "At least 20 staff",
-      "At least 1 of each staff type",
       "One member of staff per 32 guests",
-    ],
+      context.apiVersion >= API_VERSION_STAFF_FIX ? "At least 1 of each staff type" : "",
+    ].filter(Boolean),
     exclusion: ["mostUntidy"],
   },
   {

@@ -70,6 +70,7 @@ export const WARNING_DAYS = 31;
 export const RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN = 1 << 18;
 export const TRACK_DESIGN_FLAG = 1 << 5;
 export const DAZZLING_COLOURS = [5, 14, 20, 30];
+export const API_VERSION_STAFF_FIX = 116;
 
 export const ICONS = {
   objective: {

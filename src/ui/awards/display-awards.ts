@@ -1,10 +1,11 @@
 import {
+  API_VERSION_STAFF_FIX,
   DAZZLING_COLOURS,
   ERROR_COLOUR,
   ICONS,
   INFO_COLOUR,
   RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN,
-	SUCCESS_COLOUR,
+  SUCCESS_COLOUR,
 } from "../../constants";
 import { TGuestTracker } from "../../data-model/guest-tracker";
 import { TRideExtended, TRideTracker } from "../../data-model/ride-tracker";
@@ -202,14 +203,16 @@ export const displayAwards = (
   const bestStaff: TAwardQualification = {
     eligible:
       staff.length >= 20 &&
-      staffTypes === 4 &&
+      (context.apiVersion < API_VERSION_STAFF_FIX || staffTypes === 4) &&
       staff.length >= park.guests / 32 &&
       !bestStaffExclusions.excluded,
     requirements: [
       `${staff.length >= 20 ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / 20`,
-      `${staffTypes === 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${staffTypes} / 4`,
+      context.apiVersion >= API_VERSION_STAFF_FIX
+        ? `${staffTypes === 4 ? SUCCESS_COLOUR : ERROR_COLOUR}${staffTypes} / 4`
+        : "",
       `${staff.length >= park.guests / 32 ? SUCCESS_COLOUR : ERROR_COLOUR}${staff.length} / ${Math.ceil(park.guests / 32)}`,
-    ],
+    ].filter(Boolean),
     exclusions: bestStaffExclusions.list,
   };
 
