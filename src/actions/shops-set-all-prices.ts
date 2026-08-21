@@ -45,7 +45,6 @@ export const shopsSetAllPrices = (rides: TRideExtended[]) => {
         ride.ride.classification === "ride" && ride.ride.price.length > 1,
     )
     .forEach((ride: TRideExtended) => {
-      console.log("Setting");
       setRidePrice(ride.ride.id, getPhotoPrice(strategy) * 10, false);
     });
 };
