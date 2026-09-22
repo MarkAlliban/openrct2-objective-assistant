@@ -70,18 +70,25 @@ export const WARNING_DAYS = 31;
 export const RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN = 1 << 18;
 export const TRACK_DESIGN_FLAG = 1 << 5;
 export const DAZZLING_COLOURS = [5, 14, 20, 30];
-export const API_VERSION_STAFF_FIX = 116;
-export const API_VERSION_FLYING_RC_FIX = 113;
+
+// This plugin works with OpenRCT2 0.5.0 or higher, which is when the new JS engine was introduced.
+// However, some bugs are fixed and features are introduced in later versions. We need to track those that affect us.
+// Remaining bugs/issues:
+//	- objective.length is declared, but undefined
+//	- ride.popularity is not exposed (we use satisfaction instead)
+//	- Guest cap on harder guest generation should use length of first segment, but segment lengths aren't expored
+//	- For stat requirements, ride length refers to just the first segment, but segment lengths aren't exposed
+//	- For stat requirements, number of inversions isn't exposed (we scan track instead but it isn't reliable)
+//	- For stat requirements, underground percent is not exposed (we scan track instead but it isn't reliable)
+export const API_VERSION_STAFF_FIX = 116; // "Best staff" award didn't require 1 of each staff type. Fixed in 0.5.4.
+export const API_VERSION_FLYING_RC_FIX = 113; // Flying rollercoaster didn't negate "Number of drops" stat requirement when inversion is present. Fixed in 0.5.1.
 // API VERSIONS:
+//	0.5.5		122
 //	0.5.4		116
 //	0.5.3		115
 //	0.5.2		114
 //	0.5.1		113
 //	0.5.0		111
-//	0.4.32	110
-//	0.4.31	110
-//	0.4.30	110
-//	0.4.29	110
 
 export const ICONS = {
   objective: {
