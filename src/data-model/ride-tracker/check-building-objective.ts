@@ -5,7 +5,7 @@ export const checkBuildingObjective = (
   objective: TObjectiveTarget,
   ride: Ride,
 ): TBuildingObjective | undefined => {
-  if (!objective.lengthTarget && !objective.excitementTarget) return undefined;
+  if (objective.type !== '10RollercoastersLength' && !objective.lengthTarget && !objective.excitementTarget) return undefined;
 
 	let meetsExcitementRequirement =
     !!objective.excitementTarget &&

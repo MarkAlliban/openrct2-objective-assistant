@@ -10,5 +10,5 @@ export const getLengthRequirement = (objective: ScenarioObjective): number | nul
   if (scenario.name === "Ghost Town") return 1200;
   if (scenario.name === "Rollercoaster Heaven") return 1000;
 	// For unofficial/custom scenarios, we'll assume it's 1200m.
-  return 1200;
+  return null;
 };

@@ -3,6 +3,7 @@ import { formatCurrency } from "../../helpers/format-currency";
 import { wrapWords } from "../../helpers/wrap-words";
 
 export interface TObjectiveTarget {
+  type: string;
   description: string[];
   year?: number;
   guests?: number;
@@ -24,6 +25,7 @@ export const initObjective = (lineLength: number): TObjectiveTarget => {
   switch (type) {
     case "guestsBy":
       return {
+        type,
         description: wrapWords(
           `To have at least ${objective.guests} guests in your park at the end of October, Year ${objective.year}, with a park rating of at least 600`,
           lineLength,
@@ -35,6 +37,7 @@ export const initObjective = (lineLength: number): TObjectiveTarget => {
       };
     case "guestsAndRating":
       return {
+        type,
         description: wrapWords(
           `To have at least ${objective.guests} guests in your park. You must not let the park rating drop below 700 at any time!`,
           lineLength,
@@ -45,6 +48,7 @@ export const initObjective = (lineLength: number): TObjectiveTarget => {
       };
     case "parkValueBy":
       return {
+        type,
         description: wrapWords(
           `To achieve a park value of at least ${formatCurrency(objective.parkValue)} at the end of October, Year ${objective.year}`,
           lineLength,
@@ -55,6 +59,7 @@ export const initObjective = (lineLength: number): TObjectiveTarget => {
       };
     case "repayLoanAndParkValue":
       return {
+        type,
         description: wrapWords(
           `To repay your loan and achieve a park value of at least ${formatCurrency(objective.parkValue)}`,
           lineLength,
@@ -65,6 +70,7 @@ export const initObjective = (lineLength: number): TObjectiveTarget => {
       };
     case "10Rollercoasters":
       return {
+        type,
         description: wrapWords(
           "To have 10 different types of roller coasters operating in your park, each with an excitement value of at least 6.00",
           lineLength,
@@ -74,19 +80,22 @@ export const initObjective = (lineLength: number): TObjectiveTarget => {
         tab: 3,
       };
     case "10RollercoastersLength":
+      const lengthRequirement = getLengthRequirement(objective);
       return {
+        type,
         description: wrapWords(
-          `To have 10 different types of roller coasters operating in your park, each with a minimum length of ${context.formatString("{LENGTH}", getLengthRequirement(objective))}, and an excitement rating of at least 7.00`,
+          `To have 10 different types of roller coasters operating in your park, each with a minimum length of ${lengthRequirement ? context.formatString("{LENGTH}", lengthRequirement) : "UNKNOWN"}, and an excitement rating of at least 7.00`,
           lineLength,
         ),
         rollercoasters: 10,
         excitementTarget: 700,
-        lengthTarget: getLengthRequirement(scenario.objective),
+        lengthTarget: lengthRequirement,
         tab: 3,
       };
     case "finish5Rollercoasters":
       const excitementTarget = objective.excitement % 65536;
       return {
+        type,
         description: wrapWords(
           `To finish building all 5 of the partially built roller coasters in this park, designing them to achieve excitement ratings of at least ${(excitementTarget / 100).toFixed(2)}`,
           lineLength,
@@ -105,6 +114,7 @@ export const initObjective = (lineLength: number): TObjectiveTarget => {
       };
     case "monthlyRideIncome":
       return {
+        type,
         description: wrapWords(
           `To achieve a monthly income from ride tickets of at least ${formatCurrency(objective.monthlyIncome)}`,
           lineLength,
@@ -114,6 +124,7 @@ export const initObjective = (lineLength: number): TObjectiveTarget => {
       };
     case "monthlyFoodIncome":
       return {
+        type,
         description: wrapWords(
           `To achieve a monthly profit from food, drink and merchanidise sales of at least ${formatCurrency(objective.monthlyIncome)}`,
           lineLength,
@@ -123,12 +134,12 @@ export const initObjective = (lineLength: number): TObjectiveTarget => {
       };
 
     case "haveFun":
-      return { description: ["Have fun!"] };
+      return { type, description: ["Have fun!"] };
     case "buildTheBest":
-      return { description: ["buildTheBest"] };
+      return { type, description: ["buildTheBest"] };
     case "none":
-      return { description: ["None"] };
+      return { type, description: ["None"] };
     default:
-      return { description: [objective.type || ""] };
+      return { type, description: [objective.type || ""] };
   }
 };
