@@ -83,6 +83,7 @@ export const DAZZLING_COLOURS = [5, 14, 20, 30];
 export const API_VERSION_STAFF_FIX = 116; // "Best staff" award didn't require 1 of each staff type. Fixed in 0.5.4.
 export const API_VERSION_FLYING_RC_FIX = 113; // Flying rollercoaster didn't negate "Number of drops" stat requirement when inversion is present. Fixed in 0.5.1.
 // API VERSIONS:
+//	0.5.6		124
 //	0.5.5		122
 //	0.5.4		116
 //	0.5.3		115
