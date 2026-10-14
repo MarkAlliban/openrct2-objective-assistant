@@ -55,6 +55,8 @@ export const SAVED_DATA = {
   pricingStrategy: "pricing-strategy",
   automateShopPrices: "automate-shop-prices",
   shopPricingStrategy: "shop-pricing-strategy",
+  automateParkEntrance: "automate-park-entrance",
+  parkEntranceStrategy: "park-entrance-strategy",
 };
 
 export const SUCCESS_COLOUR = "{GREEN}";
@@ -74,6 +76,7 @@ export const DAZZLING_COLOURS = [5, 14, 20, 30];
 // This plugin works with OpenRCT2 0.5.0 or higher, which is when the new JS engine was introduced.
 // However, some bugs are fixed and features are introduced in later versions. We need to track those that affect us.
 // Remaining bugs/issues:
+//	- "Guests in the last 5 minutes" is a ride stat that is not exposed, and quite data intensive to calculate
 //	- objective.length is declared, but undefined
 //	- ride.popularity is not exposed (we use satisfaction instead)
 //	- Guest cap on harder guest generation should use length of first segment, but segment lengths aren't expored

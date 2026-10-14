@@ -1,6 +1,5 @@
 import { SUCCESS_COLOUR } from "../../constants";
 import { TObjectiveTarget } from "../../data-model/objective";
-import { TRideExtended, TRideTracker } from "../../data-model/ride-tracker";
 import {
   updateTimeData,
   updateWidget,
@@ -12,6 +11,8 @@ import {
   getRideName,
   getTypeName,
 } from "../../helpers/list-elements";
+import { TObjectiveAssistant } from "../../data-model/objective-assistant";
+import { TRideExtended } from "../../data-model/rides/get-extended-rides";
 
 const renderCoastersTableRow = (ride: TRideExtended) => {
   const cols: string[] = [
@@ -38,37 +39,18 @@ const getCoasterText = (
 
 export const displayCoasters = (
   window: Window,
-  objective: TObjectiveTarget,
-  rideTracker: TRideTracker,
-  sortBy: any,
+  objectiveAssistant: TObjectiveAssistant,
 ) => {
-  const rides = rideTracker
-    .getRides()
-    .filter((ride: TRideExtended) => ride.typeData.category === "rollercoaster")
-    .sort((a: TRideExtended, b: TRideExtended) => {
-      if (sortBy.key === "Ride")
-        return a.ride.name > b.ride.name ? sortBy.direction : -sortBy.direction;
-      if (sortBy.key === "Type" && a.typeData.name !== b.typeData.name)
-        return (a.typeData.name || "") > (b.typeData.name || "")
-          ? sortBy.direction
-          : -sortBy.direction;
-      if (sortBy.key === "Exc" && a.ride.excitement !== b.ride.excitement)
-        return (a.ride.excitement || 0) > (b.ride.excitement || 0)
-          ? -sortBy.direction
-          : sortBy.direction;
-      if (sortBy.key === "Length" && a.ride.rideLength !== b.ride.rideLength)
-        return (a.ride.rideLength || 0) > (b.ride.rideLength || 0)
-          ? -sortBy.direction
-          : sortBy.direction;
-      return a.ride.id > b.ride.id ? 1 : -1;
-    });
+  const { objective } = objectiveAssistant;
+
+  const rides = objectiveAssistant.rides.filter(
+    (ride) => ride.typeData.category === "rollercoaster",
+  );
 
   // Count the qualifying coasters
   const coasterTypes = rides
-    .filter((ride: TRideExtended) => ride.buildingObjective?.meetsRequirements)
-    .map(
-      (ride: TRideExtended) => ride.typeData.sameTypeAs || ride.typeData.name,
-    );
+    .filter((ride) => ride.buildingObjective?.meetsRequirements)
+    .map((ride) => ride.typeData.sameTypeAs || ride.typeData.name);
   const uniqueTypes = coasterTypes.filter(
     (type: string, index: number) => coasterTypes.indexOf(type) === index,
   );
@@ -77,7 +59,7 @@ export const displayCoasters = (
     objective.rollercoastersToComplete?.filter(
       (id) =>
         rides.filter(
-          (ride: TRideExtended) =>
+          (ride) =>
             ride.ride.id === id && ride.buildingObjective?.meetsRequirements,
         ).length > 0,
     ) || [];
@@ -93,9 +75,9 @@ export const displayCoasters = (
   updateWidgetList(
     window,
     "listRides",
-    rides.map((ride: TRideExtended) => renderCoastersTableRow(ride)),
+    rides.map((ride) => renderCoastersTableRow(ride)),
   );
 
   // Return the ride IDs
-  return rides.map((ride: TRideExtended) => ride.ride.id);
+  return rides.map((ride) => ride.ride.id);
 };

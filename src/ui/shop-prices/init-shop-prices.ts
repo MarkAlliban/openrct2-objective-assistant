@@ -1,16 +1,12 @@
 import { shopsSetAllPrices } from "../../actions/shops-set-all-prices";
 import { readValue, saveValue } from "../../helpers/storage";
-import { SAVED_DATA, UI_VALUE_HEIGHT } from "../../constants";
-import { TParkProperties } from "../../data-model/park-properties";
-import { TRideTracker } from "../../data-model/ride-tracker";
-import { TSortTable } from "../open-window";
+import { ICONS, SAVED_DATA, UI_VALUE_HEIGHT } from "../../constants";
 import { renderShopTable } from "./render-shop-table";
+import { TObjectiveAssistant } from "../../data-model/objective-assistant";
 
 export const initShopPrices = (
-  rideTracker: TRideTracker,
+  objectiveAssistant: TObjectiveAssistant,
   clickRow: Function,
-  sortBy: TSortTable,
-  parkProperties: TParkProperties,
 ) => {
   const automateShopPrices: boolean =
     !!readValue(SAVED_DATA.automateShopPrices) || false;
@@ -18,7 +14,7 @@ export const initShopPrices = (
     readValue(SAVED_DATA.shopPricingStrategy) || "0",
   );
 
-  return [
+  const widgets = [
     {
       name: "optionAutoPrices",
       type: "checkbox",
@@ -52,11 +48,16 @@ export const initShopPrices = (
       height: UI_VALUE_HEIGHT,
       text: "Set",
       onClick: () => {
-        if (parkProperties.canSetShopPrices) {
-          shopsSetAllPrices(rideTracker.getRides());
+        if (objectiveAssistant.parkProperties.canSetShopPrices) {
+          shopsSetAllPrices(objectiveAssistant.rides);
         }
       },
     },
-    ...renderShopTable(55 + UI_VALUE_HEIGHT, clickRow, sortBy),
+    ...renderShopTable(objectiveAssistant, 55 + UI_VALUE_HEIGHT, clickRow),
   ];
+
+  return {
+    image: ICONS.burger,
+    widgets,
+  };
 };

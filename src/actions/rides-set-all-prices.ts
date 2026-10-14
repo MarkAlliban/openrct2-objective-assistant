@@ -1,5 +1,5 @@
 import { SAVED_DATA } from "../constants";
-import { TRideExtended } from "../data-model/ride-tracker";
+import { TRideExtended } from "../data-model/rides/get-extended-rides";
 import { readValue } from "../helpers/storage";
 
 export const setRidePrice = (

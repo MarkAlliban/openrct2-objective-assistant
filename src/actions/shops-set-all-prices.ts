@@ -1,4 +1,4 @@
-import { TRideExtended } from "../data-model/ride-tracker";
+import { TRideExtended } from "../data-model/rides/get-extended-rides";
 import { getShopItem } from "../data/get-shop-item";
 import { getShopStrategy } from "../data/get-shop-strategy";
 import { getPhotoPrice, getRecommendedPrice } from "../data/recommended-price";

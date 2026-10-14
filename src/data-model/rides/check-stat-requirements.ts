@@ -1,5 +1,5 @@
-import { TStatRequirementResult } from ".";
-import { TRideTypeData } from "../../data/get-ride-type";
+import { TStatRequirementResult } from "./get-extended-rides";
+import { TRideTypeData } from "./get-ride-type";
 import { TTrackData } from "./track-scan";
 
 const HEIGHT_TO_UNITS = 4 / 3;

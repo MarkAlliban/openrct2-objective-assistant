@@ -1,11 +1,9 @@
-import { TRideExtended, TRideTracker } from "../../data-model/ride-tracker";
 import {
   getCurrentPrice,
   getItemName,
   getRideName,
   getRidersString,
 } from "../../helpers/list-elements";
-import { TSortTable } from "../open-window";
 import { updateWidgetList } from "../../helpers/update-widgets";
 import { getShopItem } from "../../data/get-shop-item";
 import {
@@ -19,6 +17,8 @@ import {
 } from "../../data/get-shop-strategy";
 import { readValue } from "../../helpers/storage";
 import { SAVED_DATA } from "../../constants";
+import { TObjectiveAssistant } from "../../data-model/objective-assistant";
+import { TRideExtended } from "../../data-model/rides/get-extended-rides";
 
 type TShopItemData = {
   ride: TRideExtended;
@@ -65,9 +65,10 @@ const addShopItem = (
 
 export const displayShopPrices = (
   window: Window,
-  rideTracker: TRideTracker,
-  sortBy: TSortTable,
+  objectiveAssistant: TObjectiveAssistant,
 ) => {
+  const { sortBy } = objectiveAssistant;
+
   // Set the checkbox
   const automateShopPrices = !!readValue(SAVED_DATA.automateShopPrices);
   const widget: CheckboxWidget = window.findWidget("optionAutoPrices");
@@ -75,18 +76,16 @@ export const displayShopPrices = (
     widget.isChecked = automateShopPrices;
 
   // Get shop list
-  const shops = rideTracker
-    .getRides()
-    .filter((ride: TRideExtended) =>
-      ["stall", "facility"].includes(ride.ride.classification),
-    );
+  const shops = objectiveAssistant.rides.filter((ride) =>
+    ["stall", "facility"].includes(ride.ride.classification),
+  );
 
   // Get pricing strategy
   const strategy = getShopStrategy();
 
   // Build shop and item list
   const rows: TShopItemData[] = [];
-  shops.forEach((ride: TRideExtended) => {
+  shops.forEach((ride) => {
     if (ride.ride.object.shopItem !== 255) {
       rows.push(addShopItem(ride, ride.ride.object.shopItem, true, strategy));
     }
@@ -98,14 +97,11 @@ export const displayShopPrices = (
   });
 
   // Add on-ride photos
-  const ridesWithPhotos = rideTracker
-    .getRides()
-    .filter(
-      (ride: TRideExtended) =>
-        ride.ride.classification === "ride" && ride.ride.price.length > 1,
-    );
+  const ridesWithPhotos = objectiveAssistant.rides.filter(
+    (ride) => ride.ride.classification === "ride" && ride.ride.price.length > 1,
+  );
   if (ridesWithPhotos.length) {
-    ridesWithPhotos.forEach((ride: TRideExtended) => {
+    ridesWithPhotos.forEach((ride) => {
       rows.push({
         ride,
         itemName: "On-ride Photo",

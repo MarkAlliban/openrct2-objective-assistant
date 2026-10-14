@@ -6,17 +6,17 @@ import {
   WARNING_COLOUR,
   WARNING_DAYS,
 } from "../../constants";
-import { TObjectiveTarget } from "../../data-model/objective";
 import { formatCurrency } from "../../helpers/format-currency";
-import { TRideExtended, TRideTracker } from "../../data-model/ride-tracker";
 import { convertTicksToDays } from "../../helpers/convert-ticks-to-days";
 import { updateTimeData, updateWidget } from "../../helpers/update-widgets";
+import { TObjectiveAssistant } from "../../data-model/objective-assistant";
 
 export const displayObjective = (
   window: Window,
-  objective: TObjectiveTarget,
-  rideTracker: TRideTracker,
+  objectiveAssistant: TObjectiveAssistant,
 ) => {
+  const { objective } = objectiveAssistant;
+
   // Scenario status
   updateWidget(
     window,
@@ -42,10 +42,10 @@ export const displayObjective = (
         : `${daysRemaining < WARNING_DAYS ? WARNING_COLOUR : ""}${daysRemaining} day${daysRemaining === 1 ? "" : "s"}`,
     );
   }
-	// Update time limit indicator
-	updateTimeData(window, objective, true);
+  // Update time limit indicator
+  updateTimeData(window, objective, true);
 
-	// Guest number
+  // Guest number
   if (objective.guests) {
     updateWidget(
       window,
@@ -76,15 +76,15 @@ export const displayObjective = (
   }
   // Rollercoaster stats
   if (objective.rollercoasters) {
-    const rides = rideTracker.getRides();
+    const { rides } = objectiveAssistant;
     const coasterTypes = rides
       .filter(
-        (ride: TRideExtended) =>
+        (ride) =>
           ride.typeData.category === "rollercoaster" &&
           ride.buildingObjective?.meetsRequirements,
       )
       .map(
-        (ride: TRideExtended) => ride.typeData.sameTypeAs || ride.typeData.name,
+        (ride) => ride.typeData.sameTypeAs || ride.typeData.name,
       );
     const uniqueTypes = coasterTypes.filter(
       (t: string, i: number) => coasterTypes.indexOf(t) === i,

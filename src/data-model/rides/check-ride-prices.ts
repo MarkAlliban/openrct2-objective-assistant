@@ -1,5 +1,5 @@
-import { TRideFinances } from ".";
-import { TRideTypeData } from "../../data/get-ride-type";
+import { TRideFinances } from "./get-extended-rides";
+import { TRideTypeData } from "./get-ride-type";
 
 export const getRideValue = (
   ride: Ride,
@@ -11,7 +11,7 @@ export const checkRidePrices = (
   ride: Ride,
   typeData: TRideTypeData,
   isDuplicate: boolean,
-  guestCount: number,
+  guestCount: number | undefined,
 ): TRideFinances => {
   // Calculate the value (for ticket price)
   const getAgeFactors = (value: number): number[] => [
@@ -48,7 +48,7 @@ export const checkRidePrices = (
       : null;
 
   // Get the ride value
-  const valueCalculated = getRideValue(ride, guestCount, typeData.bonusValue);
+  const valueCalculated = getRideValue(ride, guestCount || 0, typeData.bonusValue);
 
   // Adjust for age, and reduce by 25% if there are multiple rides of the same type
   let agedValues = value

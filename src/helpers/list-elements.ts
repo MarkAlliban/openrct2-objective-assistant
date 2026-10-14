@@ -5,8 +5,8 @@ import {
   SUCCESS_COLOUR,
   WARNING_COLOUR,
 } from "../constants";
+import { TRideExtended } from "../data-model/rides/get-extended-rides";
 import { formatCurrency, formatCurrency2dp } from "./format-currency";
-import { TRideExtended } from "../data-model/ride-tracker";
 
 export const getRideName = (ride: TRideExtended) => {
   if (ride.breakdown !== "none") return `${ERROR_COLOUR}${ride.ride.name}`;

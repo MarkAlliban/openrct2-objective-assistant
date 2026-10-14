@@ -1,5 +1,5 @@
-import { TBuildingObjective } from ".";
 import { TObjectiveTarget } from "../objective";
+import { TBuildingObjective } from "./get-extended-rides";
 
 export const checkBuildingObjective = (
   objective: TObjectiveTarget,

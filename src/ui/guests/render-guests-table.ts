@@ -1,11 +1,11 @@
 import { UI_VALUE_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH } from "../../constants";
+import { TObjectiveAssistant } from "../../data-model/objective-assistant";
 import { renderSortingButtons } from "../../helpers/render-sorting-buttons";
-import { TSortTable } from "../open-window";
 
 export const renderGuestsTable = (
+	ObjectiveAssistant: TObjectiveAssistant,
   y: number,
   clickRow: Function,
-  sortBy: TSortTable,
   tableWidth = WINDOW_WIDTH,
 ) => {
   // Get the columns to display
@@ -34,7 +34,7 @@ export const renderGuestsTable = (
     });
 
   // Make sorting buttons
-  const widgets = renderSortingButtons(cols, sortBy, y);
+  const widgets = renderSortingButtons(ObjectiveAssistant, cols, y);
 
   // Add the rides list
   widgets.push({

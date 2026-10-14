@@ -1,11 +1,12 @@
 import {
+  ICONS,
   INFO_COLOUR,
   UI_VALUE_HEIGHT,
   UI_VALUE_WIDTH,
   WINDOW_HEIGHT,
   WINDOW_WIDTH,
 } from "../../constants";
-import { TSortTable } from "../open-window";
+import { TObjectiveAssistant } from "../../data-model/objective-assistant";
 import { renderStatRequirementsTable } from "./render-stat-requirements-table";
 
 export const REQUIREMENT_DETAILS_WIDTH = 150;
@@ -13,8 +14,8 @@ export const ICON_SIZE = 16;
 export const MAX_STAT_REQUIREMENTS = 6;
 
 export const initStatRequirements = (
+  objectiveAssistant: TObjectiveAssistant,
   clickRow: Function,
-  sortBy: TSortTable,
 ) => {
   const newArray: number[] = [...Array(MAX_STAT_REQUIREMENTS).keys()];
   const requirementWidgets: any = [];
@@ -41,7 +42,7 @@ export const initStatRequirements = (
     });
   });
 
-  return [
+  const widgets = [
     {
       name: "labelRideName",
       type: "label",
@@ -92,10 +93,15 @@ export const initStatRequirements = (
     },
 
     ...renderStatRequirementsTable(
+      objectiveAssistant,
       55 + UI_VALUE_HEIGHT,
       clickRow,
-      sortBy,
       WINDOW_WIDTH - REQUIREMENT_DETAILS_WIDTH - 5,
     ),
   ];
+
+  return {
+    image: ICONS.stats,
+    widgets,
+  };
 };
