@@ -5,10 +5,7 @@ import {
   UI_VALUE_HEIGHT,
   WINDOW_WIDTH,
 } from "../../constants";
-import {
-  TRideExtended,
-  TStatRequirementResult,
-} from "../../data-model/ride-tracker";
+import { TRideExtended } from "../../data-model/rides/get-extended-rides";
 import { updateWidget } from "../../helpers/update-widgets";
 import { wrapWords } from "../../helpers/wrap-words";
 import {
@@ -129,7 +126,7 @@ export const showStatRequirementDetails = (
     window,
     "overrideNote",
     null,
-    statRequirementResults?.some((r: TStatRequirementResult) => r.overridden),
+    statRequirementResults?.some((r) => r.overridden),
     { y: window.height - 30 },
   );
 

@@ -1,4 +1,9 @@
-import { DAZZLING_COLOURS, ICONS, UI_VALUE_HEIGHT, WINDOW_WIDTH } from "../../constants";
+import {
+  DAZZLING_COLOURS,
+  ICONS,
+  UI_VALUE_HEIGHT,
+  WINDOW_WIDTH,
+} from "../../constants";
 import { awardsInfo, TAward } from "../../data/awards-info";
 
 const addRequirementLabel = (
@@ -111,5 +116,8 @@ export const initAwards = (changeColourBack: Function) => {
       y += UI_VALUE_HEIGHT + 3;
     });
 
-  return widgets;
+  return {
+    image: ICONS.awards,
+    widgets,
+  };
 };

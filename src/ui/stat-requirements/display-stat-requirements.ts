@@ -1,11 +1,11 @@
 import { ERROR_COLOUR, INFO_COLOUR, SUCCESS_COLOUR } from "../../constants";
-import {
-  TRideExtended,
-  TRideTracker,
-  TStatRequirementResult,
-} from "../../data-model/ride-tracker";
 import { updateWidgetList } from "../../helpers/update-widgets";
 import { getRideName, getTypeName } from "../../helpers/list-elements";
+import { TObjectiveAssistant } from "../../data-model/objective-assistant";
+import {
+  TRideExtended,
+  TStatRequirementResult,
+} from "../../data-model/rides/get-extended-rides";
 import { showStatRequirementDetails } from "./show-stat-requirement-details";
 
 const getRideRequirements = (
@@ -31,36 +31,24 @@ const renderStatRequirementsRow = (ride: TRideExtended) => {
 
 export const displayStatRequirements = (
   window: Window,
-  sortBy: any,
-  rideTracker: TRideTracker,
+  objectiveAssistant: TObjectiveAssistant,
   selectedRide: number,
 ) => {
-  const rides = rideTracker
-    .getRides()
-    .filter((ride: TRideExtended) => ride.ride.classification === "ride")
-    .sort((a: TRideExtended, b: TRideExtended) => {
-      if (sortBy.key === "Ride")
-        return a.ride.name > b.ride.name ? sortBy.direction : -sortBy.direction;
-      if (sortBy.key === "Type" && a.typeData.name !== b.typeData.name)
-        return (a.typeData.name || "") > (b.typeData.name || "")
-          ? sortBy.direction
-          : -sortBy.direction;
-      return a.ride.id > b.ride.id ? 1 : -1;
-    });
+  const rides = objectiveAssistant.rides.filter(
+    (ride) => ride.ride.classification === "ride",
+  );
 
   // Update ride list widget
   updateWidgetList(
     window,
     "listRides",
-    rides.map((ride: TRideExtended) => renderStatRequirementsRow(ride)),
+    rides.map((ride) => renderStatRequirementsRow(ride)),
   );
 
-  const ride = rides.find(
-    (ride: TRideExtended) => ride.ride.id === selectedRide,
-  );
+  const ride = rides.find((ride) => ride.ride.id === selectedRide);
 
   if (ride) showStatRequirementDetails(ride, window);
 
   // Return the ride IDs
-  return rides.map((ride: TRideExtended) => ride.ride.id);
+  return rides.map((ride) => ride.ride.id);
 };

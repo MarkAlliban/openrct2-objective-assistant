@@ -1,4 +1,4 @@
-import { API_VERSION_FLYING_RC_FIX, ERROR_COLOUR } from "../constants";
+import { API_VERSION_FLYING_RC_FIX, ERROR_COLOUR } from "../../constants";
 
 type TStatRequirements = {
   highestDropHeight?: number;

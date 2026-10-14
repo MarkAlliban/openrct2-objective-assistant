@@ -7,8 +7,7 @@ import {
   RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN,
   SUCCESS_COLOUR,
 } from "../../constants";
-import { TGuestTracker } from "../../data-model/guest-tracker";
-import { TRideExtended, TRideTracker } from "../../data-model/ride-tracker";
+import { TObjectiveAssistant } from "../../data-model/objective-assistant";
 import { awardNames, awardsInfo } from "../../data/awards-info";
 import { formatCurrency } from "../../helpers/format-currency";
 import { updateWidget } from "../../helpers/update-widgets";
@@ -34,54 +33,53 @@ const getExclusions = (award: AwardType) => {
 
 export const displayAwards = (
   window: Window,
-  rideTracker: TRideTracker,
-  guestTracker: TGuestTracker,
+  objectiveAssistant: TObjectiveAssistant
 ) => {
   // Get guest thoughts
-  const thoughts = guestTracker.getGuestThoughts();
+  const thoughts = objectiveAssistant.guestThoughts;
 
   // Get ride data
-  const allRides = rideTracker.getRides();
+  const allRides = objectiveAssistant.rides;
   const rides = allRides.filter(
-    (ride: TRideExtended) => ride.ride.classification === "ride",
+    (ride) => ride.ride.classification === "ride",
   );
   const openRides = rides.filter(
-    (ride: TRideExtended) => ride.ride.status === "open",
+    (ride) => ride.ride.status === "open",
   );
   const trackedRides = openRides.filter(
-    (ride: TRideExtended) => ride.ride.rideLength > 0,
+    (ride) => ride.ride.rideLength > 0,
   );
 
   // BUG: https://github.com/OpenRCT2/OpenRCT2/issues/26266
   // This should be based on popularity, not satisfaction. Popularity is not exposed by the API.
   const disappointingRides = rides.filter(
-    (ride: TRideExtended) => ride.ride.satisfaction < 6,
+    (ride) => ride.ride.satisfaction < 6,
   ).length;
-  const dazzlingRides = trackedRides.filter((ride: TRideExtended) =>
+  const dazzlingRides = trackedRides.filter((ride) =>
     ride.ride.colourSchemes.some((scheme) =>
       DAZZLING_COLOURS.includes(scheme.main),
     ),
   );
   const coasters = openRides.filter(
-    (ride: TRideExtended) => ride.typeData.category === "rollercoaster",
+    (ride) => ride.typeData.category === "rollercoaster",
   ).length;
   const waterRides = openRides.filter(
-    (ride: TRideExtended) => ride.typeData.category === "water",
+    (ride) => ride.typeData.category === "water",
   ).length;
   const customRides = openRides.filter(
-    (ride: TRideExtended) =>
+    (ride) =>
       (ride.ride.excitement || 0) >= 550 &&
       !(ride.ride.flags! & RIDE_LIFECYCLE_NOT_CUSTOM_DESIGN),
   ).length;
   const gentleRides = openRides.filter(
-    (ride: TRideExtended) => ride.typeData.category === "gentle",
+    (ride) => ride.typeData.category === "gentle",
   ).length;
   const foodStalls = allRides.filter(
-    (ride: TRideExtended) =>
+    (ride) =>
       ride.ride.type === 28 && ride.ride.status === "open",
   );
   const toilets = allRides.filter(
-    (ride: TRideExtended) =>
+    (ride) =>
       ride.ride.type === 36 && ride.ride.status === "open",
   );
 
@@ -95,7 +93,7 @@ export const displayAwards = (
   const toiletThoughts = thoughts.toilet!;
   const lostThoughts = thoughts.lost! + thoughts.cant_find!;
   const foodTypes = new Set(
-    foodStalls.map((ride: TRideExtended) => ride.ride.object.shopItem),
+    foodStalls.map((ride) => ride.ride.object.shopItem),
   ).size;
   const staff = map.getAllEntities("staff");
   const staffTypes = new Set(staff.map((s) => s.staffType)).size;
@@ -136,7 +134,7 @@ export const displayAwards = (
 
   // Best value park: entrance fee is 0.10 less than half of the total ride value
   const bestValueExclusions = getExclusions("bestValue");
-  const entranceFeeTarget = Math.max(park.totalRideValueForMoney / 2 - 1, 0);
+  const entranceFeeTarget = Math.max(park.totalRideValueForMoney / 2 - 0.1, 0);
   const bestValue: TAwardQualification = {
     eligible:
       !park.getFlag("noMoney") &&
@@ -149,7 +147,7 @@ export const displayAwards = (
       park.getFlag("freeParkEntry") || park.entranceFee === 0
         ? `${ERROR_COLOUR}No`
         : `${SUCCESS_COLOUR}Yes`,
-      `${park.entranceFee <= entranceFeeTarget ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(10 * Math.floor(entranceFeeTarget / 10))}`,
+      `${park.entranceFee <= entranceFeeTarget ? SUCCESS_COLOUR : ERROR_COLOUR}${formatCurrency(park.entranceFee)}/${formatCurrency(entranceFeeTarget)}`,
     ],
     exclusions: bestValueExclusions.list,
   };

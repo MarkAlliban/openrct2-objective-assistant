@@ -1,4 +1,4 @@
-import { TRideTypeData } from "../../data/get-ride-type";
+import { TRideTypeData } from "./get-ride-type";
 
 export type TTrackData = {
   length: number;

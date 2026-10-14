@@ -1,5 +1,5 @@
 import { UI_VALUE_HEIGHT } from "../constants";
-import { TSortTable } from "../ui/open-window";
+import { TObjectiveAssistant } from "../data-model/objective-assistant";
 
 export type TTableColumn = {
   header: string;
@@ -8,8 +8,8 @@ export type TTableColumn = {
 };
 
 export const renderSortingButtons = (
+  objectiveASsistant: TObjectiveAssistant,
   cols: TTableColumn[],
-  sortBy: TSortTable,
   y: number,
 ) => {
   let X_SO_FAR = 5;
@@ -25,9 +25,11 @@ export const renderSortingButtons = (
           height: UI_VALUE_HEIGHT,
           text: `{BLACK}${col.header}`,
           onClick: () =>
-            sortBy.set(
+            objectiveASsistant.setSortBy(
               col.header,
-              sortBy.key === col.header ? -sortBy.direction : 1,
+              objectiveASsistant.sortBy.key === col.header
+                ? -objectiveASsistant.sortBy.direction
+                : 1,
             ),
         }
       : {

@@ -9,32 +9,13 @@ import {
   WINDOW_HEIGHT_MIN,
   WINDOW_WIDTH,
 } from "../constants";
-import { TGuestTracker } from "../data-model/guest-tracker";
-import { TObjectiveTarget } from "../data-model/objective";
-import { TRideTracker } from "../data-model/ride-tracker";
-import { displayRidePrices } from "./ride-prices/display-ride-prices";
-import { displayShopPrices } from "./shop-prices/display-shop-prices";
-import { displayGuests } from "./guests/display-guests";
-import { displayParkValue } from "./park-value/display-park-value";
-import { displayObjective } from "./objective/display-objective";
-import { displayCoasters } from "./coasters/display-coasters";
-import { displayAwards } from "./awards/display-awards";
-import { displayStatRequirements } from "./stat-requirements/display-stat-requirements";
-import { initTabs } from "./init-tabs";
 import { tabChange } from "./tab-change";
+import { TObjectiveAssistant } from "../data-model/objective-assistant";
+import * as w from "./ui";
 
-export type TSortTable = {
-  key: string;
-  direction: number;
-  set: Function;
-};
+const UPDATE_TICKS = 5;
 
-export const openWindow = (
-  parkProperties: { canSetRidePrices: boolean; canSetShopPrices: boolean },
-  objective: TObjectiveTarget,
-  guestTracker: TGuestTracker,
-  rideTracker: TRideTracker,
-) => {
+export const openWindow = (objectiveAssistant: TObjectiveAssistant) => {
   // Only allow one window to be open at a time
   for (let i = 0; i < ui.windows; i++) {
     if (ui.getWindow(i).title === TITLE) {
@@ -43,32 +24,22 @@ export const openWindow = (
     }
   }
 
-  // Initialise the sorting mechanic
-  const sortBy: TSortTable = {
-    key: "Ride",
-    direction: 1,
-    set: (key: string, direction: number) => {
-      sortBy.key = key;
-      sortBy.direction = direction;
-    },
-  };
-
   // Closure of the ride ID's to make the ride lists clickable
   let dataRideIDs: number[] = [];
   const clickRideList = (row: number) => openRideWindow(dataRideIDs[row]);
   let selectedRide: number = -1;
   const clickStatList = (row: number) => (selectedRide = dataRideIDs[row]);
   // Closure of the ride ID's and prices to make the price list clickable
-  let dataRidePrices: { id: number; price: number }[] = [];
+  let dataRidePrices: { id: number; price: number | null | undefined }[] = [];
   const ridePriceClick = (row: number, col: number) => {
-    if (!parkProperties.canSetRidePrices) return;
+    if (!objectiveAssistant.parkProperties.canSetRidePrices) return;
     if (col < 3) return openRideWindow(dataRidePrices[row].id);
-    setRidePrice(dataRidePrices[row].id, dataRidePrices[row].price, true);
+    setRidePrice(dataRidePrices[row].id, dataRidePrices[row].price || 0, true);
   };
   // Closure of the shop ID's and prices to make the price list clickable
   let dataShopPrices: { id: number; price: number; isPrimary: boolean }[] = [];
   const shopPriceClick = (row: number, col: number) => {
-    if (!parkProperties.canSetShopPrices) return;
+    if (!objectiveAssistant.parkProperties.canSetShopPrices) return;
     if (col !== 3) return openRideWindow(dataShopPrices[row].id);
     setRidePrice(
       dataShopPrices[row].id,
@@ -91,6 +62,7 @@ export const openWindow = (
   // Remember the active tab
   let savedTab = parseInt(readValue("tab") || "0");
 
+  let lastUpdated = 0;
   let window: Window;
   window = ui.openWindow({
     classification: "objective.assistant",
@@ -101,43 +73,41 @@ export const openWindow = (
     height: WINDOW_HEIGHT,
     minHeight: WINDOW_HEIGHT_MIN,
     colours: [BACKGROUND_COLOUR, FOREGROUND_COLOUR],
-    tabs: initTabs(
-      parkProperties,
-      objective,
-      rideTracker,
-      sortBy,
-      goToObjectiveTab,
-      clickRideList,
-      ridePriceClick,
-      shopPriceClick,
-      changeColourBack,
-      clickStatList,
-    ),
+    tabs: [
+      w.initObjectiveWindow(objectiveAssistant.objective, goToObjectiveTab),
+      w.initGuests(objectiveAssistant, clickRideList),
+      w.initParkValue(objectiveAssistant, clickRideList),
+      w.initCoasters(objectiveAssistant, clickRideList),
+      w.initRidePrices(objectiveAssistant, ridePriceClick),
+      w.initShopPrices(objectiveAssistant, shopPriceClick),
+      w.initAwards(changeColourBack),
+      w.initStatRequirements(objectiveAssistant, clickStatList),
+    ],
     tabIndex: savedTab,
     onTabChange: () => {
       savedTab = tabChange(window, savedTab);
       selectedRide = -1;
+      lastUpdated = 0;
     },
     onUpdate: () => {
-      if (window.tabIndex === 0)
-        displayObjective(window, objective, rideTracker);
+      if (date.ticksElapsed < lastUpdated + UPDATE_TICKS) return;
+      lastUpdated = date.ticksElapsed;
+      if (window.tabIndex === 0) w.displayObjective(window, objectiveAssistant);
       if (window.tabIndex === 1)
-        dataRideIDs = displayGuests(window, objective, rideTracker, sortBy);
+        dataRideIDs = w.displayGuests(window, objectiveAssistant);
       if (window.tabIndex === 2)
-        dataRideIDs = displayParkValue(window, objective, rideTracker, sortBy);
+        dataRideIDs = w.displayParkValue(window, objectiveAssistant);
       if (window.tabIndex === 3)
-        dataRideIDs = displayCoasters(window, objective, rideTracker, sortBy);
+        dataRideIDs = w.displayCoasters(window, objectiveAssistant);
       if (window.tabIndex === 4)
-        dataRidePrices = displayRidePrices(window, rideTracker, sortBy);
+        dataRidePrices = w.displayRidePrices(window, objectiveAssistant);
       if (window.tabIndex === 5)
-        dataShopPrices = displayShopPrices(window, rideTracker, sortBy);
-      if (window.tabIndex === 6)
-        displayAwards(window, rideTracker, guestTracker);
+        dataShopPrices = w.displayShopPrices(window, objectiveAssistant);
+      if (window.tabIndex === 6) w.displayAwards(window, objectiveAssistant);
       if (window.tabIndex === 7)
-        dataRideIDs = displayStatRequirements(
+        dataRideIDs = w.displayStatRequirements(
           window,
-          sortBy,
-          rideTracker,
+          objectiveAssistant,
           selectedRide,
         );
     },

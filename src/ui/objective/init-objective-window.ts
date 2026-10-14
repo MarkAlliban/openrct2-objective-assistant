@@ -1,4 +1,9 @@
-import { UI_VALUE_HEIGHT, UI_VALUE_WIDTH, WINDOW_WIDTH } from "../../constants";
+import {
+  ICONS,
+  UI_VALUE_HEIGHT,
+  UI_VALUE_WIDTH,
+  WINDOW_WIDTH,
+} from "../../constants";
 import { TObjectiveTarget } from "../../data-model/objective";
 import { formatCurrency } from "../../helpers/format-currency";
 
@@ -33,7 +38,7 @@ const addRequirementValue = (
 export const initObjectiveWindow = (
   objective: TObjectiveTarget,
   goToObjectiveTab: Function,
-):WidgetDesc[] => {
+) => {
   const widgets = [];
   let y: number = 65;
 
@@ -187,5 +192,8 @@ export const initObjectiveWindow = (
     },
   );
 
-  return widgets as WidgetDesc[];
+  return {
+    image: ICONS.objective,
+    widgets,
+  };
 };
