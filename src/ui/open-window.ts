@@ -15,14 +15,10 @@ import * as w from "./ui";
 
 const UPDATE_TICKS = 5;
 
+let window: Window | undefined;
 export const openWindow = (objectiveAssistant: TObjectiveAssistant) => {
   // Only allow one window to be open at a time
-  for (let i = 0; i < ui.windows; i++) {
-    if (ui.getWindow(i).title === TITLE) {
-      ui.getWindow(i).bringToFront();
-      return;
-    }
-  }
+	if(typeof window !== 'undefined') return;
 
   // Closure of the ride ID's to make the ride lists clickable
   let dataRideIDs: number[] = [];
@@ -50,12 +46,12 @@ export const openWindow = (objectiveAssistant: TObjectiveAssistant) => {
 
   // Change tab button
   const goToObjectiveTab = (tab: number) => {
-    window.tabIndex = tab;
+    window!.tabIndex = tab;
   };
 
   // Prevent colour pickers from being changed
   const changeColourBack = (widgetName: string, colour: number) => {
-    const w: ColourPickerWidget = window.findWidget(widgetName);
+    const w: ColourPickerWidget = window!.findWidget(widgetName);
     w.colour = colour;
   };
 
@@ -63,7 +59,6 @@ export const openWindow = (objectiveAssistant: TObjectiveAssistant) => {
   let savedTab = parseInt(readValue("tab") || "0");
 
   let lastUpdated = 0;
-  let window: Window;
   window = ui.openWindow({
     classification: "objective.assistant",
     title: TITLE,
@@ -85,31 +80,33 @@ export const openWindow = (objectiveAssistant: TObjectiveAssistant) => {
     ],
     tabIndex: savedTab,
     onTabChange: () => {
-      savedTab = tabChange(window, savedTab);
+      savedTab = tabChange(window!, savedTab);
       selectedRide = -1;
       lastUpdated = 0;
     },
     onUpdate: () => {
       if (date.ticksElapsed < lastUpdated + UPDATE_TICKS) return;
       lastUpdated = date.ticksElapsed;
-      if (window.tabIndex === 0) w.displayObjective(window, objectiveAssistant);
-      if (window.tabIndex === 1)
-        dataRideIDs = w.displayGuests(window, objectiveAssistant);
-      if (window.tabIndex === 2)
-        dataRideIDs = w.displayParkValue(window, objectiveAssistant);
-      if (window.tabIndex === 3)
-        dataRideIDs = w.displayCoasters(window, objectiveAssistant);
-      if (window.tabIndex === 4)
-        dataRidePrices = w.displayRidePrices(window, objectiveAssistant);
-      if (window.tabIndex === 5)
-        dataShopPrices = w.displayShopPrices(window, objectiveAssistant);
-      if (window.tabIndex === 6) w.displayAwards(window, objectiveAssistant);
-      if (window.tabIndex === 7)
+      const tabIndex = window!.tabIndex;
+      if (tabIndex === 0) w.displayObjective(window!, objectiveAssistant);
+      if (tabIndex === 1)
+        dataRideIDs = w.displayGuests(window!, objectiveAssistant);
+      if (tabIndex === 2)
+        dataRideIDs = w.displayParkValue(window!, objectiveAssistant);
+      if (tabIndex === 3)
+        dataRideIDs = w.displayCoasters(window!, objectiveAssistant);
+      if (tabIndex === 4)
+        dataRidePrices = w.displayRidePrices(window!, objectiveAssistant);
+      if (tabIndex === 5)
+        dataShopPrices = w.displayShopPrices(window!, objectiveAssistant);
+      if (tabIndex === 6) w.displayAwards(window!, objectiveAssistant);
+      if (tabIndex === 7)
         dataRideIDs = w.displayStatRequirements(
-          window,
+          window!,
           objectiveAssistant,
           selectedRide,
         );
     },
+    onClose: () => (window = undefined),
   });
 };
