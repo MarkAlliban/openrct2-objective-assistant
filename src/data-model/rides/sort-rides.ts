@@ -1,8 +1,8 @@
 import { TRideExtended } from "./get-extended-rides";
 
 export type TSortTable = {
-	key: string;
-	direction: number;
+  key: string;
+  direction: number;
 };
 
 export const sortRides = (rides: TRideExtended[], sortBy: TSortTable) => {
@@ -27,8 +27,12 @@ export const sortRides = (rides: TRideExtended[], sortBy: TSortTable) => {
       return (a.guestHistory.count || 0) > (b.guestHistory.count || 0)
         ? -sortBy.direction
         : sortBy.direction;
-    if (sortBy.key === "Value" && a.finances?.value !== b.finances?.value)
-      return (a.finances?.value || 0) > (b.finances?.value || 0)
+    if (
+      sortBy.key === "Value" &&
+      a.finances?.valueCalculated !== b.finances?.valueCalculated
+    )
+      return (a.finances?.valueCalculated || 0) >
+        (b.finances?.valueCalculated || 0)
         ? -sortBy.direction
         : sortBy.direction;
     if (sortBy.key === "Exc" && a.ride.excitement !== b.ride.excitement)
